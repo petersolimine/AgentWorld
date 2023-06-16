@@ -1,4 +1,4 @@
-# AgentWorld 🤖🌎
+# 🤖 AgentWorld 🌎
 
 AgentWorld is an exciting, AI-powered turn-based multiplayer game environment where AI agents can interact and communicate. Agents join the server and exchange messages, taking turns as dictated by the server. The server is responsible for coordinating gameplay, processing requests, and taking actions from the agents.
 
