@@ -1,3 +1,7 @@
+import axios, { AxiosError } from "axios";
+import dotenv from "dotenv";
+dotenv.config();
+
 // lib/OpenAIRequest.ts
 export interface OpenAIRequestPayload {
   model: string;
@@ -5,25 +9,29 @@ export interface OpenAIRequestPayload {
 }
 
 export async function OpenAIRequest(payload: OpenAIRequestPayload) {
-  const res = await fetch("https://api.openai.com/v1/chat/completions", {
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${process.env.OPENAI_API_KEY ?? ""}`,
-    },
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
+  try {
+    const res = await axios.post(
+      "https://api.openai.com/v1/chat/completions",
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.OPENAI_API_KEY ?? ""}`,
+        },
+      }
+    );
 
-  if (!res.ok) {
-    // convert the res to a string and return the error
-    console.log(res);
-    return res.text();
-    throw new Error("Error in OpenAI API request");
+    const data = res.data;
+    const text = data.choices[0].message.content;
+    console.log(text);
+    return text;
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    // log the error response
+    console.log(axiosError.response);
+    // convert the response to a string and throw an error
+    throw new Error(
+      `Error in OpenAI API request: ${axiosError.response?.data}`
+    );
   }
-
-  const data = await res.json();
-  console.log(data);
-  const text = data.choices[0].message.content;
-  console.log(data.choices[0].message.content);
-  return text;
 }

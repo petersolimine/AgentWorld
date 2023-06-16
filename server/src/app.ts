@@ -3,6 +3,9 @@ import bodyParser from "body-parser";
 import WebSocket, { Server as WebSocketServer } from "ws";
 import axios from "axios";
 import Deque from "collections/deque";
+import { OpenAIRequest } from "./openAIChatRequest";
+import { WorldState } from "./prompts";
+import { formatActionsToString } from "./utils";
 
 const app = express();
 const port = 3123;
@@ -65,22 +68,24 @@ const startGame = async () => {
         );
         actions.push({ user: user.name, action: response.data.action });
 
-        console.log(
-          `Received action from ${user.name}: ${response.data.action}`
-        );
-        process.stdout.write("Enter response to the action: ");
+        broadcast(`${user.name}: ${response.data.action}`);
 
-        const serverResponse = await new Promise<string>((resolve) => {
-          const listener = (data: Buffer) => {
-            process.stdin.removeListener("data", listener);
-            resolve(data.toString().trim());
-          };
-          process.stdin.addListener("data", listener);
+        const serverResponse = await OpenAIRequest({
+          model: "gpt-3.5-turbo",
+          messages: [
+            { role: "system", content: WorldState },
+            {
+              role: "user",
+              content: `Received action from ${user.name}: ${
+                response.data.action
+              }. Here is information about previous actions, which may be relevant:\n${formatActionsToString(
+                actions.toArray()
+              )}\n\nRespond with relevant json data regarding the state of the world.`,
+            },
+          ],
         });
-
-        broadcast(
-          `Action: ${response.data.action} | Server Response: ${serverResponse}`
-        );
+        broadcast(`Server: ${serverResponse}`);
+        actions.push({ user: "server", action: serverResponse });
       } catch (error) {
         users.splice(i, 1);
         i--;
@@ -89,7 +94,6 @@ const startGame = async () => {
       }
     }
   }
-
   console.log("Game over.");
 };
 

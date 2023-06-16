@@ -40,6 +40,9 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const ws_1 = __importStar(require("ws"));
 const axios_1 = __importDefault(require("axios"));
 const deque_1 = __importDefault(require("collections/deque"));
+const openAIChatRequest_1 = require("./openAIChatRequest");
+const prompts_1 = require("./prompts");
+const utils_1 = require("./utils");
 const app = (0, express_1.default)();
 const port = 3123;
 app.use(body_parser_1.default.json());
@@ -76,16 +79,19 @@ const startGame = () => __awaiter(void 0, void 0, void 0, function* () {
             try {
                 const response = yield axios_1.default.post(user.url, { actions: actions.toArray() }, { timeout: 15000 });
                 actions.push({ user: user.name, action: response.data.action });
-                console.log(`Received action from ${user.name}: ${response.data.action}`);
-                process.stdout.write("Enter response to the action: ");
-                const serverResponse = yield new Promise((resolve) => {
-                    const listener = (data) => {
-                        process.stdin.removeListener("data", listener);
-                        resolve(data.toString().trim());
-                    };
-                    process.stdin.addListener("data", listener);
+                broadcast(`${user.name}: ${response.data.action}`);
+                const serverResponse = yield (0, openAIChatRequest_1.OpenAIRequest)({
+                    model: "gpt-3.5-turbo",
+                    messages: [
+                        { role: "system", content: prompts_1.WorldState },
+                        {
+                            role: "user",
+                            content: `Received action from ${user.name}: ${response.data.action}. Here is information about previous actions, which may be relevant:\n${(0, utils_1.formatActionsToString)(actions.toArray())}\n\nRespond with relevant json data regarding the state of the world.`,
+                        },
+                    ],
                 });
-                broadcast(`Action: ${response.data.action} | Server Response: ${serverResponse}`);
+                broadcast(`Server: ${serverResponse}`);
+                actions.push({ user: "server", action: serverResponse });
             }
             catch (error) {
                 users.splice(i, 1);

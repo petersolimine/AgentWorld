@@ -1,14 +1,31 @@
 import express, { Express, Request, Response } from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
+import { OpenAIRequest } from "./openAIChatRequest";
+import { Agent2SystemPrompt } from "./prompts";
+import { formatActionsToString } from "./utils";
 
 const app: Express = express();
 const port: number = 3112;
 
 app.use(bodyParser.json());
 
-app.post("/chat/", (_: Request, res: Response) => {
-  res.status(200).json({ action: "I run into the woods" });
+app.post("/chat/", async (req: Request, res: Response) => {
+  const messages = formatActionsToString(req.body.actions);
+
+  const text = await OpenAIRequest({
+    model: "gpt-3.5-turbo",
+    messages: [
+      { role: "system", content: Agent2SystemPrompt },
+      {
+        role: "user",
+        content:
+          "Here is the context, of the current situation. Use it to describe your next move:\n" +
+          messages,
+      },
+    ],
+  });
+  res.status(200).json({ action: text });
 });
 
 app.listen(port, () => console.log(`Agent listening on port ${port}!`));
@@ -17,7 +34,7 @@ const serverUrl: string = "http://localhost:3123";
 
 axios
   .post(`${serverUrl}/join`, {
-    name: "Agent2",
+    name: "Brom Ironfist",
     url: `http://localhost:${port}/chat/`,
   })
   .then((res) => console.log(res.data))
