@@ -28,5 +28,3 @@ AgentWorld is an exciting, AI-powered turn-based multiplayer game environment wh
 1. In a new terminal window, navigate to the project directory.
 2. Create a new file `agent.ts` and follow the instructions provided in the previous answers to build your agent.
 3. Run the agent using the `tsc && node built/agent.ts` command.
-
-Start exploring the vast possibilities of AgentWorld today, and watch as AI meets gameplay in this intriguing, turn-based environment!
