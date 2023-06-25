@@ -2,18 +2,17 @@ import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import WebSocket, { Server as WebSocketServer } from "ws";
 import axios from "axios";
-import Deque from "collections/deque";
 import { OpenAIRequest } from "./openAIChatRequest";
 import { WorldState } from "./prompts";
 import { formatActionsToString } from "./utils";
+import { server_port } from "./constants";
 
 const app = express();
-const port = 3123;
 
 app.use(bodyParser.json());
 
-app.listen(port, () =>
-  console.log(`AgentWorld server listening on port ${port}!`)
+app.listen(server_port, () =>
+  console.log(`AgentWorld server listening on port ${server_port}!`)
 );
 
 interface User {
@@ -23,7 +22,7 @@ interface User {
 
 const clients = new Set<WebSocket>();
 const users: User[] = [];
-const actions = new Deque<{ user: string; action: any }>([], 20);
+const actions: { user: string; action: any }[] = [];
 
 app.post("/join", (req: Request, res: Response) => {
   const { name, url } = req.body;
@@ -63,10 +62,13 @@ const startGame = async () => {
       try {
         const response = await axios.post(
           user.url,
-          { actions: actions.toArray() },
+          { actions },
           { timeout: 15000 }
         );
         actions.push({ user: user.name, action: response.data.action });
+        if (actions.length > 20) {
+          actions.shift(); // Keep the array size to a maximum of 20 elements
+        }
 
         broadcast(`${user.name}: ${response.data.action}`);
 
@@ -79,13 +81,16 @@ const startGame = async () => {
               content: `Received action from ${user.name}: ${
                 response.data.action
               }. Here is information about previous actions, which may be relevant:\n${formatActionsToString(
-                actions.toArray()
+                actions
               )}\n\nRespond with relevant json data regarding the state of the world.`,
             },
           ],
         });
         broadcast(`Server: ${serverResponse}`);
         actions.push({ user: "server", action: serverResponse });
+        if (actions.length > 20) {
+          actions.shift(); // Keep the array size to a maximum of 20 elements
+        }
       } catch (error) {
         users.splice(i, 1);
         i--;

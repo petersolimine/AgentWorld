@@ -4,6 +4,7 @@ import axios from "axios";
 import { OpenAIRequest } from "./openAIChatRequest";
 import { Agent2SystemPrompt } from "./prompts";
 import { formatActionsToString } from "./utils";
+import { server_port } from "./constants";
 
 const app: Express = express();
 const port: number = 3112;
@@ -30,20 +31,32 @@ app.post("/chat/", async (req: Request, res: Response) => {
 
 app.listen(port, () => console.log(`Agent listening on port ${port}!`));
 
-const serverUrl: string = "http://localhost:3123";
+const serverUrl: string = `http://localhost:${server_port}`;
 
-axios
-  .post(`${serverUrl}/join`, {
-    name: "Brom Ironfist",
-    url: `http://localhost:${port}/chat/`,
-  })
-  .then((res) => console.log(res.data))
-  .catch((error) =>
-    console.error(
-      `Failed to join server: ${
-        error.response && error.response.data
-          ? error.response.data.error
-          : error
-      }`
-    )
-  );
+let retries = 0;
+const maxRetries = 6;
+
+const joinServer = () => {
+  axios
+    .post(`${serverUrl}/join`, {
+      name: "Brom Ironfist",
+      url: `http://localhost:${port}/chat/`,
+    })
+    .then((res) => console.log(res.data))
+    .catch((error) => {
+      console.error(
+        `Failed to join server: ${
+          error.response && error.response.data
+            ? error.response.data.error
+            : error
+        }`
+      );
+
+      if (retries < maxRetries) {
+        retries++;
+        setTimeout(joinServer, 10000); // Retry after 10 seconds
+      }
+    });
+};
+
+joinServer();

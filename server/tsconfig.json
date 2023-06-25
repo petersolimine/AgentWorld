@@ -6,9 +6,11 @@
     "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
-    "types": ["node"],
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "typeRoots": ["./**/*"]
   },
-  "include": ["src/**/*", "declarations.d.ts"],
-  "types": ["node"]
+  "include": ["src/**/*", "src/types/declarations.d.ts"],
+  "paths": {
+    "*": ["node_modules/*", "src/types/*"]
+  }
 }
