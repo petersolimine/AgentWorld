@@ -1,0 +1,52 @@
+version: "3.9"
+
+networks:
+  net:
+    driver: bridge
+
+services:
+  world:
+    image: node:18
+    command: npx ts-node src/app.ts
+    volumes:
+      - ./server:/app
+    working_dir: /app
+    networks:
+      - net
+    ports:
+      - "3123:3123"
+
+  ag1:
+    image: node:18
+    command: npx ts-node src/ag1.ts
+    volumes:
+      - ./server:/app
+    working_dir: /app
+    networks:
+      - net
+    depends_on:
+      - world
+    ports:
+      - "3111:3111"
+
+  ag2:
+    image: node:18
+    command: npx ts-node src/ag2.ts
+    volumes:
+      - ./server:/app
+    working_dir: /app
+    networks:
+      - net
+    depends_on:
+      - world
+    ports:
+      - "3112:3111"
+
+  frontend:
+    build: ./frontend
+    networks:
+      - net
+    depends_on:
+      - world
+    ports:
+      - "3000:3000"
