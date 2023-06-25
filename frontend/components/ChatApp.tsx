@@ -6,17 +6,34 @@ function ChatApp() {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8080");
+    let ws: WebSocket;
+    let retryTimeoutId: NodeJS.Timeout;
 
-    ws.addEventListener("message", (e) => {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { text: e.data, key: prevMessages.length },
-      ]);
-    });
+    const connect = () => {
+      ws = new WebSocket("ws://localhost:8080");
+
+      ws.addEventListener("open", () => {
+        console.log("Connected to WebSocket");
+      });
+
+      ws.addEventListener("error", () => {
+        console.log("WebSocket connection error. Retrying in 5 seconds...");
+        retryTimeoutId = setTimeout(connect, 5000); // retry after 5 seconds if connection fails
+      });
+
+      ws.addEventListener("message", (e) => {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: e.data, key: prevMessages.length },
+        ]);
+      });
+    };
+
+    connect();
 
     return () => {
-      ws.close();
+      clearTimeout(retryTimeoutId); // clear retry timeout on component unmount
+      if (ws) ws.close();
     };
   }, []);
 
