@@ -20,7 +20,7 @@ const prompts_1 = require("./prompts");
 const utils_1 = require("./utils");
 const constants_1 = require("./constants");
 const app = (0, express_1.default)();
-const port = 3115;
+const port = 3111;
 app.use(body_parser_1.default.json());
 app.post("/chat/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // make a chat request to OpenAI with the information about state of the world
@@ -41,14 +41,15 @@ app.post("/chat/", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     res.status(200).json({ action: text });
 }));
 app.listen(port, () => console.log(`Agent listening on port ${port}!`));
-const serverUrl = `http://localhost:${constants_1.server_port}`;
+console.log(`${constants_1.isDocker ? "host.docker.internal" : "localhost"}`);
+const serverUrl = `http://${constants_1.isDocker ? "host.docker.internal" : "localhost"}:${constants_1.server_port}`;
 let retries = 0;
 const maxRetries = 6;
 const joinServer = () => {
     axios_1.default
         .post(`${serverUrl}/join`, {
         name: "Aelis Windrider",
-        url: `http://localhost:${port}/chat/`,
+        url: `http://agent1:${port}/chat/`,
     })
         .then((res) => console.log(res.data))
         .catch((error) => {

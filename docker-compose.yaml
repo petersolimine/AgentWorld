@@ -12,9 +12,12 @@ services:
       - ./server:/app
     working_dir: /app
     networks:
-      - net
+      net:
+        aliases:
+          - world
     ports:
       - "3123:3123"
+      - "8080:8080"
 
   agent1:
     image: node:18

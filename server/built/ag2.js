@@ -38,14 +38,14 @@ app.post("/chat/", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     res.status(200).json({ action: text });
 }));
 app.listen(port, () => console.log(`Agent listening on port ${port}!`));
-const serverUrl = `http://localhost:${constants_1.server_port}`;
+const serverUrl = `http://${constants_1.network_url}:${constants_1.server_port}`;
 let retries = 0;
 const maxRetries = 6;
 const joinServer = () => {
     axios_1.default
         .post(`${serverUrl}/join`, {
         name: "Brom Ironfist",
-        url: `http://localhost:${port}/chat/`,
+        url: `http://${constants_1.network_url}:${port}/chat/`,
     })
         .then((res) => console.log(res.data))
         .catch((error) => {

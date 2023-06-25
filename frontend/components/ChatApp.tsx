@@ -1,5 +1,8 @@
 import { useEffect, useState, MouseEvent } from "react";
 import { Message } from "./interfaces";
+// this should only be localhost for now, but can change to a domain name later
+const network_url =
+  process.env.NODE_ENV === "production" ? "localhost" : "world";
 
 function ChatApp() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -10,14 +13,14 @@ function ChatApp() {
     let retryTimeoutId: NodeJS.Timeout;
 
     const connect = () => {
-      ws = new WebSocket("ws://localhost:8080");
+      ws = new WebSocket(`ws://${network_url}:8080`);
 
       ws.addEventListener("open", () => {
         console.log("Connected to WebSocket");
       });
 
-      ws.addEventListener("error", () => {
-        console.log("WebSocket connection error. Retrying in 5 seconds...");
+      ws.addEventListener("error", (error) => {
+        console.error("WebSocket error:", error);
         retryTimeoutId = setTimeout(connect, 5000); // retry after 5 seconds if connection fails
       });
 
