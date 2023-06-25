@@ -4,14 +4,11 @@ const fs = require("fs");
 
 function isRunningInDocker() {
   try {
-    return fs.readFileSync("/proc/self/cgroup", "utf8").includes("docker");
+    return fs.existsSync("/.dockerenv");
   } catch (e) {
     return false;
   }
 }
 
-export let server_host = "localhost";
-
-if (isRunningInDocker()) {
-  server_host = "world";
-}
+export const isDocker = isRunningInDocker();
+export const network_url = isDocker ? "host.docker.internal" : "localhost";

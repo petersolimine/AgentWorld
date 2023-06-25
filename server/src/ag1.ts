@@ -4,10 +4,10 @@ import axios from "axios";
 import { OpenAIRequest } from "./openAIChatRequest";
 import { Agent1SystemPrompt } from "./prompts";
 import { formatActionsToString } from "./utils";
-import { server_port } from "./constants";
+import { server_port, network_url, isDocker } from "./constants";
 
 const app: Express = express();
-const port: number = 3115;
+const port: number = 3111;
 
 app.use(bodyParser.json());
 
@@ -33,8 +33,10 @@ app.post("/chat/", async (req: Request, res: Response) => {
 });
 
 app.listen(port, () => console.log(`Agent listening on port ${port}!`));
-
-const serverUrl: string = `http://localhost:${server_port}`;
+console.log(`${isDocker ? "host.docker.internal" : "localhost"}`);
+const serverUrl: string = `http://${
+  isDocker ? "host.docker.internal" : "localhost"
+}:${server_port}`;
 
 let retries = 0;
 const maxRetries = 6;
@@ -43,7 +45,7 @@ const joinServer = () => {
   axios
     .post(`${serverUrl}/join`, {
       name: "Aelis Windrider",
-      url: `http://localhost:${port}/chat/`,
+      url: `http://agent1:${port}/chat/`,
     })
     .then((res) => console.log(res.data))
     .catch((error) => {
