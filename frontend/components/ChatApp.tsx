@@ -25,9 +25,14 @@ function ChatApp() {
       });
 
       ws.addEventListener("message", (e) => {
+        const data = JSON.parse(e.data);
         setMessages((prevMessages) => [
           ...prevMessages,
-          { text: e.data, key: prevMessages.length },
+          {
+            text: `${data.name}: ${data.message}`,
+            color: data.color,
+            key: prevMessages.length,
+          },
         ]);
       });
     };
@@ -58,10 +63,14 @@ function ChatApp() {
         </button>
       )}
       <div className="flex flex-col space-y-4">
-        {displayedMessages.map((message, idx) => (
+        {displayedMessages.map((message) => (
           <div
             key={message.key}
-            className="bg-blue-500 text-white rounded-lg py-2 px-4 max-w-md w-full inline-block"
+            className="rounded-lg py-2 px-4 max-w-md w-full inline-block"
+            style={{
+              backgroundColor: message.color,
+              color: "black",
+            }}
           >
             {message.text}
           </div>

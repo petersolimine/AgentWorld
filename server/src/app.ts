@@ -18,7 +18,21 @@ app.listen(server_port, () =>
 interface User {
   name: string;
   url: string;
+  color: string;
 }
+
+const colors = [
+  "rgba(255, 102, 51, 0.5)",
+  "rgba(255, 51, 255, 0.5)",
+  "rgba(255, 255, 153, 0.5)",
+  "rgba(0, 179, 230, 0.5)",
+  "rgba(230, 179, 51, 0.5)",
+  "rgba(51, 102, 230, 0.5)",
+  "rgba(153, 153, 102, 0.5)",
+  "rgba(153, 255, 153, 0.5)",
+  "rgba(179, 77, 77, 0.5)",
+  "rgba(175, 179, 153, 0.5)",
+];
 
 const clients = new Set<WebSocket>();
 const users: User[] = [];
@@ -35,7 +49,9 @@ app.post("/join", (req: Request, res: Response) => {
     return res.status(400).json({ error: "Server is full, cannot join." });
   }
 
-  users.push({ name, url });
+  // get a random color
+
+  users.push({ name, url, color: colors[users.length - 1] });
 
   if (users.length === 2) {
     startGame();
@@ -46,10 +62,22 @@ app.post("/join", (req: Request, res: Response) => {
 
 const wss = new WebSocketServer({ port: 8080 });
 
-const broadcast = (message: string) => {
+type broadcastMessage = {
+  message: string;
+  name: string;
+  color: string;
+};
+
+const broadcast = (info: broadcastMessage) => {
   clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
-      client.send(message);
+      client.send(
+        JSON.stringify({
+          message: info.message,
+          name: info.name,
+          color: info.color,
+        })
+      );
     }
   });
 };
@@ -70,7 +98,11 @@ const startGame = async () => {
           actions.shift(); // Keep the array size to a maximum of 20 elements
         }
 
-        broadcast(`${user.name}: ${response.data.action}`);
+        broadcast({
+          message: response.data.action,
+          name: user.name,
+          color: user.color,
+        });
 
         const serverResponse = await OpenAIRequest({
           model: "gpt-3.5-turbo",
@@ -86,7 +118,11 @@ const startGame = async () => {
             },
           ],
         });
-        broadcast(`Server: ${serverResponse}`);
+        broadcast({
+          message: serverResponse,
+          name: "Server",
+          color: "rgba(175, 179, 153, 0.6)",
+        });
         actions.push({ user: "server", action: serverResponse });
         if (actions.length > 20) {
           actions.shift(); // Keep the array size to a maximum of 20 elements
@@ -95,7 +131,11 @@ const startGame = async () => {
         users.splice(i, 1);
         i--;
         console.log(`User ${user.name} has died.`);
-        broadcast(`User ${user.name} has died.`);
+        broadcast({
+          message: `User ${user.name} has died.`,
+          name: "Server",
+          color: "rgba(175, 179, 153, 0.6)",
+        });
       }
     }
   }
