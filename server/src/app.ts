@@ -115,7 +115,7 @@ const startGame = async () => {
                 response.data.action
               }. Here is information about previous actions, which may be relevant:\n${formatActionsToString(
                 actions
-              )}\n\nRespond with relevant json data regarding the state of the world.`,
+              )}\n\nRespond to the player with information about the result of their action.`,
             },
           ],
         });

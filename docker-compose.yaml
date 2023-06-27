@@ -21,7 +21,7 @@ services:
 
   agent1:
     image: node:18
-    command: npx ts-node src/ag1.ts
+    command: npx ts-node src/agents/ag1.ts
     volumes:
       - ./server:/app
     working_dir: /app
@@ -34,7 +34,7 @@ services:
 
   agent2:
     image: node:18
-    command: npx ts-node src/ag2.ts
+    command: npx ts-node src/agents/ag2.ts
     volumes:
       - ./server:/app
     working_dir: /app
@@ -47,7 +47,7 @@ services:
 
   agent3:
     image: node:18
-    command: npx ts-node src/ag3.ts
+    command: npx ts-node src/agents/ag3.ts
     volumes:
       - ./server:/app
     working_dir: /app
@@ -60,7 +60,7 @@ services:
 
   agent4:
     image: node:18
-    command: npx ts-node src/ag4.ts
+    command: npx ts-node src/agents/ag4.ts
     volumes:
       - ./server:/app
     working_dir: /app

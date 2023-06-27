@@ -1,13 +1,13 @@
 import express, { Express, Request, Response } from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
-import { OpenAIRequest } from "./openAIChatRequest";
-import { Agent3SystemPrompt } from "./prompts";
-import { formatActionsToString } from "./utils";
-import { server_port, network_url, isDocker } from "./constants";
+import { OpenAIRequest } from "../openAIChatRequest";
+import { Agent4SystemPrompt } from "../prompts";
+import { formatActionsToString } from "../utils";
+import { server_port, network_url } from "../constants";
 
 const app: Express = express();
-const port: number = 3113;
+const port: number = 3114;
 
 app.use(bodyParser.json());
 
@@ -17,7 +17,7 @@ app.post("/chat/", async (req: Request, res: Response) => {
   const text = await OpenAIRequest({
     model: "gpt-3.5-turbo",
     messages: [
-      { role: "system", content: Agent3SystemPrompt },
+      { role: "system", content: Agent4SystemPrompt },
       {
         role: "user",
         content:
@@ -39,7 +39,7 @@ const maxRetries = 6;
 const joinServer = () => {
   axios
     .post(`${serverUrl}/join`, {
-      name: "Craig Johnson",
+      name: "Sleeter Skateer",
       url: `http://${network_url}:${port}/chat/`,
     })
     .then((res) => console.log(res.data))

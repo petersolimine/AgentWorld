@@ -1,10 +1,10 @@
 import express, { Express, Request, Response } from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
-import { OpenAIRequest } from "./openAIChatRequest";
-import { Agent2SystemPrompt } from "./prompts";
-import { formatActionsToString } from "./utils";
-import { server_port, network_url, isDocker } from "./constants";
+import { OpenAIRequest } from "../openAIChatRequest";
+import { Agent2SystemPrompt } from "../prompts";
+import { formatActionsToString } from "../utils";
+import { server_port, network_url } from "../constants";
 
 const app: Express = express();
 const port: number = 3112;

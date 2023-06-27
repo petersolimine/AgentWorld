@@ -1,26 +1,23 @@
 import express, { Express, Request, Response } from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
-import { OpenAIRequest } from "./openAIChatRequest";
-import { Agent1SystemPrompt } from "./prompts";
-import { formatActionsToString } from "./utils";
-import { server_port, network_url, isDocker } from "./constants";
+import { OpenAIRequest } from "../openAIChatRequest";
+import { Agent3SystemPrompt } from "../prompts";
+import { formatActionsToString } from "../utils";
+import { server_port, network_url } from "../constants";
 
 const app: Express = express();
-const port: number = 3111;
+const port: number = 3113;
 
 app.use(bodyParser.json());
 
 app.post("/chat/", async (req: Request, res: Response) => {
-  // make a chat request to OpenAI with the information about state of the world
-  // and the action that the other agent took
-  // req.body.actions is an array of the last 20 actions in string form. We must combine them into a single string.
   const messages = formatActionsToString(req.body.actions);
 
   const text = await OpenAIRequest({
     model: "gpt-3.5-turbo",
     messages: [
-      { role: "system", content: Agent1SystemPrompt },
+      { role: "system", content: Agent3SystemPrompt },
       {
         role: "user",
         content:
@@ -33,10 +30,8 @@ app.post("/chat/", async (req: Request, res: Response) => {
 });
 
 app.listen(port, () => console.log(`Agent listening on port ${port}!`));
-console.log(`${isDocker ? "host.docker.internal" : "localhost"}`);
-const serverUrl: string = `http://${
-  isDocker ? "host.docker.internal" : "localhost"
-}:${server_port}`;
+
+const serverUrl: string = `http://${network_url}:${server_port}`;
 
 let retries = 0;
 const maxRetries = 6;
@@ -44,8 +39,8 @@ const maxRetries = 6;
 const joinServer = () => {
   axios
     .post(`${serverUrl}/join`, {
-      name: "Aelis Windrider",
-      url: `http://agent1:${port}/chat/`,
+      name: "Craig Johnson",
+      url: `http://${network_url}:${port}/chat/`,
     })
     .then((res) => console.log(res.data))
     .catch((error) => {
