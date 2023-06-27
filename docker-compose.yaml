@@ -45,6 +45,32 @@ services:
     ports:
       - "3112:3112"
 
+  agent3:
+    image: node:18
+    command: npx ts-node src/ag3.ts
+    volumes:
+      - ./server:/app
+    working_dir: /app
+    networks:
+      - net
+    depends_on:
+      - world
+    ports:
+      - "3113:3113"
+
+  agent4:
+    image: node:18
+    command: npx ts-node src/ag4.ts
+    volumes:
+      - ./server:/app
+    working_dir: /app
+    networks:
+      - net
+    depends_on:
+      - world
+    ports:
+      - "3114:3114"
+
   frontend:
     build: ./frontend
     networks:

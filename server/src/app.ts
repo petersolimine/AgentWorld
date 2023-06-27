@@ -52,6 +52,7 @@ app.post("/join", (req: Request, res: Response) => {
   // get a random color
 
   users.push({ name, url, color: colors[users.length - 1] });
+  console.log(`assigned color ${colors[users.length - 1]} to ${name}`);
 
   if (users.length === 2) {
     startGame();
