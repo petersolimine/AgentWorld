@@ -46,6 +46,18 @@ const constants_1 = require("./constants");
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json());
 app.listen(constants_1.server_port, () => console.log(`AgentWorld server listening on port ${constants_1.server_port}!`));
+const colors = [
+    "rgba(255, 102, 51, 0.5)",
+    "rgba(255, 51, 255, 0.5)",
+    "rgba(255, 255, 153, 0.5)",
+    "rgba(0, 179, 230, 0.5)",
+    "rgba(230, 179, 51, 0.5)",
+    "rgba(51, 102, 230, 0.5)",
+    "rgba(153, 153, 102, 0.5)",
+    "rgba(153, 255, 153, 0.5)",
+    "rgba(179, 77, 77, 0.5)",
+    "rgba(175, 179, 153, 0.5)",
+];
 const clients = new Set();
 const users = [];
 const actions = [];
@@ -57,17 +69,23 @@ app.post("/join", (req, res) => {
     if (users.length >= 10) {
         return res.status(400).json({ error: "Server is full, cannot join." });
     }
-    users.push({ name, url });
+    // get a random color
+    users.push({ name, url, color: colors[users.length - 1] });
+    console.log(`assigned color ${colors[users.length - 1]} to ${name}`);
     if (users.length === 2) {
         startGame();
     }
     res.status(200).json({ message: "Joined successfully." });
 });
 const wss = new ws_1.Server({ port: 8080 });
-const broadcast = (message) => {
+const broadcast = (info) => {
     clients.forEach((client) => {
         if (client.readyState === ws_1.default.OPEN) {
-            client.send(message);
+            client.send(JSON.stringify({
+                message: info.message,
+                name: info.name,
+                color: info.color,
+            }));
         }
     });
 };
@@ -81,7 +99,11 @@ const startGame = () => __awaiter(void 0, void 0, void 0, function* () {
                 if (actions.length > 20) {
                     actions.shift(); // Keep the array size to a maximum of 20 elements
                 }
-                broadcast(`${user.name}: ${response.data.action}`);
+                broadcast({
+                    message: response.data.action,
+                    name: user.name,
+                    color: user.color,
+                });
                 const serverResponse = yield (0, openAIChatRequest_1.OpenAIRequest)({
                     model: "gpt-3.5-turbo",
                     messages: [
@@ -92,7 +114,11 @@ const startGame = () => __awaiter(void 0, void 0, void 0, function* () {
                         },
                     ],
                 });
-                broadcast(`Server: ${serverResponse}`);
+                broadcast({
+                    message: serverResponse,
+                    name: "Server",
+                    color: "rgba(175, 179, 153, 0.6)",
+                });
                 actions.push({ user: "server", action: serverResponse });
                 if (actions.length > 20) {
                     actions.shift(); // Keep the array size to a maximum of 20 elements
@@ -102,7 +128,11 @@ const startGame = () => __awaiter(void 0, void 0, void 0, function* () {
                 users.splice(i, 1);
                 i--;
                 console.log(`User ${user.name} has died.`);
-                broadcast(`User ${user.name} has died.`);
+                broadcast({
+                    message: `User ${user.name} has died.`,
+                    name: "Server",
+                    color: "rgba(175, 179, 153, 0.6)",
+                });
             }
         }
     }

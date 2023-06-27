@@ -17,20 +17,24 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log("Starting the process...");
         // Connect to Chroma backend
         const client = new chromadb_1.ChromaClient();
+        console.log("Connected to Chroma backend");
         // Reset the database
         yield client.reset();
+        console.log("Database reset");
         // Initialize the OpenAI Embedding Function with the API key
         const embedder = new chromadb_1.OpenAIEmbeddingFunction({
             openai_api_key: process.env.OPENAI_API_KEY || "",
         });
+        console.log("OpenAI Embedding Function initialized");
         // Creating a collection with OpenAI embedding function
         let collection = yield client.createCollection({
             name: "my_collection",
             embeddingFunction: embedder,
         });
-        console.log("here");
+        console.log("Collection created");
         // Adding data to the collection
         yield collection.add({
             ids: ["id1", "id2", "id3", "id4"],
@@ -42,21 +46,24 @@ function main() {
             ],
             documents: ["lorem ipsum...", "doc2", "doc5", "doc6"],
         });
-        console.log("here2");
+        console.log("Data added to the collection");
         // Querying a collection
         const result = yield collection.query({
             queryTexts: ["lorem"],
             nResults: 1,
             where: { chapter: "3" },
         });
+        console.log("Queried the collection");
         console.log(result);
         // Deleting data from the collection
         yield collection.delete({
             ids: ["id1", "id2"],
             where: { chapter: "3" },
         });
+        console.log("Data deleted from the collection");
         // Deleting the collection
         yield client.deleteCollection({ name: "my_collection" });
+        console.log("Collection deleted");
     });
 }
 main().catch((error) => console.error(error));
