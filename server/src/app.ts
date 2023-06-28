@@ -2,10 +2,10 @@ import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import WebSocket, { Server as WebSocketServer } from "ws";
 import axios from "axios";
-import { OpenAIRequest } from "./openAIChatRequest";
+import { OpenAIRequest } from "../lib/utils";
 import { WorldState } from "./prompts";
-import { formatActionsToString } from "./utils";
-import { server_port } from "./constants";
+import { formatActionsToString } from "../lib/utils";
+import { server_port } from "../lib/constants";
 
 const app = express();
 

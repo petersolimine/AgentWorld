@@ -12,3 +12,5 @@ function isRunningInDocker() {
 
 export const isDocker = isRunningInDocker();
 export const network_url = isDocker ? "host.docker.internal" : "localhost";
+
+export const MAX_RETRIES = 6;
