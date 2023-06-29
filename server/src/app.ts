@@ -1,12 +1,12 @@
 import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
-import WebSocket, { Server as WebSocketServer } from "ws";
 import axios from "axios";
 import { OpenAIRequest } from "../lib/utils";
 import { WorldState } from "./prompts";
 import { formatActionsToString } from "../lib/utils";
 import { server_port, colors } from "../lib/constants";
 import { initChroma } from "../lib/utils";
+import { broadcast, clients } from "../lib/WebsocketManager";
 
 const app = express();
 
@@ -22,7 +22,6 @@ interface User {
   color: string;
 }
 
-const clients = new Set<WebSocket>();
 const users: User[] = [];
 const actions: { user: string; action: any }[] = [];
 
@@ -48,28 +47,6 @@ app.post("/join", (req: Request, res: Response) => {
 
   res.status(200).json({ message: "Joined successfully." });
 });
-
-const wss = new WebSocketServer({ port: 8080 });
-
-type broadcastMessage = {
-  message: string;
-  name: string;
-  color: string;
-};
-
-const broadcast = (info: broadcastMessage) => {
-  clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(
-        JSON.stringify({
-          message: info.message,
-          name: info.name,
-          color: info.color,
-        })
-      );
-    }
-  });
-};
 
 const startGame = async () => {
   // initialize chroma with the collection names that we will use (return value is a client)
@@ -136,8 +113,3 @@ const startGame = async () => {
   }
   console.log("Game over.");
 };
-
-wss.on("connection", (ws: WebSocket) => {
-  clients.add(ws);
-  ws.on("close", () => clients.delete(ws));
-});
