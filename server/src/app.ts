@@ -5,7 +5,8 @@ import axios from "axios";
 import { OpenAIRequest } from "../lib/utils";
 import { WorldState } from "./prompts";
 import { formatActionsToString } from "../lib/utils";
-import { server_port } from "../lib/constants";
+import { server_port, colors } from "../lib/constants";
+import { initChroma } from "../lib/utils";
 
 const app = express();
 
@@ -20,19 +21,6 @@ interface User {
   url: string;
   color: string;
 }
-
-const colors = [
-  "rgba(255, 102, 51, 0.5)",
-  "rgba(255, 51, 255, 0.5)",
-  "rgba(255, 255, 153, 0.5)",
-  "rgba(0, 179, 230, 0.5)",
-  "rgba(230, 179, 51, 0.5)",
-  "rgba(51, 102, 230, 0.5)",
-  "rgba(153, 153, 102, 0.5)",
-  "rgba(153, 255, 153, 0.5)",
-  "rgba(179, 77, 77, 0.5)",
-  "rgba(175, 179, 153, 0.5)",
-];
 
 const clients = new Set<WebSocket>();
 const users: User[] = [];
@@ -84,6 +72,9 @@ const broadcast = (info: broadcastMessage) => {
 };
 
 const startGame = async () => {
+  // initialize chroma with the collection names that we will use (return value is a client)
+  const chroma_client = await initChroma(["world", "all_moves"], false);
+
   while (users.length > 1) {
     for (let i = 0; i < users.length; i++) {
       const user = users[i];
@@ -119,12 +110,15 @@ const startGame = async () => {
             },
           ],
         });
+
         broadcast({
           message: serverResponse,
           name: "Server",
           color: "rgba(175, 179, 153, 0.6)",
         });
+
         actions.push({ user: "server", action: serverResponse });
+
         if (actions.length > 20) {
           actions.shift(); // Keep the array size to a maximum of 20 elements
         }

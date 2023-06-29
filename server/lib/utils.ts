@@ -9,7 +9,10 @@ This function will take 2 params.
 2. Bool value to reset the collection or not
 returns a client
 */
-export const initChroma = async (collection_name: string, reset: boolean) => {
+export const initChroma = async (
+  collection_names: string[],
+  reset: boolean
+) => {
   const client = new ChromaClient();
 
   if (reset) await client.reset();
@@ -17,14 +20,18 @@ export const initChroma = async (collection_name: string, reset: boolean) => {
   const embedder = new OpenAIEmbeddingFunction({
     openai_api_key: process.env.OPENAI_API_KEY || "",
   });
-  try {
-    await client.createCollection({
-      name: collection_name,
-      embeddingFunction: embedder,
-    });
-    console.log("Collection created: ", collection_name);
-  } catch (e) {
-    console.log("Collection already exists: ", collection_name);
+
+  // iterate through each
+  for (let collection_name of collection_names) {
+    try {
+      await client.createCollection({
+        name: collection_name,
+        embeddingFunction: embedder,
+      });
+      console.log("Collection created: ", collection_name);
+    } catch (e) {
+      console.log("Collection already exists: ", collection_name);
+    }
   }
   return client;
 };
