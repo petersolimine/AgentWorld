@@ -12,10 +12,9 @@
   "include": [
     "src/**/*",
     "lib/**/*",
+    "tests/**/*",
     "src/types/declarations.d.ts",
     "lib/constants.ts",
-    "../lib/ChromaClient.ts",
-    "lib/ChromaClient.ts",
     "lib/utils.ts"
   ],
   "paths": {
