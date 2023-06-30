@@ -86,6 +86,39 @@ const startGame = async () => {
         Parse the response, update the necessary items.
         */
 
+      /*
+        ACTIONABLE GAME PLAN:
+        -------------
+        STEP 1: <insert preamble>
+        Here is <CHARACTER>'s previous action: <INSERT PREV ACTION> 
+        and here's a list of every action that has been taken since. <INSERT LIST>
+        Review the list for information that is relevant to <CHARACTER>. Consider the current state of the world, and only provide a summary of 
+        of things that are directly relevant to <CHARACTER>. Write the summary as if the actions are unfolding, in the order that they happened 
+        (e.g. "Player1 began running at you, but Player2 stopped them. Moments later, Player5 shouted 'lorem ipsum'").
+        This summary will be provided to the character as their perspective on the world. Do not include information that does not pertain to <CHARACTER>. 
+        Here is some potentially important information about the state of the world. You can use this information help determine what might be relevant:
+
+        <insert state of the world, queried from the character's previous action> <trim this list based on context length>
+        
+        Now, write the summary for <CHARACTER>
+        -------------
+
+        From the above, we now have a concise summary of past actions. 
+
+        OPTIONAL STEP 1.5: Run a query to get more world information that would be useful to the user. 
+        -------------
+
+        STEP 2: Pass the summary to the agent, await a response.
+        -------------
+
+        STEP 3: When the response is received:
+                3A:  Store it in the actions array
+                3B:  Query Chroma for relevant items, locations, etc with UPSERT
+
+        REPEAT
+
+        */
+
       try {
         const response = await axios.post(
           user.url,
