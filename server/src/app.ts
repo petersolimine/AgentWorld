@@ -36,8 +36,6 @@ app.post("/join", (req: Request, res: Response) => {
     return res.status(400).json({ error: "Server is full, cannot join." });
   }
 
-  // get a random color
-
   users.push({ name, url, color: colors[users.length - 1] });
   console.log(`assigned color ${colors[users.length - 1]} to ${name}`);
 
@@ -50,11 +48,43 @@ app.post("/join", (req: Request, res: Response) => {
 
 const startGame = async () => {
   // initialize chroma with the collection names that we will use (return value is a client)
-  const chroma_client = await initChroma(["world", "all_moves"], false);
+  const chroma_client = await initChroma(["world", "actions"], false);
+  const world_collection = await chroma_client.getCollection({
+    name: "world",
+  });
+
+  const actions_collection = await chroma_client.getCollection({
+    name: "actions",
+  });
 
   while (users.length > 1) {
     for (let i = 0; i < users.length; i++) {
       const user = users[i];
+
+      // create a collection of information that should be shared with the user
+      // 1. The relevant elements of the world state
+      // 2. The actions of previous users IF relevant
+      // we will not send the user's own actions to them, because they should know what they did
+
+      // first, ask if any of the actions are relevant to the user (i.e. if they are in the same room)
+      // before doing that, we need to know where the user is
+      // we can retrieve that from their last move
+      // so maybe we start by querying world state with the agents last move,
+      // then, we use that information + the list of new actions to construct a prompt to the Server:
+      /* "Here is the past action that a user took: {last_action}. Relevant information about the virtual world: {relevant information}, 
+        With that in mind, summarize the most recent actions that other user's have taken. The summary will be given to the user, 
+        so you must NOT include information that is irrelevant. Only include information that is directly relevant to the user, 
+        such as if someone interacted with an object or said something directly to the user. Your output should be a concise summary in the format of a story."*/
+      // Once we have the summary, feed it to the user and await the response.
+      /*
+        Once the user replies:
+        1. Embed the user's response.
+        2. Query the world_state collection for most relevant items, locations, etc
+        3. Construct a prompt with those and the user action, i.e. :
+        Here is the action that the user took. Here is some relavant information below. Which, if any, of these items, locations, or places needs to be updated based on the user's action?
+        // this should probably be a formatted output with OpenAI functions.
+        Parse the response, update the necessary items.
+        */
 
       try {
         const response = await axios.post(
@@ -63,8 +93,9 @@ const startGame = async () => {
           { timeout: 15000 }
         );
         actions.push({ user: user.name, action: response.data.action });
-        if (actions.length > 20) {
-          actions.shift(); // Keep the array size to a maximum of 20 elements
+
+        if (actions.length > 100) {
+          actions.shift(); // Keep the array size to a maximum of 100 elements
         }
 
         broadcast({
@@ -96,8 +127,8 @@ const startGame = async () => {
 
         actions.push({ user: "server", action: serverResponse });
 
-        if (actions.length > 20) {
-          actions.shift(); // Keep the array size to a maximum of 20 elements
+        if (actions.length > 100) {
+          actions.shift(); // Keep the array size to a maximum of 100 elements
         }
       } catch (error) {
         users.splice(i, 1);

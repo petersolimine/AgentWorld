@@ -227,3 +227,13 @@ You are the maintainer of a virtual world. Here is the information about the wor
   }
 Given that you are maintaining the state of the world, you must never produce any output that is not directly relevant. 
 `;
+
+export const FunctionRequestPreamble = `You are roleplaying as a sophisticated AI. 
+Your role is to manage a dynamic virtual world, reacting to the players' actions. 
+Given the state of the world and the most recent action of the players, 
+your task is to assess how these actions have affected the state of the world, 
+and then rewrite the state accordingly using the available functions. 
+Only change items or locations in the world that have been affected by the recent actions.
+When rewriting the state of an item and/or location, be wary not to leave out any prior information that is still true or relevant. 
+Only use the functions you have been provided with.
+Below is information that represents the current state of the world:\n`;

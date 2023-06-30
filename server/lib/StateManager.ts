@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import dotenv from "dotenv";
+import { FunctionRequestPreamble } from "../src/prompts";
 dotenv.config();
 
 interface FunctionArgs {
@@ -8,11 +9,11 @@ interface FunctionArgs {
 }
 
 export async function updateDatabase({ item, new_value }: FunctionArgs) {
-  // your database update logic here
+  // chroma update
   console.log(`Update ${item} with new value: ${new_value}`);
 }
 
-export interface OpenAIRequestPayload {
+export interface OpenAIFuncRequestPayload {
   model: string;
   messages: Array<{ role: string; content: string }>;
   functions?: Array<{
@@ -23,8 +24,8 @@ export interface OpenAIRequestPayload {
   function_call?: string;
 }
 
-export async function OpenAIRequest(
-  payload: OpenAIRequestPayload
+export async function OpenAIFuncRequest(
+  payload: OpenAIFuncRequestPayload
 ): Promise<string> {
   try {
     const res = await axios.post(
@@ -56,7 +57,7 @@ export async function OpenAIRequest(
       await available_functions[function_name](function_args);
       payload.messages.push(data.choices[0].message);
 
-      return await OpenAIRequest(payload);
+      return await OpenAIFuncRequest(payload);
     }
 
     return data.choices[0].message.content;
@@ -71,8 +72,60 @@ export async function OpenAIRequest(
 
 async function runConversation() {
   const worldState = {
-    elven_forest:
-      "Jane and randy are in the forest, starting a fire. They are preparing to cook dinner",
+    ElvenForest: {
+      description:
+        "A lush, enchanted forest where the ancient elves live among the towering trees.",
+      objects: ["elven bow", "enchanted stream", "ancient tree of knowledge"],
+      goNorth: "SilverMountain",
+      goEast: "FeyGrove",
+      goSouth: "PortalCrossroads",
+      goWest: "null",
+    },
+    SilverMountain: {
+      description:
+        "A majestic mountain range with snow-capped peaks and home to the dwarves.",
+      objects: ["mithril ore", "dwarven axe", "silver dragon"],
+      goNorth: "null",
+      goEast: "SkyTemple",
+      goSouth: "ElvenForest",
+      goWest: "DarkSwamps",
+    },
+    FeyGrove: {
+      description:
+        "A grove bathed in perpetual twilight and inhabited by magical fey creatures.",
+      objects: ["fairy dust", "wishing well", "unicorn"],
+      goNorth: "SkyTemple",
+      goEast: "null",
+      goSouth: "CrystalCaves",
+      goWest: "ElvenForest",
+    },
+    PortalCrossroads: {
+      description:
+        "A mystical clearing with portals leading to unknown dimensions.",
+      objects: ["runestone", "guardian golem", "ancient portals"],
+      goNorth: "ElvenForest",
+      goEast: "CrystalCaves",
+      goSouth: "null",
+      goWest: "HauntedGraveyard",
+    },
+    DarkSwamps: {
+      description:
+        "Gloomy swamps, rumored to be haunted by spirits and home to dangerous creatures.",
+      objects: ["witch's brew", "swamp monster", "ghost lantern"],
+      goNorth: "null",
+      goEast: "SilverMountain",
+      goSouth: "HauntedGraveyard",
+      goWest: "null",
+    },
+    SkyTemple: {
+      description:
+        "A floating temple high in the clouds, said to be where the gods convene.",
+      objects: ["cloud sword", "oracle", "golden harp"],
+      goNorth: "null",
+      goEast: "ocean_of_angels",
+      goSouth: "FeyGrove",
+      goWest: "SilverMountain",
+    },
     sword_of_domacles:
       "The sword of domacles is hidden behind a rock in the elven forrest",
     rainbow: "a rainbow has appeared above the ocean of angels",
@@ -83,15 +136,15 @@ async function runConversation() {
   };
 
   const recentAction =
-    "Brom Ironfist yells at the sky, 'damn you, lord comable!' and then hurls his sword into the ocean. He prepares to be stabbed in the heart.";
+    "Brom Ironfist yells at the sky, 'damn you, lord comable!' and then hurls his sword with all his might. The sword flies west for miles and miles, landing at the base of a temple. He prepares to be stabbed in the heart.";
 
   const messages = [
     {
       role: "user",
       content:
-        `You are roleplaying as a sophisticated AI. Your role is to manage a dynamic virtual world, reacting to the players' actions. Given the state of the world and the most recent action of the players, your task is to assess how these actions have affected the state of the world, and then rewrite the state accordingly using the available functions. Only change items or locations in the world that have been affected by the recent actions. Here's the current state of the world:\n` +
+        FunctionRequestPreamble +
         JSON.stringify(worldState) +
-        `\nAnd here's the most recent action:\n`,
+        `\nHere is the recent action:\n`,
     },
     { role: "user", content: recentAction },
   ];
@@ -106,7 +159,7 @@ async function runConversation() {
           item: {
             type: "string",
             description:
-              "The name of the item/location to update. You can only update existing items.",
+              "The ID of the item/location to update. You can only update existing items.",
           },
           new_value: {
             type: "string",
@@ -119,7 +172,7 @@ async function runConversation() {
     },
   ];
 
-  const response = await OpenAIRequest({
+  const response = await OpenAIFuncRequest({
     model: "gpt-4-0613",
     messages,
     functions,

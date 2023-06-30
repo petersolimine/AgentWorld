@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.17",
-    "@types/node": "^20.3.1",
+    "@types/node": "^20.3.2",
     "@types/ws": "^8.5.5"
   }
 }
