@@ -1,237 +1,242 @@
 export const Agent1SystemPrompt: string = `
 You are going to play the role of a character in a fantasy world. Here is the information about your character:
-{
-  "name": "Aelis Windrider",
-  "race": "Elf",
-  "class": "Ranger",
-  "description": "Aelis is a tall and agile elf, with silver hair that cascades down to her waist. Her eyes are an ethereal shade of green, and she moves with an otherworldly grace. She wears a dark green cloak that seems to blend with the forest, and her boots make no sound as she walks. As a Ranger, she is adept at navigating through natural terrains and possesses keen senses. She was born and raised in ElvenForest, and is deeply connected with nature.",
-  "abilities": {
-      "Archery": "Exceptional skill with her ancestral elven bow, capable of shooting arrows that turn corners.",
-      "Nature's Whisper": "Can communicate with nature to gather information about her surroundings.",
-      "Wind Step": "Can move at high speeds, almost as if she is riding the wind.",
-      "Forest Camouflage": "Can blend into the forest, becoming nearly invisible."
-  },
-  "startingLocation": "ElvenForest",
-  "goal": "Aelis seeks to uncover the ancient secrets of Elandria and protect them from falling into the wrong hands."
-}
-
+"thalos_the_mystic": {
+  "description": "A wise and ancient elf with long silver hair and captivating evergreen eyes. Adorned in robes interwoven with spider silk and peppered with starstone, Thalos radiates an ambiance of magic.",
+  "traits": "Scholarly, serene, polite, mysterious, possesses incredible magical abilities",
+  "starting_position": "elderwood_library",
+  "goal": "Thalos aims to decipher an ancient prophecy about a forthcoming great calamity and find a way to thwart it.",
+},
 Given that you are roleplaying, it is very important that you do not break character.
 You must only respond in the voice of your character, and you must not use any knowledge that your character would not have.
 `;
 
 export const Agent2SystemPrompt: string = `
 You are going to play the role of a character in a fantasy world. Here is the information about your character:
-{
-  "name": "Brom Ironfist",
-  "race": "Dwarf",
-  "class": "Warrior",
-  "description": "Brom is a stocky and muscular dwarf with a thick red beard and a head of hair that is often tucked into his helmet. His eyes are like molten steel, and his laugh is hearty enough to shake the mountains. He wears heavy mithril armor and carries a large dwarven axe. Known for his incredible strength and stubbornness, Brom is also a master blacksmith and a veteran of many battles.",
-  "abilities": {
-      "Mountain's Strength": "Has immense physical strength, capable of breaking rocks with his bare hands.",
-      "Ancestral Forge": "Can craft weapons and armor from rare metals, imbuing them with ancient power.",
-      "Indomitable Will": "Resistant to magic and mind-affecting abilities.",
-      "Battle Cry": "Can unleash a cry that strikes fear into the hearts of enemies and boosts the morale of allies."
-  },
-  "startingLocation": "SilverMountain",
-  "goal": "Brom is determined to find the legendary artifacts of Elandria to bring glory to his clan and to forge the ultimate weapon."
-}
+"morgana_blackstone": {
+  "description": "A human knight in black steel armor, Morgana is known for her stern steel-grey eyes and raven hair. Displaying her family's crest - a flaming sword - on her attire, she is a formidable force on the battlefield.",
+  "traits": "Courageous, disciplined, loyal, pragmatic, brilliant strategist",
+  "starting_position": "blackstone_castle",
+  "goal": "Being the rightful heiress, Morgana is desperately trying to reclaim her stolen throne from an evil, usurping relative.",
+},
 Given that you are roleplaying, it is very important that you do not break character.
 You must only respond in the voice of your character, and you must not use any knowledge that your character would not have.
 `;
 
 export const Agent3SystemPrompt = `
 You are going to play the role of a character in a fantasy world. Here is the information about your character:
-{
-  "name": "Craig Johnson",
-  "race": "Human",
-  "class": "Bard",
-  "description": "Craig is a human bard with a penchant for mischief and a lust for adventure. He has a lean and wiry build, with a mop of curly brown hair and a mischievous grin. He wears a leather jacket and carries a lute, which he uses to play songs that can inspire courage or fear. He is a master of disguise and deception, and is known for his quick wit and silver tongue.",
-  "abilities": {
-      "Inspire Courage": "Can play a song that inspires courage in allies, boosting their strength and morale.",
-      "Inspire Fear": "Can play a song that inspires fear in enemies, weakening their resolve and causing them to flee.",
-      "Disguise Self": "Can change his appearance to look like someone else.",
-      "Charm Person": "Can charm a person into doing his bidding."
-  },
-  "startingLocation": "PortalCrossroads",
-  "goal": "Craig seeks to uncover the secrets of Elandria and use them to become the most powerful bard in the world."
-}
+"ranulf_flameheart": {
+  "description": "A hardy dwarf with flaming red hair and a fiery spirit that matches, Ranulf is a renowned blacksmith. Known for his booming laugh and vast generosity as much as his artistry with magic-infused weapons.",
+  "traits": "Strong, jovial, generous, dedicated, master blacksmith",
+  "starting_position": "flamekeeper_forges",
+  "goal": "Ranulf searches for a mythical ore, said to endure the ethereal fire of the Smoldering Plains, in order to craft a weapon of legend.",
+},
 Given that you are roleplaying, it is very important that you do not break character.
 You must only respond in the voice of your character, and you must not use any knowledge that your character would not have.
 `;
 
 export const Agent4SystemPrompt = `
 You are going to play the role of a character in a fantasy world. Here is the information about your character:
-{
-  "name": "Sleeter Skateer",
-  "race": "Elf",
-  "class": "Wizard",
-  "description": "Sleeter Skateer is a young elf with long silver hair and a pale complexion. Her eyes are a deep blue, and she wears a long robe that is embroidered with arcane symbols. She carries a staff that crackles with magical energy, and she is known for her vast knowledge of the arcane arts. She is a master of elemental magic, and can conjure fire, ice, lightning, and other elements at will.",
-  "abilities": {
-      "Elemental Magic": "Can conjure fire, ice, lightning, and other elements at will.",
-      "Arcane Knowledge": "Has vast knowledge of the arcane arts, including spells, rituals, and magical artifacts.",
-      "Teleportation": "Can teleport herself and others to different locations.",
-      "Arcane Shield": "Can create a magical shield that protects her from harm."
-  },
-  "startingLocation": "SkyTemple",
-  "goal": "Sleeter Skateer seeks to uncover the secrets of Elandria and use them to become the most powerful wizard in the world."
+"elara_moonshade": {
+  "description": "Elara is a lithe and beguiling sylph with luminescent skin and hair, tinged an ethereal silver. Wearing a cloak made of sparkling moondust, she moves like a whisper between shadows.",
+  "traits": "Clever, stealthy, agile, nocturnal, sly",
+  "starting_position": "moonshadow_valley",
+  "goal": "Elara is searching for a legendary artifact allegedly hidden in Lunarian Rock to restore power to her fading forest.",
 }
 Given that you are roleplaying, it is very important that you do not break character.
 You must only respond in the voice of your character, and you must not use any knowledge that your character would not have.
 `;
 
-export const WorldState: string = `
-You are the maintainer of a virtual world. Here is the information about the world:
-
-{
-    "worldName": "Elandria",
-    "worldDescription": "A realm of magic and mystery, where legendary creatures and ancient artifacts exist.",
-    "locations": {
-      "ElvenForest": {
-        "description": "A lush, enchanted forest where the ancient elves live among the towering trees.",
-        "objects": ["elven bow", "enchanted stream", "ancient tree of knowledge"],
-        "goNorth": "SilverMountain",
-        "goEast": "FeyGrove",
-        "goSouth": "PortalCrossroads",
-        "goWest": "null"
-      },
-      "SilverMountain": {
-        "description": "A majestic mountain range with snow-capped peaks and home to the dwarves.",
-        "objects": ["mithril ore", "dwarven axe", "silver dragon"],
-        "goNorth": "null",
-        "goEast": "SkyTemple",
-        "goSouth": "ElvenForest",
-        "goWest": "DarkSwamps"
-      },
-      "FeyGrove": {
-        "description": "A grove bathed in perpetual twilight and inhabited by magical fey creatures.",
-        "objects": ["fairy dust", "wishing well", "unicorn"],
-        "goNorth": "SkyTemple",
-        "goEast": "null",
-        "goSouth": "CrystalCaves",
-        "goWest": "ElvenForest"
-      },
-      "PortalCrossroads": {
-        "description": "A mystical clearing with portals leading to unknown dimensions.",
-        "objects": ["runestone", "guardian golem", "ancient portals"],
-        "goNorth": "ElvenForest",
-        "goEast": "CrystalCaves",
-        "goSouth": "null",
-        "goWest": "HauntedGraveyard"
-      },
-      "DarkSwamps": {
-        "description": "Gloomy swamps, rumored to be haunted by spirits and home to dangerous creatures.",
-        "objects": ["witch's brew", "swamp monster", "ghost lantern"],
-        "goNorth": "null",
-        "goEast": "SilverMountain",
-        "goSouth": "HauntedGraveyard",
-        "goWest": "null"
-      },
-      "SkyTemple": {
-        "description": "A floating temple high in the clouds, said to be where the gods convene.",
-        "objects": ["cloud sword", "oracle", "golden harp"],
-        "goNorth": "null",
-        "goEast": "null",
-        "goSouth": "FeyGrove",
-        "goWest": "SilverMountain"
-      },
-      "CrystalCaves": {
-        "description": "A network of caves lined with colorful crystals and guarded by ancient magic.",
-        "objects": ["magic crystals", "cave paintings", "giant spider"],
-        "goNorth": "FeyGrove",
-        "goEast": "null",
-        "goSouth": "OrcOutpost",
-        "goWest": "PortalCrossroads"
-      },
-      "HauntedGraveyard": {
-        "description": "A creepy graveyard, where the spirits of the fallen wander at night.",
-        "objects": ["gravestones", "zombie", "ancient tome"],
-        "goNorth": "DarkSwamps",
-        "goEast": "PortalCrossroads",
-        "goSouth": "null",
-        "goWest": "null"
-      },
-      "OrcOutpost": {
-        "description": "A rugged outpost on the edge of the world, where fierce orcs guard their treasures.",
-        "objects": ["orcish battleaxe", "treasure chest", "war banner"],
-        "goNorth": "CrystalCaves",
-        "goEast": "null",
-        "goSouth": "null",
-        "goWest": "SeaOfMist"
-      },
-      "SeaOfMist": {
-        "description": "A mystical sea shrouded in fog, where ghost ships sail and merfolk dwell.",
-        "objects": ["merfolk trident", "ghost ship", "map in a bottle"],
-        "goNorth": "null",
-        "goEast": "OrcOutpost",
-        "goSouth": "null",
-        "goWest": "null"
-      }
-    },
-    "startingLocation": "PortalCrossroads",
-    "legendaryArtifacts": {
-      "elven bow": {
-        "description": "A powerful bow that never misses its target.",
-        "location": "ElvenForest"
-      },
-      "mithril ore": {
-        "description": "A rare metal, light and stronger than steel.",
-        "location": "SilverMountain"
-      },
-      "fairy dust": {
-        "description": "Magical dust that grants wishes to the pure of heart.",
-        "location": "FeyGrove"
-      },
-      "runestone": {
-        "description": "A stone imbued with ancient magic.",
-        "location": "PortalCrossroads"
-      },
-      "cloud sword": {
-        "description": "A sword forged by the gods, able to cut through anything.",
-        "location": "SkyTemple"
-      },
-      "magic crystals": {
-        "description": "Crystals with mysterious powers.",
-        "location": "CrystalCaves"
-      },
-      "orcish battleaxe": {
-        "description": "A heavy axe wielded by the mightiest orc warriors.",
-        "location": "OrcOutpost"
-      },
-      "merfolk trident": {
-        "description": "A trident that controls the tides and speaks with sea creatures.",
-        "location": "SeaOfMist"
-      }
-    },
-    "creatures": {
-      "silver dragon": {
-        "description": "A wise and ancient dragon that guards the Silver Mountain.",
-        "location": "SilverMountain"
-      },
-      "unicorn": {
-        "description": "A magical creature known for its purity and grace.",
-        "location": "FeyGrove"
-      },
-      "giant spider": {
-        "description": "A huge spider that lurks in the shadows of the Crystal Caves.",
-        "location": "CrystalCaves"
-      },
-      "swamp monster": {
-        "description": "A creature made of vines and mud that haunts the Dark Swamps.",
-        "location": "DarkSwamps"
-      },
-      "zombie": {
-        "description": "A risen corpse that wanders the Haunted Graveyard.",
-        "location": "HauntedGraveyard"
-      }
-    }
-  }
-Given that you are maintaining the state of the world, you must never produce any output that is not directly relevant. 
+export const WorldCreatorPrompt = `Your job is to create a cohesive, comprehensive, consistent virtual fantasy world. To create the world, you will describe various locations, items, and characters. When describing a location, make note of what is nearby, and keep a mental model of the map of the world. (e.g. if you go north from this place, where do you end up?). Create many interesting locations and items, at least 20 of each, and also create 5 characters. 
+Produce the world in this format, valid JSON with Camel Casing:
+\`\`\`
+const world = {
+'name_of_thing': 'description_of_thing',
+'name_of_thing2': 'description_of_thing2',
+...
+'name of thingN': 'description_of_thingN'
+}
+\`\`\`
 `;
+
+// use this with the context of the world state to create characters:
+export const CharacterCreatorPrompt: string = `Now, create 4 characters that will live in this world. 
+Describe their features, characteristics, traits, and their starting positions in the world. Describe their goals. 
+Explain why you are placing them where you are on the map, and explain how far apart they are from eachother and
+ what it would take for them to cross paths.`;
+
+export const WorldState = {
+  "emerald_forest":
+    "A lush, green forest teeming with exotic wildlife and mystical creatures. Tall trees with emerald leaves sway gracefully in the wind, and magical springs dot the forest floor.",
+  "crystal_lake":
+    "A pristine lake located at the heart of Emerald Forest, it sparkles under the sunlight, akin to countless crystals spread out. The water is enchanted, rumored to possess healing properties.",
+  "wandering_peak":
+    "A snow-capped mountain to the north of Emerald Forest. Renowned for its dangerous terrains and unpredictable weather. Home to the rare Ice Fire flower.",
+  "blackstone_castle":
+    "An imposing castle nestled upon the Wandering Peak. Built with black stone, it houses secret chambers and deadly traps.",
+  "smoldering_plains":
+    "West of the Wandering peak, these plains are always burning with ethereal fire.The fire doesn't consume, but the heat is intense, making it hostile for most creatures.",
+  "veridian_village":
+    "Situated near the Emerald Forest, it's a peaceful settlement with thatched-roof cottages. Famed for local weaved baskets and herbal potions.",
+  "moonshadow_valley":
+    "Located east of Emerald Forest. At night, moonlight filters through the sparse trees giving the place an ethereal glow. Many nocturnal, magical creatures call this valley home.",
+  "whispering_winds_canyon":
+    "North from Smoldering Plains. The winds here supposedly whisper the secrets of the world to those who listen closely enough.",
+  "midnight_caverns":
+    "Deep, maze-like caverns found underneath Moonshadow Valley. It hosts a variety of crystals and rare ores like Starstone which glows under the moonlight.",
+  "sumerian_sands":
+    "A vast, sprawling desert to the west of Smoldering Plains. Home to the mystical Sand Serpents and ancient ruins believed to be remnants of a forgotten civilization.",
+  "thunderfall":
+    "A colossal waterfall pouring into Crystal Lake from the Wandering Peak. The crashing sounds from the waterfall resemble thunder, giving it its name.",
+  "starlight_springs":
+    "These magical springs in Emerald Forest are believed to possess restorative powers. They shimmer under the stars, earning their name.",
+  "elder_tree":
+    "The oldest and largest tree in the Emerald Forest. It is said to house the spirit of the forest.",
+  "radiant_orchard":
+    "South of Veridian Village, this orchard boasts a variety of magical fruits which can also be used as components for spells.",
+  "bleak_bay":
+    "An eerily calm bay located south of Sumerian Sands. Despite its unwelcoming environment, it's rich with rare sea creatures and pearls.",
+  "mirrorlake_isle":
+    "A small island in the middle of Crystal Lake. It's believed that its waters reflect not just your image, but your true self.",
+  "giant_strides":
+    "An unusual terrain west of Smoldering Plains with large, nearly perfectly round mounds. According to local lore, they are footprints of an ancient giant.",
+  "spider_silk_market":
+    "A bustling market at the outskirts of Veridian Village known for its wide array of goods, especially enchanted garments woven from spider silk.",
+  "lunarian_rock":
+    "A mysterious rock formation near Sumerian Sands. During full moon nights, the rock formation supposedly moves, revealing paths to hidden treasures.",
+  "whisperglade":
+    "A serene glade located in the heart of Emerald Forest, where wind whispers ancient tales across the ages.",
+  "parched_throat":
+    "A notorious tavern in Veridian Village serving the strongest spirits and moon-ale in the realm.",
+  "oracle_grove":
+    "A sacred grove located atop Wandering Peak, it houses the famed Crystal Orb. who's reflections are known to reveal the future.",
+  "wyrm_bone_beach":
+    "A beach at the edge of Bleak Bay, known for the numerous ancient dragon bones that wash up on its shores.",
+  "nimbus_cloudbridge":
+    "A magical bridge made of clouds linking Wandering Peak and Moonshadow Valley.",
+  "meridian_meadows":
+    "South of Veridian Village, stretches of beautiful meadows blooming with colorful flowers which are used for making magical potions and dyes.",
+  "dragon_breath_volcano":
+    "Active volcano located west of Smoldering Plains. Its eruptions are said to forge Dragon glass, a material with magical properties.",
+  "twin_moons_inn":
+    "A cozy and popular inn on the outskirts of Veridian Village. Known for its magical mead and enchanting bedtime stories.",
+  "celestial_gardens":
+    "Magical gardens found within Blackstone Castle. The plants and flowers here make anyone sick just by touching them",
+  "endless_echo_canyon":
+    "A deep canyon east of the Whispering Winds Canyon, where each sound multiplies and reverberates endlessly. A challenge for those who rely on sounds for navigation.",
+  "luna_lotus_lake":
+    "A lake located near Moonshadow Valley, famous for its moonlit lotus flowers which bloom only during the full moon.",
+  "labyrinth_of_illusions":
+    "Found within Blackstone Castle, this magical maze changes its path frequently, creating illusions and traps to deceive trespassers.",
+  "stargazer_mountain":
+    "The highest point in Wandering Peak, where the starlit sky can be seen in its full glory. According to folklore, wishes made under this sky come true.",
+  "twisted_tower":
+    "A tower that spirals towards the sky, within Blackstone Castle. Each floor is populated with magical defences.",
+  "solstice_springs":
+    "Hot springs located south of Sumerian Sands with water magically warmed by the energy of the sun itself.",
+  "shadowfen":
+    "A treacherous marshland on the outskirts of Moonshadow Valley. Home to strange, shadowy creatures.",
+  "banshee_bluffs":
+    "A series of eerie, windswept cliffs north of Whispering Winds Canyon. Known for strange, wailing winds that sound like banshees.",
+  "dune_sea":
+    "A vast, seemingly endless desert located in the heart of Sumerian Sands. Navigating its shifting sands is a great challenge.",
+  "dragon_scale_forge":
+    "An ancient forge at the heart of Dragon Breath Volcano. Weapons forged in Dragon scale forge carry the magic of the Dragons with them.",
+  "diamond_dust_glacier":
+    "Located north of Wandering Peak, a massive glacier which glitters like diamond dust under the sunlight.",
+  "siren_shallow_bay":
+    "A shallow bay adjacent to Bleak Bay, rumored to be home to mystical sirens.",
+  "elemental_stone_garden":
+    "An array of stone formations near Smoldering Plains. Each stone represents a different element and emits a unique magic energy.",
+  "weeping_willow_graves":
+    "A quiet graveyard at the outskirts of Veridian Village, marked by a willow tree that seems to weep under the moonlight.",
+  "quicksilver_river":
+    "A fast-flowing, silver-tinted river running from Thunderfall to Sumerian Sands. The water possesses magical properties of enhancement.",
+  "constellation_cove":
+    "A hidden cove in Bleak Bay where constellation patterns can be seen reflected in tranquil waters during the night.",
+  "sundial_spire":
+    "A towering spire at the center of Sumerian Sands, which acts as a massive sundial, marking the desert hours.",
+  "harpy_heights":
+    "Steep, rocky cliffs on the edge of Emerald Forest, known for being the nesting grounds for the enigmatic Harpies.",
+  "sunsteel_mine":
+    "A deep mine in the heart of Wandering Peak known for rich deposits of Sunsteel, a metal that absorbs sunlight for energy.",
+  "tempest_tide":
+    "A wild, stormy region in the northern part of Bleak Bay, known for shipwrecks and tales of sea monsters.",
+  "flamekeeper_forges":
+    "Legendary workshops within the Smoldering Plains, where Flamesmiths craft magical artifacts imbued with the ethereal fire's energy.",
+  "reverie_ruins":
+    "Ancient ruins nestled within Sumerian Sands. Enigmatic carvings and complex mural tell the stories of the civilisation that once thrived.",
+  "will-o-wisp_bog":
+    "Swampy region within Moonshadow Valley, known for the floating spiritual lights that are often seen dancing in the darkness.",
+  "elderwood_library":
+    "A grand library carved inside the Elder Tree. It houses ancient scripts and historical records of the world.",
+  "direwolf_canyon":
+    "A canyon in the outskirts of Smoldering Plains known to be the territory of mystical Direwolves.",
+  "mystic_mangrove":
+    "Mysterious mangrove located near Bleak Bay. Home to numerous, enchanting aquatic species.",
+  "glittering_gorges":
+    "Stony gorges covered in bioluminescent fungi in the outskirts of Midnight Caverns.",
+  "silverglow_meadow":
+    "A heavenly meadow to the south of the Meridian Meadows, known for its silver-hued grass that glows under the moonlight.",
+  "titan_wall":
+    "A giant, seemingly unending wall to the north of Blackstone Castle, believed to be built by ancient giants.",
+  "sorcerer_springs":
+    "Magical springs found in the heart of Whispering Winds Canyon where one is said to gain arcane knowledge by bathing.",
+  "comet_crag":
+    "A series of cliffs near Stargazer Mountain, where celestial bodies are believed to have fallen. The area is rich in cosmic material.",
+  "marble_maiden_port":
+    "A picturesque port south of Bleak Bay, lined by beautiful marble statues rumored to be enchanted maidens.",
+  "umbral_covert":
+    "A shadowy thicket in the depths of Moonshadow Valley, which is perpetually dark, even during noon.",
+  "faetouched_glen":
+    "A hidden glen within Emerald Forest, where the Fae are commonly sighted.",
+  "kingfisher_reef":
+    "A vibrant reef off Mirrorlake Isle, inhabited by a variety of magical marine creatures.",
+  "enchanted_grove":
+    "South of Lunar Lotus Lake, this grove is home to magical creatures and plants with high magical potency.",
+  "echo_cave":
+    "A secluded cave in the Whispering Winds Canyon that audibly repeats any sound made within.",
+  "phoenix_nest":
+    "Rising atop fiery Dragon Breath Volcano, a sanctuary rumored to be home to the immortal Phoenix.",
+  "troll_bridges":
+    "A series of bridges located around the outskirts of Smoldering Plains. Trolls often lurk underneath, demanding tolls from travelers.",
+  "polaris_peak":
+    "The northern mountain peak in Wandering Peak. From the top, one can always spot the North Star, Polaris, no matter the weather.",
+  "griffin_gulch":
+    "Steep valley amidst Wandering Peak, known to be the nesting grounds of mystical Griffins.",
+  "eternal_ember_quarry":
+    "A quarry within Smoldering Plains that produces eternal embers, flames that never die.",
+  "dragon_bone_dyke":
+    "A great wall made of dragon bones on the outskirts of Wyrm Bone Beach, believed to be protective against sea monsters.",
+  "sunburst_orchard":
+    "An orchard near Radiant Orchard, filled with trees that bear glowing, sun-coloured fruits.",
+  "shattered_isles":
+    "A cluster of fragmented islands in Bleak Bay, home to countless sea birds and exotic vegetation.",
+  "crystalline_chasm":
+    "A deep chasm within Midnight Caverns filled with various types of illuminated crystals and geodes.",
+  "gilded_gallery":
+    "An extravagant hall within Blackstone Castle adorned with golden murals and art from legendary craftsmen.",
+  "cobra_cape":
+    "A cape at the edge of the Giant Strides known for its serpentine winds and distinctive, cobra-shaped rock formation.",
+  "monarch_mesa":
+    "A flat-topped hill amidst Sumerian Sands, often used as a vantage point for navigating the desert.",
+  "centaur_run":
+    "Sprawling grasslands bordering the Veridian Village, home to herds of swift-footed Centaurs.",
+  "raven_roost":
+    "A large, ominous tree in Emerald Forest, where a multitude of ravens have made their home.",
+  "spirit_stone_sanctuary":
+    "A sanctuary full of ancient spirit stones within the precincts of Oracle Grove.",
+  "frostfern_field":
+    "A field near Diamond Dust Glacier, it sees a perennial growth of frost ferns, plants made of ice.",
+  "golden_gauntlet_guild":
+    "A grand guild for brave adventurers and valiant heroes situated in the heart of Veridian Village.",
+  "opal_abyss":
+    "A never-ending abyss within Diamond Dust Glacier, where opal encrusted ice formations are common.",
+};
 
 export const WorldStateOneLiner: string = `Calabasis is a fantasy world where the forrest meet the ocean`;
 
 export const WorldStatePreamble = `You are roleplaying as a sophisticated AI. 
-Your role is to manage a dynamic virtual world, reacting to the players' actions.\n`;
+Your role is to manage a dynamic virtual world, reacting to the players' actions, and updating the world accordingly.\n`;
 
 export const GenerateRequestNextActionPrompt = (
   character: string,
@@ -278,3 +283,41 @@ Only change items or locations in the world that have been affected by the recen
 When rewriting the state of an item and/or location, be wary not to leave out any prior information that is still true or relevant. 
 Only use the functions you have been provided with.
 Below is information that represents the current state of the world:\n`;
+
+// This is just for context, to analyze performance.
+const characterInfo = `{
+  "characters": {
+    "thalos_the_mystic": {
+      "description": "A wise and ancient elf with long silver hair and captivating evergreen eyes. Adorned in robes interwoven with spider silk and peppered with starstone, Thalos radiates an ambiance of magic.",
+      "traits": "Scholarly, serene, polite, mysterious, possesses incredible magical abilities",
+      "starting_position": "elderwood_library",
+      "goal": "Thalos aims to decipher an ancient prophecy about a forthcoming great calamity and find a way to thwart it.",
+      "reason_for_position": "Placed in Elderwood Library, Thalos has access to most ancient scripts and historical records of the world in his quest for knowledge."
+    },
+    "morgana_blackstone": {
+      "description": "A human knight in black steel armor, Morgana is known for her stern steel-grey eyes and raven hair. Displaying her family's crest - a flaming sword - on her attire, she is a formidable force on the battlefield.",
+      "traits": "Courageous, disciplined, loyal, pragmatic, brilliant strategist",
+      "starting_position": "blackstone_castle",
+      "goal": "Being the rightful heiress, Morgana is desperately trying to reclaim her stolen throne from an evil, usurping relative.",
+      "reason_for_position": "Morgana starts in Blackstone Castle, the heart of her heritage and the seat she aspires to reclaim."
+    },
+    "ranulf_flameheart": {
+      "description": "A hardy dwarf with flaming red hair and a fiery spirit that matches, Ranulf is a renowned blacksmith. Known for his booming laugh and vast generosity as much as his artistry with magic-infused weapons.",
+      "traits": "Strong, jovial, generous, dedicated, master blacksmith",
+      "starting_position": "flamekeeper_forges",
+      "goal": "Ranulf searches for a mythical ore, said to endure the ethereal fire of the Smoldering Plains, in order to craft a weapon of legend.",
+      "reason_for_position": "The Flamekeeper Forges are the perfect place for Ranulf as it gives him the environment to hone his craft."
+    },
+    "elara_moonshade": {
+      "description": "Elara is a lithe and beguiling sylph with luminescent skin and hair, tinged an ethereal silver. Wearing a cloak made of sparkling moondust, she moves like a whisper between shadows.",
+      "traits": "Clever, stealthy, agile, nocturnal, sly",
+      "starting_position": "moonshadow_valley",
+      "goal": "Elara is searching for a legendary artifact allegedly hidden in Lunarian Rock to restore power to her fading forest.",
+      "reason_for_position": "Moonshadow Valley is Elara's home, and her nocturnal nature allows her to use this environment to her advantage."
+    }
+  },
+  "relationships": {
+    "distance": "Morgana's castle is the farthest from Elara's forest, requiring them to traverse the dangerous Wandering Peak or the mystical Emerald Forest to meet. Ranulf and Thalos, meanwhile, are closer to each other. Ranulf's forges are west of Thalos's library, requiring a journey through the Emerald Forest. On the other hand, Morgana and Ranulf would have to cross the fiery Smoldering Plains to find each other.",
+    "crossing_paths": "In order to cross paths, each will need to travel outside their comfort zones. Thalos might need to journey to Morgana's castle for historical records in recovering his prophecy. Meanwhile, the ore Ranulf seeks might very well be within the depths of the castle Morgana seeks to reclaim. Elara may be drawn to the Flamekeeper Forges, should she need Ranulf's skills to unlock the power of the artifact she seeks."
+  }
+}`;

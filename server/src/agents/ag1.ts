@@ -22,11 +22,11 @@ app.post("/chat/", async (req: Request, res: Response) => {
       {
         role: "user",
         content:
-          "Here is the context of your current situation. Use it to describe your next action in the first person:\n" +
+          "Here is the context of your current situation. Use it to briefly describe your next action in the first person:\n" +
           req.body.request_action_prompt,
       },
     ],
-    max_tokens: 100,
+    max_tokens: 150,
     temperature: 1,
   });
   res.status(200).json({ action: text });
@@ -41,7 +41,7 @@ let retries = 0;
 const joinServer = () => {
   axios
     .post(`${serverUrl}/join`, {
-      name: "Aelis Windrider",
+      name: "Thalos The Mystic",
       url: `http://${network_url}:${port}/chat/`,
     })
     .then((res) => console.log(res.data))
