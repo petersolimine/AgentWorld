@@ -42,17 +42,21 @@ async function main() {
   // Querying a collection
   const result = await collection.query({
     queryTexts: ["lorem"],
-    nResults: 1,
+    nResults: 2,
     where: { chapter: "3" },
   });
   console.log("Queried the collection");
   console.log(result);
-
+  console.log(result.documents[0]);
+  // the above results in the following: [ 'lorem ipsum...', 'doc2' ]
+  // now, we want to combine them in the following way: lorem ipsum...\ndoc2\n, so we do the following:
+  console.log(result.documents[0].join("\n"));
   // Deleting data from the collection
   await collection.delete({
     ids: ["id1", "id2"],
     where: { chapter: "3" },
   });
+
   console.log("Data deleted from the collection");
 
   // Deleting the collection

@@ -3,39 +3,6 @@ import { ChromaClient, OpenAIEmbeddingFunction } from "chromadb";
 import dotenv from "dotenv";
 dotenv.config();
 
-/*
-This function will take 2 params. 
-1. The collection name
-2. Bool value to reset the collection or not
-returns a client
-*/
-export const initChroma = async (
-  collection_names: string[],
-  reset: boolean
-) => {
-  const client = new ChromaClient();
-
-  if (reset) await client.reset();
-
-  const embedder = new OpenAIEmbeddingFunction({
-    openai_api_key: process.env.OPENAI_API_KEY || "",
-  });
-
-  // iterate through each
-  for (let collection_name of collection_names) {
-    try {
-      await client.createCollection({
-        name: collection_name,
-        embeddingFunction: embedder,
-      });
-      console.log("Collection created: ", collection_name);
-    } catch (e) {
-      console.log("Collection already exists: ", collection_name);
-    }
-  }
-  return client;
-};
-
 export function formatActionsToString(
   actionsArray: Array<{ user: string; action: any }>
 ): string {
@@ -77,4 +44,9 @@ export async function OpenAIRequest(payload: OpenAIRequestPayload) {
       `Error in OpenAI API request: ${axiosError.response?.data}`
     );
   }
+}
+
+// used for blocking JS threads so that docker can build
+export function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
