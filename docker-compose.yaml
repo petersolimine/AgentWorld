@@ -11,6 +11,8 @@ services:
     volumes:
       - ./server:/app
     working_dir: /app
+    depends_on:
+      - chroma-server
     networks:
       net:
         aliases:
@@ -79,7 +81,6 @@ services:
       - world
     ports:
       - "3000:3000"
-
   chroma-server:
     image: peterbeulr/chroma:latest
     volumes:
