@@ -70,83 +70,39 @@ export async function OpenAIFuncRequest(
   }
 }
 
-async function runConversation() {
-  const worldState = {
-    ElvenForest: {
-      description:
-        "A lush, enchanted forest where the ancient elves live among the towering trees.",
-      objects: ["elven bow", "enchanted stream", "ancient tree of knowledge"],
-      goNorth: "SilverMountain",
-      goEast: "FeyGrove",
-      goSouth: "PortalCrossroads",
-      goWest: "null",
-    },
-    SilverMountain: {
-      description:
-        "A majestic mountain range with snow-capped peaks and home to the dwarves.",
-      objects: ["mithril ore", "dwarven axe", "silver dragon"],
-      goNorth: "null",
-      goEast: "SkyTemple",
-      goSouth: "ElvenForest",
-      goWest: "DarkSwamps",
-    },
-    FeyGrove: {
-      description:
-        "A grove bathed in perpetual twilight and inhabited by magical fey creatures.",
-      objects: ["fairy dust", "wishing well", "unicorn"],
-      goNorth: "SkyTemple",
-      goEast: "null",
-      goSouth: "CrystalCaves",
-      goWest: "ElvenForest",
-    },
-    PortalCrossroads: {
-      description:
-        "A mystical clearing with portals leading to unknown dimensions.",
-      objects: ["runestone", "guardian golem", "ancient portals"],
-      goNorth: "ElvenForest",
-      goEast: "CrystalCaves",
-      goSouth: "null",
-      goWest: "HauntedGraveyard",
-    },
-    DarkSwamps: {
-      description:
-        "Gloomy swamps, rumored to be haunted by spirits and home to dangerous creatures.",
-      objects: ["witch's brew", "swamp monster", "ghost lantern"],
-      goNorth: "null",
-      goEast: "SilverMountain",
-      goSouth: "HauntedGraveyard",
-      goWest: "null",
-    },
-    SkyTemple: {
-      description:
-        "A floating temple high in the clouds, said to be where the gods convene.",
-      objects: ["cloud sword", "oracle", "golden harp"],
-      goNorth: "null",
-      goEast: "ocean_of_angels",
-      goSouth: "FeyGrove",
-      goWest: "SilverMountain",
-    },
-    sword_of_domacles:
-      "The sword of domacles is hidden behind a rock in the elven forrest",
-    rainbow: "a rainbow has appeared above the ocean of angels",
-    ocean_of_angels:
-      "the ocean of angels is undergoing a major storm. Two ships are stranded at sea, the weather might get better soon",
-    sword_of_elders:
-      "Brom Ironfist is wielding the sword of elders while his ship is stranded at sea in a storm in the ocean of angels. He is fighting his captain in a battle to the death. The sword is capable of killing any dwarf, but is unusable against dragons. ",
-  };
+export async function findAndUpdateWorldInformation({
+  worldStateIds,
+  worldStateDocuments,
+  recentAction,
+}: {
+  worldStateIds: string[];
+  worldStateDocuments: (string | null)[];
+  recentAction: string;
+}) {
+  // systematically remove items from the list until there are fewer than N charcters, for context window limit
+  // 1 token is ~4 chars. max tokens is 8,192
+  const max_token_allocation = 7000 * 4;
+  while (worldStateDocuments.join("\n").length > max_token_allocation) {
+    // remove the last ID
+    worldStateIds.pop();
+    // remove the corresponding document
+    worldStateDocuments.pop();
+  }
 
-  const recentAction =
-    "Brom Ironfist yells at the sky, 'damn you, lord comable!' and then hurls his sword with all his might. The sword flies west for miles and miles, landing at the base of a temple. He prepares to be stabbed in the heart.";
+  // Combine worldStateIds and worldStateDocuments into one big string
+  const combinedDocuments = worldStateIds
+    .map((id, index) => `${id}: ${worldStateDocuments[index]}`)
+    .join("\n");
 
   const messages = [
     {
       role: "user",
       content:
         FunctionRequestPreamble +
-        JSON.stringify(worldState) +
-        `\nHere is the recent action:\n`,
+        combinedDocuments +
+        `\n\nHere is the recent action:\n` +
+        recentAction,
     },
-    { role: "user", content: recentAction },
   ];
 
   const functions = [
@@ -159,7 +115,7 @@ async function runConversation() {
           item: {
             type: "string",
             description:
-              "The ID of the item/location to update. You can only update existing items.",
+              "The ID of the item/location to update in snake_case. You can only update existing items.",
           },
           new_value: {
             type: "string",
@@ -181,5 +137,3 @@ async function runConversation() {
 
   console.log(response);
 }
-
-runConversation();

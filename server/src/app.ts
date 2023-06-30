@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
-import { OpenAIRequest } from "../lib/utils";
+import { OpenAIRequest, delay } from "../lib/utils";
 import {
   GenerateRequestNextActionPrompt,
   WorldState,
@@ -9,8 +9,14 @@ import {
 } from "./prompts";
 import { formatActionsToString } from "../lib/utils";
 import { server_port, colors } from "../lib/constants";
-import { initChroma } from "../lib/utils";
+import {
+  initChroma,
+  initializeWorldState,
+  embedder,
+} from "../lib/ChromaHelpers";
 import { broadcast, clients } from "../lib/WebsocketManager";
+import { findAndUpdateWorldInformation } from "../lib/StateManager";
+import { QueryResponse } from "chromadb/dist/main/types";
 
 const app = express();
 
@@ -77,21 +83,28 @@ app.post("/join", (req: Request, res: Response) => {
 });
 
 const startGame = async () => {
+  // delay 20 seconds so that docker-compose can finish building
+  console.log("Starting game in 30 seconds...");
+  await delay(30000);
   // initialize chroma with the collection names that we will use (return value is a client)
-  /*
-  TODO uncomment this
-  const chroma_client = await initChroma(["world", "actions"], false);
-  const world_collection = await chroma_client.getCollection({
-    name: "world",
-  });
+  const chroma_client = await initChroma(["world", "actions"], true);
 
   const actions_collection = await chroma_client.getCollection({
     name: "actions",
+    embeddingFunction: embedder,
   });
-  */
+  const world_collection = await chroma_client.getCollection({
+    name: "world",
+    embeddingFunction: embedder,
+  });
 
+  // for every item in WorldState, insert it into the 'world' collection
+  await initializeWorldState(chroma_client, "world", WorldState);
+
+  let counter = 0;
   while (users.length > 1) {
     for (let i = 0; i < users.length; i++) {
+      counter += 1;
       const user = users[i];
 
       // create a collection of information that should be shared with the user
@@ -123,7 +136,7 @@ const startGame = async () => {
         ACTIONABLE GAME PLAN:
         ____________
         STEP 0: Embed the state of the world
-
+        DONE?
         -------------
         STEP 1: <insert preamble>
         Here is <CHARACTER>'s previous action: <INSERT PREV ACTION> 
@@ -137,6 +150,7 @@ const startGame = async () => {
         <insert state of the world, queried from the character's previous action> <trim this list based on context length>
         
         Now, write the summary for <CHARACTER>
+        DONE?
         -------------
 
         From the above, we now have a concise summary of past actions. 
@@ -145,11 +159,15 @@ const startGame = async () => {
         -------------
 
         STEP 2: Pass the summary to the agent, await a response.
+        DONE
+
         -------------
 
         STEP 3: When the response is received:
                 3A:  Store it in the actions array
-                3B:  Query Chroma for relevant items, locations, etc with UPSERT
+                DONE?
+                3B:  Query Chroma for relevant items, locations, etc 
+                3C:  MAKE FUNCTION CALL with UPSERT
 
         REPEAT
 
@@ -167,7 +185,7 @@ const startGame = async () => {
       const actionRequest = await OpenAIRequest({
         model: "gpt-4",
         messages: [
-          { role: "system", content: WorldState },
+          { role: "system", content: WorldStatePreamble },
           {
             role: "user",
             content: request_action_prompt,
@@ -190,6 +208,27 @@ const startGame = async () => {
           { timeout: 15000 }
         );
         actions.push({ user: user.name, action: response.data.action });
+
+        // add action to chromadb
+        await actions_collection.add({
+          ids: [counter.toString()],
+          metadatas: [{ user: user.name }],
+          documents: [response.data.action],
+        });
+
+        // get relevant worldstate items from chromadb
+        const relevantWorldStateQueryResult = await world_collection.query({
+          // here we retrieve 50 items. They are filtered in StateManager if this proves to be too long.
+          nResults: 50,
+          queryTexts: [response.data.action],
+        });
+
+        // update world state if necessary
+        await findAndUpdateWorldInformation({
+          worldStateIds: relevantWorldStateQueryResult.ids[0],
+          worldStateDocuments: relevantWorldStateQueryResult.documents[0],
+          recentAction: response.data.action,
+        });
 
         if (actions.length > 100) {
           actions.shift(); // Keep the array size to a maximum of 100 elements
