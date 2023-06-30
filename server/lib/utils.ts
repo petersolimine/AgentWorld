@@ -39,6 +39,7 @@ export const initChroma = async (
 export function formatActionsToString(
   actionsArray: Array<{ user: string; action: any }>
 ): string {
+  if (actionsArray.length === 0) return "";
   return actionsArray.map((item) => `${item.user}: ${item.action}`).join("\n");
 }
 
@@ -46,6 +47,8 @@ export function formatActionsToString(
 export interface OpenAIRequestPayload {
   model: string;
   messages: Array<{ role: string; content: string }>;
+  max_tokens?: number;
+  temperature?: number;
 }
 
 export async function OpenAIRequest(payload: OpenAIRequestPayload) {

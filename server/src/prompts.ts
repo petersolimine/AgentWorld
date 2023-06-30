@@ -228,8 +228,49 @@ You are the maintainer of a virtual world. Here is the information about the wor
 Given that you are maintaining the state of the world, you must never produce any output that is not directly relevant. 
 `;
 
-export const FunctionRequestPreamble = `You are roleplaying as a sophisticated AI. 
-Your role is to manage a dynamic virtual world, reacting to the players' actions. 
+export const WorldStateOneLiner: string = `Calabasis is a fantasy world where the forrest meet the ocean`;
+
+export const WorldStatePreamble = `You are roleplaying as a sophisticated AI. 
+Your role is to manage a dynamic virtual world, reacting to the players' actions.\n`;
+
+export const GenerateRequestNextActionPrompt = (
+  character: string,
+  previous_action: string,
+  recent_actions: string
+): string => {
+  return `Your task is to request the next action from a player in a turn-based environment.
+To do so, you have access to three types of information:
+
+Your task is to provide a Third-Person Objective Narration to a player in a turn-based, immersive environment.
+
+You have access to three types of information to facilitate this:
+
+1. The latest action undertaken by the player (if available)
+2. The most recent actions executed by other players (if applicable)
+3. Pertinent details about the current state of the virtual world
+
+It's crucial to remember that while you possess comprehensive information about the world, the players DO NOT. 
+They can only act based on what they know from their perspective.
+
+Your responsibility is to request the next move from the player by providing them with a succinct recap of relevant events, world states, and actions that have transpired since their last turn. 
+
+Here is ${character}'s most recent action:
+${character}: ${previous_action}
+
+Here are the recent actions taken by other players:
+${recent_actions}
+
+Here is the current state of the virtual world that you are maintaining:
+${WorldStateOneLiner}
+
+Now, compile the concise Third-Person Objective Narration for ${character}, using only information that is directly relevant to 
+${character} and that may influence ${character}'s next move. Entirely ignore all information, player names, and actions that are not 
+directly relevant to ${character}'s circumstance. In essence, you act as the eyes and ears of ${character}. You must not make any action, 
+thought, feeling, or plan on behalf of ${character}.
+\n`;
+};
+
+export const FunctionRequestPreamble = `${WorldStatePreamble}
 Given the state of the world and the most recent action of the players, 
 your task is to assess how these actions have affected the state of the world, 
 and then rewrite the state accordingly using the available functions. 

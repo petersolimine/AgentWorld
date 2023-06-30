@@ -14,8 +14,6 @@ app.use(bodyParser.json());
 app.post("/chat/", async (req: Request, res: Response) => {
   // make a chat request to OpenAI with the information about state of the world
   // and the action that the other agent took
-  // req.body.actions is an array of the last 20 actions in string form. We must combine them into a single string.
-  const messages = formatActionsToString(req.body.actions);
 
   const text = await OpenAIRequest({
     model: "gpt-3.5-turbo",
@@ -24,10 +22,12 @@ app.post("/chat/", async (req: Request, res: Response) => {
       {
         role: "user",
         content:
-          "Here is the context, of the current situation. Use it to describe your next move:\n" +
-          messages,
+          "Here is the context of your current situation. Use it to describe your next action in the first person:\n" +
+          req.body.request_action_prompt,
       },
     ],
+    max_tokens: 100,
+    temperature: 1,
   });
   res.status(200).json({ action: text });
 });

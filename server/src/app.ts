@@ -2,7 +2,11 @@ import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
 import { OpenAIRequest } from "../lib/utils";
-import { WorldState } from "./prompts";
+import {
+  GenerateRequestNextActionPrompt,
+  WorldState,
+  WorldStatePreamble,
+} from "./prompts";
 import { formatActionsToString } from "../lib/utils";
 import { server_port, colors } from "../lib/constants";
 import { initChroma } from "../lib/utils";
@@ -24,6 +28,32 @@ interface User {
 
 const users: User[] = [];
 const actions: { user: string; action: any }[] = [];
+
+function getPreviousAction(user: User) {
+  for (let j = actions.length - 1; j >= 0; j--) {
+    if (actions[j].user === user.name) {
+      return actions[j].action;
+    }
+  }
+  return `User ${user.name} has not made any actions yet.`;
+}
+
+function getOtherPlayersActions(user: User) {
+  let otherPlayersActions = "";
+  let counter = 0;
+  for (let j = actions.length - 1; j >= 0; j--) {
+    if (actions[j].user !== user.name) {
+      otherPlayersActions += `${actions[j].user}: ${actions[j].action}\n`;
+      counter++;
+      if (counter >= users.length) {
+        break;
+      }
+    } else {
+      break;
+    }
+  }
+  return otherPlayersActions;
+}
 
 app.post("/join", (req: Request, res: Response) => {
   const { name, url } = req.body;
@@ -48,6 +78,8 @@ app.post("/join", (req: Request, res: Response) => {
 
 const startGame = async () => {
   // initialize chroma with the collection names that we will use (return value is a client)
+  /*
+  TODO uncomment this
   const chroma_client = await initChroma(["world", "actions"], false);
   const world_collection = await chroma_client.getCollection({
     name: "world",
@@ -56,6 +88,7 @@ const startGame = async () => {
   const actions_collection = await chroma_client.getCollection({
     name: "actions",
   });
+  */
 
   while (users.length > 1) {
     for (let i = 0; i < users.length; i++) {
@@ -88,6 +121,9 @@ const startGame = async () => {
 
       /*
         ACTIONABLE GAME PLAN:
+        ____________
+        STEP 0: Embed the state of the world
+
         -------------
         STEP 1: <insert preamble>
         Here is <CHARACTER>'s previous action: <INSERT PREV ACTION> 
@@ -119,10 +155,38 @@ const startGame = async () => {
 
         */
 
+      // Assemble the prompt to send to the player
+      const request_action_prompt = GenerateRequestNextActionPrompt(
+        user.name,
+        getPreviousAction(user),
+        getOtherPlayersActions(user)
+      );
+      console.log(`request_action_prompt: ${request_action_prompt}`);
+
+      // use the prompt:
+      const actionRequest = await OpenAIRequest({
+        model: "gpt-4",
+        messages: [
+          { role: "system", content: WorldState },
+          {
+            role: "user",
+            content: request_action_prompt,
+          },
+        ],
+        max_tokens: 150,
+        temperature: 0.8,
+      });
+
+      broadcast({
+        message: `${actionRequest}`,
+        name: `ACTION REQUEST TO ${user.name}:`,
+        color: "rgba(175, 179, 153, 0.6)",
+      });
+
       try {
         const response = await axios.post(
           user.url,
-          { actions },
+          { actionRequest },
           { timeout: 15000 }
         );
         actions.push({ user: user.name, action: response.data.action });
@@ -136,6 +200,10 @@ const startGame = async () => {
           name: user.name,
           color: user.color,
         });
+
+        // NOW: UPDATE WORLD ACCORDINGLY!!
+
+        /*
 
         const serverResponse = await OpenAIRequest({
           model: "gpt-3.5-turbo",
@@ -159,6 +227,8 @@ const startGame = async () => {
         });
 
         actions.push({ user: "server", action: serverResponse });
+
+        */
 
         if (actions.length > 100) {
           actions.shift(); // Keep the array size to a maximum of 100 elements
