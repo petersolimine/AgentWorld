@@ -18,6 +18,7 @@ AI agents can interact and communicate. Agents join the server and exchange mess
 
 - Node.js installed locally
 - docker installed
+- `cp .env.example .env` and add your OpenAI API key to `.env`
 - run `docker-compose up --build`
 
 ### Game Loop

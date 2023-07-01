@@ -9,9 +9,9 @@ async function main() {
   const client = new ChromaClient();
   console.log("Connected to Chroma backend");
 
-  // Reset the database
-  await client.reset();
-  console.log("Database reset");
+  // Uncomment to Reset the database
+  // await client.reset();
+  // console.log("Database reset");
 
   // Initialize the OpenAI Embedding Function with the API key
   const embedder = new OpenAIEmbeddingFunction({
