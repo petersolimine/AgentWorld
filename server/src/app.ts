@@ -107,72 +107,6 @@ const startGame = async () => {
       counter += 1;
       const user = users[i];
 
-      // create a collection of information that should be shared with the user
-      // 1. The relevant elements of the world state
-      // 2. The actions of previous users IF relevant
-      // we will not send the user's own actions to them, because they should know what they did
-
-      // first, ask if any of the actions are relevant to the user (i.e. if they are in the same room)
-      // before doing that, we need to know where the user is
-      // we can retrieve that from their last move
-      // so maybe we start by querying world state with the agents last move,
-      // then, we use that information + the list of new actions to construct a prompt to the Server:
-      /* "Here is the past action that a user took: {last_action}. Relevant information about the virtual world: {relevant information}, 
-        With that in mind, summarize the most recent actions that other user's have taken. The summary will be given to the user, 
-        so you must NOT include information that is irrelevant. Only include information that is directly relevant to the user, 
-        such as if someone interacted with an object or said something directly to the user. Your output should be a concise summary in the format of a story."*/
-      // Once we have the summary, feed it to the user and await the response.
-      /*
-        Once the user replies:
-        1. Embed the user's response.
-        2. Query the world_state collection for most relevant items, locations, etc
-        3. Construct a prompt with those and the user action, i.e. :
-        Here is the action that the user took. Here is some relavant information below. Which, if any, of these items, locations, or places needs to be updated based on the user's action?
-        // this should probably be a formatted output with OpenAI functions.
-        Parse the response, update the necessary items.
-        */
-
-      /*
-        ACTIONABLE GAME PLAN:
-        ____________
-        STEP 0: Embed the state of the world
-        DONE?
-        -------------
-        STEP 1: <insert preamble>
-        Here is <CHARACTER>'s previous action: <INSERT PREV ACTION> 
-        and here's a list of every action that has been taken since. <INSERT LIST>
-        Review the list for information that is relevant to <CHARACTER>. Consider the current state of the world, and only provide a summary of 
-        of things that are directly relevant to <CHARACTER>. Write the summary as if the actions are unfolding, in the order that they happened 
-        (e.g. "Player1 began running at you, but Player2 stopped them. Moments later, Player5 shouted 'lorem ipsum'").
-        This summary will be provided to the character as their perspective on the world. Do not include information that does not pertain to <CHARACTER>. 
-        Here is some potentially important information about the state of the world. You can use this information help determine what might be relevant:
-
-        <insert state of the world, queried from the character's previous action> <trim this list based on context length>
-        
-        Now, write the summary for <CHARACTER>
-        DONE?
-        -------------
-
-        From the above, we now have a concise summary of past actions. 
-
-        OPTIONAL STEP 1.5: Run a query to get more world information that would be useful to the user. 
-        -------------
-
-        STEP 2: Pass the summary to the agent, await a response.
-        DONE
-
-        -------------
-
-        STEP 3: When the response is received:
-                3A:  Store it in the actions array
-                DONE?
-                3B:  Query Chroma for relevant items, locations, etc 
-                3C:  MAKE FUNCTION CALL with UPSERT
-
-        REPEAT
-
-        */
-
       // Assemble the prompt to send to the player
       const request_action_prompt = GenerateRequestNextActionPrompt(
         user.name,
@@ -192,12 +126,12 @@ const startGame = async () => {
           },
         ],
         max_tokens: 150,
-        temperature: 0.8,
+        temperature: 0.5,
       });
 
       broadcast({
         message: `${actionRequest}`,
-        name: `ACTION REQUEST TO ${user.name}:`,
+        name: `ACTION REQUEST TO ${user.name}`,
         color: "rgba(175, 179, 153, 0.6)",
       });
 
