@@ -186,35 +186,6 @@ const startGame = async () => {
           color: user.color,
         });
 
-        // NOW: UPDATE WORLD ACCORDINGLY!!
-
-        /*
-
-        const serverResponse = await OpenAIRequest({
-          model: "gpt-3.5-turbo",
-          messages: [
-            { role: "system", content: WorldState },
-            {
-              role: "user",
-              content: `Received action from ${user.name}: ${
-                response.data.action
-              }. Here is information about previous actions, which may be relevant:\n${formatActionsToString(
-                actions
-              )}\n\nRespond to the player with information about the result of their action.`,
-            },
-          ],
-        });
-
-        broadcast({
-          message: serverResponse,
-          name: "Server",
-          color: "rgba(175, 179, 153, 0.6)",
-        });
-
-        actions.push({ user: "server", action: serverResponse });
-
-        */
-
         if (actions.length > 100) {
           actions.shift(); // Keep the array size to a maximum of 100 elements
         }
