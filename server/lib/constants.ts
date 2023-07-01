@@ -27,3 +27,6 @@ export const colors = [
   "rgba(179, 77, 77, 0.5)",
   "rgba(175, 179, 153, 0.5)",
 ];
+
+export const WORLD_STATE_COLLECTION_NAME = "world";
+export const ACTIONS_COLLECTION_NAME = "actions";

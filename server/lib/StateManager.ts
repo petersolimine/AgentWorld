@@ -1,6 +1,9 @@
 import axios, { AxiosError } from "axios";
 import dotenv from "dotenv";
 import { FunctionRequestPreamble } from "../src/prompts";
+import { retrieveCollection } from "./ChromaHelpers";
+import { WORLD_STATE_COLLECTION_NAME } from "./constants";
+
 dotenv.config();
 
 interface FunctionArgs {
@@ -9,8 +12,35 @@ interface FunctionArgs {
 }
 
 export async function updateDatabase({ item, new_value }: FunctionArgs) {
-  // chroma update
+  try {
+    let collection = await retrieveCollection(WORLD_STATE_COLLECTION_NAME);
+    // using upsert here means that it's possible to add new items to the collection if they don't already exist
+    await collection.upsert({
+      ids: [item],
+      documents: [new_value],
+    });
+  } catch (e) {
+    console.log("updating collection failed with error:", e);
+  }
+
+  // TODO Broadcast this
   console.log(`Update ${item} with new value: ${new_value}`);
+}
+
+export async function addToDatabase({ item, new_value }: FunctionArgs) {
+  try {
+    let collection = await retrieveCollection(WORLD_STATE_COLLECTION_NAME);
+    // we don't use upsert here because it means the model didn't have the right context, so we want to fail rather than overwrite an existing item
+    await collection.add({
+      ids: [item],
+      documents: [new_value],
+    });
+  } catch (e) {
+    console.log("Adding to collection failed with error:", e);
+  }
+
+  // TODO Broadcast this
+  console.log(`Added ${item} with value: ${new_value}`);
 }
 
 export interface OpenAIFuncRequestPayload {
@@ -121,6 +151,26 @@ export async function findAndUpdateWorldInformation({
             type: "string",
             description:
               "The new value (full description) for the item or location. Include all relevant information. Remove information only if it is no longer accurate or relevant due to the recent actions. The new value is a comprehensive description reflecting the current state.",
+          },
+        },
+        required: ["item", "new_value"],
+      },
+    },
+    {
+      name: "addToDatabase",
+      description: "Add a new field in the world state",
+      parameters: {
+        type: "object",
+        properties: {
+          item: {
+            type: "string",
+            description:
+              "The ID of the item/location to create, in snake_case. You can only add if the item doesnt already exist.",
+          },
+          new_value: {
+            type: "string",
+            description:
+              "The full description for the item or location. Include all relevant information. The  value is a comprehensive description reflecting the current state.",
           },
         },
         required: ["item", "new_value"],

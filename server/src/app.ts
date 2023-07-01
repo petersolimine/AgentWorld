@@ -8,7 +8,12 @@ import {
   WorldStatePreamble,
 } from "./prompts";
 import { formatActionsToString } from "../lib/utils";
-import { server_port, colors } from "../lib/constants";
+import {
+  server_port,
+  colors,
+  WORLD_STATE_COLLECTION_NAME,
+  ACTIONS_COLLECTION_NAME,
+} from "../lib/constants";
 import {
   initChroma,
   initializeWorldState,
@@ -87,19 +92,26 @@ const startGame = async () => {
   console.log("Starting game in 30 seconds...");
   await delay(30000);
   // initialize chroma with the collection names that we will use (return value is a client)
-  const chroma_client = await initChroma(["world", "actions"], true);
+  const chroma_client = await initChroma(
+    [WORLD_STATE_COLLECTION_NAME, "actions"],
+    true
+  );
 
   const actions_collection = await chroma_client.getCollection({
-    name: "actions",
+    name: ACTIONS_COLLECTION_NAME,
     embeddingFunction: embedder,
   });
   const world_collection = await chroma_client.getCollection({
-    name: "world",
+    name: WORLD_STATE_COLLECTION_NAME,
     embeddingFunction: embedder,
   });
 
   // for every item in WorldState, insert it into the 'world' collection
-  await initializeWorldState(chroma_client, "world", WorldState);
+  await initializeWorldState(
+    chroma_client,
+    WORLD_STATE_COLLECTION_NAME,
+    WorldState
+  );
 
   let counter = 0;
   while (users.length > 1) {

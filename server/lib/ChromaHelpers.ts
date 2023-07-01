@@ -1,4 +1,4 @@
-import { ChromaClient, OpenAIEmbeddingFunction } from "chromadb";
+import { ChromaClient, Collection, OpenAIEmbeddingFunction } from "chromadb";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -12,12 +12,22 @@ This function will take 2 params.
 2. Bool value to reset the collection or not
 returns a client
 */
+
+export const client = new ChromaClient({ path: "http://chroma-server:8000" });
+
+export const retrieveCollection = async (
+  collection_name: string
+): Promise<Collection> => {
+  return await client.getCollection({
+    name: collection_name,
+    embeddingFunction: embedder,
+  });
+};
+
 export const initChroma = async (
   collection_names: string[],
   reset: boolean
 ) => {
-  const client = new ChromaClient({ path: "http://chroma-server:8000" });
-
   if (reset) {
     console.log("Resetting ChromaDB...");
     await client.reset();

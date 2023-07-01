@@ -59,10 +59,10 @@ is included.
 
 OTHER TODOS:
 
-- [] Actually update chroma inside the updateDatabase function
-- [] Add new items and locations when they are 'created'
-- [] Provide some world state information on game start (first action)
-- [] Make agents smarter (add thought, action, say, etc)
-- [] Update UI to display server actions separately from agent dialogue
-- [] Add aditional world examples (lord of the flies ? 👀)
-- [] Create a hosted version
+( [x] ) Actually update chroma inside the updateDatabase function
+( [x] ) Add new items and locations when they are 'created' (half done, just update prompt)
+( [ ] ) Provide some world state information on game start (first action). Remove the mini irrelevant injection ('WorldStateOneLiner'). In other words, fetch world state before prompting user to make an action
+( [ ] ) Make agents smarter (add thought, action, say, etc)
+( [ ] ) Update UI to display server actions separately from agent dialogue
+( [ ] ) Add aditional world examples (lord of the flies ? 👀)
+( [ ] ) Create a hosted version
