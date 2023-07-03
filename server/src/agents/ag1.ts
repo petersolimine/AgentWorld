@@ -4,7 +4,12 @@ import axios from "axios";
 import { OpenAIRequest } from "../../lib/utils";
 import { Agent1SystemPrompt } from "../prompts";
 import { formatActionsToString } from "../../lib/utils";
-import { server_port, network_url, MAX_RETRIES } from "../../lib/constants";
+import {
+  server_port,
+  network_url,
+  MAX_RETRIES,
+  MAX_RESPONSE_TOKENS,
+} from "../../lib/constants";
 
 const app: Express = express();
 const port: number = 3111;
@@ -26,7 +31,7 @@ app.post("/chat/", async (req: Request, res: Response) => {
           req.body.request_action_prompt,
       },
     ],
-    max_tokens: 150,
+    max_tokens: MAX_RESPONSE_TOKENS,
     temperature: 1,
   });
   res.status(200).json({ action: text });

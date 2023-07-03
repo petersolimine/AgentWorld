@@ -31,4 +31,4 @@ export const colors = [
 export const WORLD_STATE_COLLECTION_NAME = "world";
 export const ACTIONS_COLLECTION_NAME = "actions";
 
-export const MAX_RESPONSE_TOKENS = 150;
+export const MAX_RESPONSE_TOKENS = 250;
