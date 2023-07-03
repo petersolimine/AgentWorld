@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { FunctionRequestPreamble } from "../src/prompts";
 import { retrieveCollection } from "./ChromaHelpers";
 import { WORLD_STATE_COLLECTION_NAME } from "./constants";
+import { Collection } from "chromadb";
 
 dotenv.config();
 
@@ -101,28 +102,18 @@ export async function OpenAIFuncRequest(
 }
 
 export async function findAndUpdateWorldInformation({
-  worldStateIds,
-  worldStateDocuments,
   recentAction,
+  collection,
 }: {
-  worldStateIds: string[];
-  worldStateDocuments: (string | null)[];
   recentAction: string;
+  collection: Collection;
 }) {
-  // systematically remove items from the list until there are fewer than N charcters, for context window limit
-  // 1 token is ~4 chars. max tokens is 8,192
-  const max_token_allocation = 7000 * 4;
-  while (worldStateDocuments.join("\n").length > max_token_allocation) {
-    // remove the last ID
-    worldStateIds.pop();
-    // remove the corresponding document
-    worldStateDocuments.pop();
-  }
-
-  // Combine worldStateIds and worldStateDocuments into one big string
-  const combinedDocuments = worldStateIds
-    .map((id, index) => `${id}: ${worldStateDocuments[index]}`)
-    .join("\n");
+  const combinedDocuments = await getStateOfTheWorld({
+    available_tokens: 7000,
+    query_text: recentAction,
+    collection: collection,
+    num_results: 50,
+  });
 
   const messages = [
     {
@@ -186,4 +177,41 @@ export async function findAndUpdateWorldInformation({
   });
 
   console.log(response);
+}
+
+export async function getStateOfTheWorld({
+  available_tokens,
+  query_text,
+  collection,
+  num_results = 50,
+}: {
+  available_tokens: number;
+  query_text: string;
+  collection: Collection;
+  num_results: number;
+}): Promise<string> {
+  const relevantWorldStateQueryResult = await collection.query({
+    // here we retrieve 50 items. They are filtered down.
+    nResults: num_results,
+    queryTexts: [query_text],
+  });
+
+  const worldStateIds = relevantWorldStateQueryResult.ids[0];
+  const worldStateDocuments = relevantWorldStateQueryResult.documents[0];
+
+  // filter down to make sure there are fewer than available_tokens, i.e. length < available_tokens*4
+  const max_char_allocation = available_tokens * 4;
+  while (worldStateDocuments.join("\n").length > max_char_allocation) {
+    // remove the last ID
+    worldStateIds.pop();
+    // remove the corresponding document
+    worldStateDocuments.pop();
+  }
+
+  // Combine worldStateIds and worldStateDocuments into one big string
+  const combinedDocuments = worldStateIds
+    .map((id, index) => `${id}: ${worldStateDocuments[index]}`)
+    .join("\n");
+
+  return combinedDocuments;
 }

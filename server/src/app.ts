@@ -13,6 +13,7 @@ import {
   colors,
   WORLD_STATE_COLLECTION_NAME,
   ACTIONS_COLLECTION_NAME,
+  MAX_RESPONSE_TOKENS,
 } from "../lib/constants";
 import {
   initChroma,
@@ -20,8 +21,10 @@ import {
   embedder,
 } from "../lib/ChromaHelpers";
 import { broadcast, clients } from "../lib/WebsocketManager";
-import { findAndUpdateWorldInformation } from "../lib/StateManager";
-import { QueryResponse } from "chromadb/dist/main/types";
+import {
+  findAndUpdateWorldInformation,
+  getStateOfTheWorld,
+} from "../lib/StateManager";
 
 const app = express();
 
@@ -40,16 +43,16 @@ interface User {
 const users: User[] = [];
 const actions: { user: string; action: any }[] = [];
 
-function getPreviousAction(user: User) {
+function getPreviousAction(user: User): string {
   for (let j = actions.length - 1; j >= 0; j--) {
     if (actions[j].user === user.name) {
       return actions[j].action;
     }
   }
-  return `User ${user.name} has not made any actions yet.`;
+  return ``;
 }
 
-function getOtherPlayersActions(user: User) {
+function getOtherPlayersActions(user: User): string {
   let otherPlayersActions = "";
   let counter = 0;
   for (let j = actions.length - 1; j >= 0; j--) {
@@ -119,11 +122,27 @@ const startGame = async () => {
       counter += 1;
       const user = users[i];
 
+      const previous_action: string = getPreviousAction(user);
+      const other_actions: string = getOtherPlayersActions(user);
+
+      // calculate available tokens in prompt (8k limit - 500 for the preamble, 1000 for response, - 1 token per 4 chars in other injected strings)
+      // there is some noise here, for example the character name, so we will just estimate and leave some buffer
+      const available_tokens =
+        7000 - previous_action.length / 4 - other_actions.length / 4 - 500;
+
+      const world_state = await getStateOfTheWorld({
+        available_tokens: available_tokens,
+        query_text: previous_action + "\n" + other_actions,
+        collection: world_collection,
+        num_results: 50,
+      });
+
       // Assemble the prompt to send to the player
       const request_action_prompt = GenerateRequestNextActionPrompt(
         user.name,
-        getPreviousAction(user),
-        getOtherPlayersActions(user)
+        previous_action,
+        other_actions,
+        world_state
       );
       console.log(`request_action_prompt: ${request_action_prompt}`);
 
@@ -137,7 +156,7 @@ const startGame = async () => {
             content: request_action_prompt,
           },
         ],
-        max_tokens: 150,
+        max_tokens: MAX_RESPONSE_TOKENS,
         temperature: 0.5,
       });
 
@@ -162,17 +181,9 @@ const startGame = async () => {
           documents: [response.data.action],
         });
 
-        // get relevant worldstate items from chromadb
-        const relevantWorldStateQueryResult = await world_collection.query({
-          // here we retrieve 50 items. They are filtered in StateManager if this proves to be too long.
-          nResults: 50,
-          queryTexts: [response.data.action],
-        });
-
         // update world state if necessary
         await findAndUpdateWorldInformation({
-          worldStateIds: relevantWorldStateQueryResult.ids[0],
-          worldStateDocuments: relevantWorldStateQueryResult.documents[0],
+          collection: world_collection,
           recentAction: response.data.action,
         });
 

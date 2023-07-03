@@ -238,17 +238,20 @@ export const WorldStateOneLiner: string = `Calabasis is a fantasy world where th
 export const WorldStatePreamble = `You are roleplaying as a sophisticated AI. 
 Your role is to manage a dynamic virtual world, reacting to the players' actions, and updating the world accordingly.\n`;
 
+// with this prompt, assuming there are 3000 tokens worth of actions,
+// we can safely afford to inject 3500 tokens worth of world state
 export const GenerateRequestNextActionPrompt = (
   character: string,
   previous_action: string,
-  recent_actions: string
+  recent_actions: string,
+  world_state: string
 ): string => {
   return `Your task is to request the next action from a player in a turn-based environment.
 To do so, you have access to three types of information:
 
 Your task is to provide a Third-Person Objective Narration to a player in a turn-based, immersive environment.
 
-You have access to three types of information to facilitate this:
+You have access to a few types of information to facilitate this:
 
 1. The latest action undertaken by the player (if available)
 2. The most recent actions executed by other players (if applicable)
@@ -259,14 +262,16 @@ They can only act based on what they know from their perspective.
 
 Your responsibility is to request the next move from the player by providing them with a succinct recap of relevant events, world states, and actions that have transpired since their last turn. 
 
-Here is ${character}'s most recent action:
-${character}: ${previous_action}
+${
+  previous_action.length > 1 &&
+  `Here is ${character}'s most recent action:
+  ${character}: ${previous_action}`
+}
 
-Here are the recent actions taken by other players:
-${recent_actions}
+Here are the recent actions taken by other players: ${recent_actions}
 
-Here is the current state of the virtual world that you are maintaining:
-${WorldStateOneLiner}
+Here are some relevant elements of the current state of the virtual world that you are maintaining:
+${world_state}
 
 Now, compile the concise Third-Person Objective Narration for ${character}, using only information that is directly relevant to 
 ${character} and that may influence ${character}'s next move. Entirely ignore all information, player names, and actions that are not 
