@@ -13,6 +13,7 @@ interface FunctionArgs {
 }
 
 export async function updateDatabase({ item, new_value }: FunctionArgs) {
+  if (!new_value) return;
   try {
     let collection = await retrieveCollection(WORLD_STATE_COLLECTION_NAME);
     // using upsert here means that it's possible to add new items to the collection if they don't already exist
@@ -21,7 +22,9 @@ export async function updateDatabase({ item, new_value }: FunctionArgs) {
       documents: [new_value],
     });
   } catch (e) {
-    console.log("updating collection failed with error:", e);
+    // may not want to ignore this, we'll see
+    // @ts-ignore
+    console.log("updating collection failed with error:", e.message);
   }
 
   // TODO Broadcast this

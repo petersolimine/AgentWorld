@@ -21,7 +21,7 @@ app.post("/chat/", async (req: Request, res: Response) => {
   // and the action that the other agent took
 
   const text = await OpenAIRequest({
-    model: "gpt-3.5-turbo",
+    model: "gpt-4",
     messages: [
       { role: "system", content: Agent1SystemPrompt },
       {

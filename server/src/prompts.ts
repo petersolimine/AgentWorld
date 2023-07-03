@@ -284,7 +284,7 @@ export const FunctionRequestPreamble = `${WorldStatePreamble}
 Given the state of the world and the most recent action of the players, 
 your task is to assess how these actions have affected the state of the world, 
 and then rewrite the state accordingly using the functions you have been provided with. 
-Only change items or locations in the world that have been affected by the recent actions.
+Only update a few items or locations in the world, and only update them if they have been affected in a meaningful way by the recent actions.
 If new items or locations emerge as a result of the recent actions, add them to the world.
 When rewriting the state of an item and/or location, be extremely wary not to leave out any prior information that is still true or relevant. 
 Below is information that represents the current state of the world 
