@@ -6,6 +6,7 @@ type broadcastMessage = {
   message: string;
   name: string;
   color: string;
+  is_server: boolean;
 };
 
 export const broadcast = (info: broadcastMessage) => {
@@ -16,6 +17,7 @@ export const broadcast = (info: broadcastMessage) => {
           message: info.message,
           name: info.name,
           color: info.color,
+          is_server: info.is_server,
         })
       );
     }

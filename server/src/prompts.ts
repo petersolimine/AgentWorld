@@ -263,12 +263,17 @@ They can only act based on what they know from their perspective.
 Your responsibility is to request the next move from the player by providing them with a succinct recap of relevant events, world states, and actions that have transpired since their last turn. 
 
 ${
-  previous_action.length > 1 &&
-  `Here is ${character}'s most recent action:
+  previous_action.length > 5
+    ? `Here is ${character}'s most recent action:
   ${character}: ${previous_action}`
+    : ""
 }
 
-Here are the recent actions taken by other players: ${recent_actions}
+${
+  recent_actions.length > 5
+    ? `Here are the recent actions taken by other players: ${recent_actions}`
+    : ""
+}
 
 Here are some relevant elements of the current state of the virtual world that you are maintaining:
 ${world_state}

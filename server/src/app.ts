@@ -83,6 +83,13 @@ app.post("/join", (req: Request, res: Response) => {
   users.push({ name, url, color: colors[users.length - 1] });
   console.log(`assigned color ${colors[users.length - 1]} to ${name}`);
 
+  broadcast({
+    is_server: true,
+    name: "",
+    message: `${name} has joined the game.`,
+    color: colors[users.length - 1],
+  });
+
   if (users.length === 2) {
     startGame();
   }
@@ -92,8 +99,13 @@ app.post("/join", (req: Request, res: Response) => {
 
 const startGame = async () => {
   // delay 20 seconds so that docker-compose can finish building
-  console.log("Starting game in 30 seconds...");
-  await delay(30000);
+  broadcast({
+    is_server: true,
+    name: "",
+    message: `Starting game in 20 seconds...`,
+    color: "red",
+  });
+  await delay(20000);
   // initialize chroma with the collection names that we will use (return value is a client)
   const chroma_client = await initChroma(
     [WORLD_STATE_COLLECTION_NAME, "actions"],
@@ -107,6 +119,13 @@ const startGame = async () => {
   const world_collection = await chroma_client.getCollection({
     name: WORLD_STATE_COLLECTION_NAME,
     embeddingFunction: embedder,
+  });
+
+  broadcast({
+    is_server: true,
+    name: "",
+    message: `Initializing worldstate in chromadb...`,
+    color: "red",
   });
 
   // for every item in WorldState, insert it into the 'world' collection
@@ -137,6 +156,13 @@ const startGame = async () => {
         num_results: 50,
       });
 
+      broadcast({
+        is_server: true,
+        name: "",
+        message: `Composing prompt for ${user.name}...`,
+        color: user.color,
+      });
+
       // Assemble the prompt to send to the player
       const request_action_prompt = GenerateRequestNextActionPrompt(
         user.name,
@@ -144,7 +170,6 @@ const startGame = async () => {
         other_actions,
         world_state
       );
-      console.log(`request_action_prompt: ${request_action_prompt}`);
 
       // use the prompt:
       const actionRequest = await OpenAIRequest({
@@ -161,24 +186,45 @@ const startGame = async () => {
       });
 
       broadcast({
-        message: `${actionRequest}`,
-        name: `ACTION REQUEST TO ${user.name}`,
-        color: "rgba(175, 179, 153, 0.6)",
+        is_server: true,
+        name: "",
+        message: `Requesting action from ${user.name}...`,
+        color: user.color,
       });
 
       try {
         const response = await axios.post(
           user.url,
           { actionRequest },
-          { timeout: 15000 }
+          { timeout: 40000 }
         );
         actions.push({ user: user.name, action: response.data.action });
 
+        broadcast({
+          is_server: false,
+          message: response.data.action,
+          name: user.name,
+          color: user.color,
+        });
+
         // add action to chromadb
+        broadcast({
+          is_server: true,
+          name: "",
+          message: `adding action from ${user.name} to ChromaDB actions collection...`,
+          color: user.color,
+        });
         await actions_collection.add({
           ids: [counter.toString()],
           metadatas: [{ user: user.name }],
           documents: [response.data.action],
+        });
+
+        broadcast({
+          is_server: true,
+          name: "",
+          message: `Finding and updating world state elements from ChromaDB world collection...`,
+          color: user.color,
         });
 
         // update world state if necessary
@@ -191,23 +237,19 @@ const startGame = async () => {
           actions.shift(); // Keep the array size to a maximum of 100 elements
         }
 
-        broadcast({
-          message: response.data.action,
-          name: user.name,
-          color: user.color,
-        });
-
         if (actions.length > 100) {
           actions.shift(); // Keep the array size to a maximum of 100 elements
         }
       } catch (error) {
         users.splice(i, 1);
         i--;
+        console.log("NOT DEAD: ", error);
         console.log(`User ${user.name} has died.`);
         broadcast({
+          is_server: true,
           message: `User ${user.name} has died.`,
           name: "Server",
-          color: "rgba(175, 179, 153, 0.6)",
+          color: "red",
         });
       }
     }

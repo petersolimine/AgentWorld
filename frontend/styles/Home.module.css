@@ -1,0 +1,11 @@
+.terminalWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.terminalWrapper > div {
+  flex: 1 0 300px;
+  margin: 10px;
+  max-width: 550px;
+}

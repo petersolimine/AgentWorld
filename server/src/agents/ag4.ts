@@ -28,7 +28,7 @@ app.post("/chat/", async (req: Request, res: Response) => {
         role: "user",
         content:
           "Here is the context of your current situation. Use it to briefly describe your next action in the first person:\n" +
-          req.body.request_action_prompt,
+          req.body.actionRequest,
       },
     ],
     max_tokens: MAX_RESPONSE_TOKENS,
