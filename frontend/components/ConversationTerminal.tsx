@@ -13,7 +13,7 @@ export interface Message {
 function ConversationTerminal({ is_server }: { is_server: boolean }) {
   const [messages, setMessages] = useState<Message[]>([
     {
-      text: `${is_server ? "Agent Responses:" : "Server Actions:"}`,
+      text: `${is_server ? "Server Actions:" : "Agent Responses:"}`,
       color: "red",
       key: 17283273,
     },
