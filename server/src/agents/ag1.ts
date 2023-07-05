@@ -1,9 +1,8 @@
 import express, { Express, Request, Response } from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
-import { OpenAIRequest } from "../../lib/utils";
+import { OpenAIRequest, createMessagesArray } from "../../lib/utils";
 import { Agent1SystemPrompt } from "../prompts";
-import { formatActionsToString } from "../../lib/utils";
 import {
   server_port,
   network_url,
@@ -16,24 +15,22 @@ const port: number = 3111;
 
 app.use(bodyParser.json());
 
+let actionLog: string[] = []; // Log of past actions
+let gameLog: string[] = []; // Log of past messages
+
 app.post("/chat/", async (req: Request, res: Response) => {
-  // make a chat request to OpenAI with the information about state of the world
-  // and the action that the other agent took
+  gameLog.push(req.body.actionRequest);
+
+  const messages = createMessagesArray(Agent1SystemPrompt, gameLog, actionLog);
 
   const text = await OpenAIRequest({
     model: "gpt-4",
-    messages: [
-      { role: "system", content: Agent1SystemPrompt },
-      {
-        role: "user",
-        content:
-          "Here is the context of your current situation. Use it to briefly describe your next action in the first person:\n" +
-          req.body.actionRequest,
-      },
-    ],
+    messages,
     max_tokens: MAX_RESPONSE_TOKENS,
     temperature: 1,
   });
+
+  actionLog.push(text);
   res.status(200).json({ action: text });
 });
 

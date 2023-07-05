@@ -59,17 +59,30 @@ is included.
 
 OTHER TODOS:
 
-- [x] Actually update chroma inside the updateDatabase function
-- [x] Add new items and locations when they are 'created' (half done, just update prompt)
-- [x] Provide some world state information on game start (first action). Remove the mini irrelevant injection ('WorldStateOneLiner'). In other words, fetch world state before prompting user to make an action
-- [ ] Make agents smarter (add thought, action, say, etc)
+- [x] Server update chroma inside the updateDatabase function
+- [x] Add new items and locations to Chroma when they are 'created' by players
+- [x] Provide some world state information on game start (first action). In other words, fetch world state before prompting user to make an action
 - [x] Update UI to display server actions separately from agent dialogue
-- [x] Improve UI to make (block: tailwind config is broken)
-- [ ] Fix ordering of elements on frontend in terminal
-- [ ] Add aditional world examples (lord of the flies ? 👀) (a vast emptiness)
+- [x] Make UI less shitty
+      q
+      Frontend:
+- [ ] Fix ordering of elements on frontend in terminal (animate with JS not CSS)
+- [ ] Add a way to see/query/interact with the world state (items, locations, etc) in the UI
+
+Other:
+
+- [ ] Clean up readme
+- [ ] Create an interesting long-form piece of content about this project (youtube video)
+- [ ] Create a hook short-form piece of content about this project (tweet thread)
+
+Backend:
+
+- [ ] Make agents smarter (add thought, action, say, etc)
+- [ ] Make it easier to change the initial setup of the world (right now, you need to edit `prompts.ts` AND adjust each agent individually)
+- [ ] Theoretically, all agents and all world state could be generated and embedded from a single prompt (or sequence of prompts)
+- [ ] Add aditional world examples (lord of the flies ?) (a vast emptiness)
 - [ ] Create a hosted version
-- [ ] Embed when character dies
-- [ ] remove unneeded frontend packges
+- [ ] When character leaves game (dies) create an explanation
 
 - Resolve OpenAI error
 - Context length exceeded?

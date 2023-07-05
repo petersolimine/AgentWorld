@@ -7,7 +7,6 @@ import {
   WorldState,
   WorldStatePreamble,
 } from "./prompts";
-import { formatActionsToString } from "../lib/utils";
 import {
   server_port,
   colors,

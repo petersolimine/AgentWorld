@@ -3,12 +3,22 @@ import { ChromaClient, OpenAIEmbeddingFunction } from "chromadb";
 import dotenv from "dotenv";
 dotenv.config();
 
-export function formatActionsToString(
-  actionsArray: Array<{ user: string; action: any }>
-): string {
-  if (actionsArray.length === 0) return "";
-  return actionsArray.map((item) => `${item.user}: ${item.action}`).join("\n");
-}
+export const createMessagesArray = (
+  systemPrompt: string,
+  gameLog: string[],
+  actionLog: string[]
+) => {
+  const messages = [{ role: "system", content: systemPrompt }];
+
+  for (let i = 0; i < gameLog.length; i++) {
+    messages.push({ role: "user", content: gameLog[i] });
+    if (actionLog[i]) {
+      messages.push({ role: "assistant", content: actionLog[i] });
+    }
+  }
+
+  return messages;
+};
 
 // lib/OpenAIRequest.ts
 export interface OpenAIRequestPayload {

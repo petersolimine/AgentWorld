@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import axios from "axios";
 import { OpenAIRequest } from "../../lib/utils";
 import { Agent2SystemPrompt } from "../prompts";
-import { formatActionsToString } from "../../lib/utils";
+import { createMessagesArray } from "../../lib/utils";
 import {
   server_port,
   network_url,
