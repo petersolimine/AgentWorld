@@ -261,28 +261,28 @@ It's crucial to remember that while you possess comprehensive information about 
 They can only act based on what they know from their perspective.
 
 Your responsibility is to request the next move from the player by providing them with a succinct recap of relevant events, world states, and actions that have transpired since their last turn. 
+If someone said or did something to the character, you must tell them who it was and what they said or did.
 
 ${
   previous_action.length > 5
     ? `Here is ${character}'s most recent action:
-  ${character}: ${previous_action}`
+    \`\`\`${character}: ${previous_action}\`\`\``
     : ""
 }
 
 ${
   recent_actions.length > 5
-    ? `Here are the recent actions taken by other players: ${recent_actions}`
+    ? `Here are the recent actions taken by other players: \`\`\`${recent_actions}\`\`\``
     : ""
 }
 
-Here are some relevant elements of the current state of the virtual world that you are maintaining:
-${world_state}
+Here are some potentially relevant elements of the current state of the virtual world that you are maintaining, ignore all information that is not directly relevant to ${character}:
+\`\`\`${world_state}\`\`\`
 
 Now, compile the concise Third-Person Objective Narration for ${character}, using only information that is directly relevant to 
 ${character} and that may influence ${character}'s next move. Entirely ignore all information, player names, and actions that are not 
-directly relevant to ${character}'s circumstance. In essence, you act as the eyes and ears of ${character}. You must not make any action, 
-thought, feeling, or plan on behalf of ${character}.
-\n`;
+directly relevant to ${character}'s circumstance. In essence, you act as the eyes and ears of ${character}. You must not fabricate any action, 
+thought, feeling, or plan on behalf of ${character}. You must not tell ${character} about anything that ${character} cannot see, hear, or know\n`;
 };
 
 export const FunctionRequestPreamble = `${WorldStatePreamble}
