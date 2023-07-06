@@ -33,7 +33,7 @@ export async function updateDatabase({ item, new_value }: FunctionArgs) {
     is_server: true,
     name: "$",
     message: `Update ${item} with new value: ${new_value}`,
-    color: "blue",
+    color: "green",
   });
 }
 
@@ -53,7 +53,7 @@ export async function addToDatabase({ item, new_value }: FunctionArgs) {
     is_server: true,
     name: "$",
     message: `Added ${item} with value: ${new_value}`,
-    color: "blue",
+    color: "green",
   });
 }
 
@@ -129,7 +129,7 @@ export async function findAndUpdateWorldInformation({
       available_tokens: 7000,
       query_text: recentAction,
       collection: collection,
-      num_results: 50,
+      num_results: 20,
     });
 
     const messages = [
@@ -202,7 +202,7 @@ export async function getStateOfTheWorld({
   available_tokens,
   query_text,
   collection,
-  num_results = 50,
+  num_results = 20,
 }: {
   available_tokens: number;
   query_text: string;
