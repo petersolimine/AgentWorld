@@ -30,6 +30,11 @@ app.post("/chat/", async (req: Request, res: Response) => {
     actionLog,
     summary
   ));
+  console.log(
+    "AG1 finished calling createMessagesArray, summary:",
+    summary,
+    "\nend summary.\n"
+  );
 
   const text = await OpenAIRequest({
     model: "gpt-4",
