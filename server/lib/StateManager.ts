@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { FunctionRequestPreamble } from "../src/prompts";
 import { retrieveCollection } from "./ChromaHelpers";
 import { WORLD_STATE_COLLECTION_NAME } from "./constants";
+import { ChatMessages } from "./types";
 import { Collection } from "chromadb";
 import { broadcast } from "./WebsocketManager";
 
@@ -58,7 +59,7 @@ export async function addToDatabase({ item, new_value }: FunctionArgs) {
 
 export interface OpenAIFuncRequestPayload {
   model: string;
-  messages: Array<{ role: string; content: string }>;
+  messages: ChatMessages;
   functions?: Array<{
     name: string;
     description: string;
@@ -94,11 +95,17 @@ export async function OpenAIFuncRequest(
         [key: string]: (args: FunctionArgs) => Promise<void>;
       } = {
         updateDatabase,
+        addToDatabase,
       };
 
       // actually call the function
-      await available_functions[function_name](function_args);
-      payload.messages.push(data.choices[0].message);
+      // wrap this in a try catch because it could faile
+      try {
+        await available_functions[function_name](function_args);
+        payload.messages.push(data.choices[0].message);
+      } catch (e) {
+        throw new Error(`Error with OpenAI Functions API: ${e}`);
+      }
 
       return await OpenAIFuncRequest(payload);
     }
