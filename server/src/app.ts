@@ -101,10 +101,10 @@ const startGame = async () => {
   broadcast({
     is_server: true,
     name: "",
-    message: `Starting game in 20 seconds...`,
+    message: `Starting game in 30 seconds...`,
     color: "red",
   });
-  await delay(20000);
+  await delay(30000);
   // initialize chroma with the collection names that we will use (return value is a client)
   const chroma_client = await initChroma(
     [WORLD_STATE_COLLECTION_NAME, "actions"],
@@ -152,7 +152,7 @@ const startGame = async () => {
         available_tokens: available_tokens,
         query_text: previous_action + "\n" + other_actions,
         collection: world_collection,
-        num_results: 50,
+        num_results: 20,
       });
 
       broadcast({
@@ -187,7 +187,7 @@ const startGame = async () => {
       broadcast({
         is_server: true,
         name: "",
-        message: `Requesting action from ${user.name}...`,
+        message: `Requesting action from ${user.name}...\n ${actionRequest}`,
         color: user.color,
       });
 
@@ -195,7 +195,7 @@ const startGame = async () => {
         const response = await axios.post(
           user.url,
           { actionRequest },
-          { timeout: 40000 }
+          { timeout: 90000 }
         );
         actions.push({ user: user.name, action: response.data.action });
 
