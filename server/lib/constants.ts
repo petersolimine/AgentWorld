@@ -16,16 +16,16 @@ export const network_url = isDocker ? "host.docker.internal" : "localhost";
 export const MAX_RETRIES = 6;
 
 export const colors = [
-  "rgba(255, 102, 51, 0.5)",
-  "rgba(255, 51, 255, 0.5)",
-  "rgba(255, 255, 153, 0.5)",
-  "rgba(0, 179, 230, 0.5)",
-  "rgba(230, 179, 51, 0.5)",
-  "rgba(51, 102, 230, 0.5)",
-  "rgba(153, 153, 102, 0.5)",
-  "rgba(153, 255, 153, 0.5)",
-  "rgba(179, 77, 77, 0.5)",
-  "rgba(175, 179, 153, 0.5)",
+  "rgba(255, 102, 51, 0.9)",
+  "rgba(255, 51, 255, 0.9)",
+  "rgba(255, 255, 153, 0.9)",
+  "rgba(0, 179, 230, 0.9)",
+  "rgba(230, 179, 51, 0.9)",
+  "rgba(51, 102, 230, 0.9)",
+  "rgba(153, 153, 102, 0.9)",
+  "rgba(153, 255, 153, 0.9)",
+  "rgba(179, 77, 77, 0.9)",
+  "rgba(175, 179, 153, 0.9)",
 ];
 
 export const WORLD_STATE_COLLECTION_NAME = "world";
