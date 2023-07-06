@@ -2,13 +2,27 @@ import axios, { AxiosError } from "axios";
 import { ChromaClient, OpenAIEmbeddingFunction } from "chromadb";
 import dotenv from "dotenv";
 dotenv.config();
+import { MAX_RESPONSE_TOKENS } from "./constants";
+import { ChatMessages } from "./types";
 
-export const createMessagesArray = (
+const SUMMARY_PREAMBLE =
+  "Below is a summary of everything that has happened in the past, for context\n";
+
+export const createMessagesArray = async (
   systemPrompt: string,
   gameLog: string[],
-  actionLog: string[]
+  actionLog: string[],
+  summary: string
 ) => {
   const messages = [{ role: "system", content: systemPrompt }];
+  if (messages.length > 0) {
+    messages.push({
+      role: "user",
+      content: SUMMARY_PREAMBLE + summary,
+    });
+  }
+  // TODO change the below back to 7000
+  const MAX_TOKEN_ALLOCATION = 1000 - MAX_RESPONSE_TOKENS - summary.length;
 
   for (let i = 0; i < gameLog.length; i++) {
     messages.push({ role: "user", content: gameLog[i] });
@@ -17,13 +31,71 @@ export const createMessagesArray = (
     }
   }
 
-  return messages;
+  if (totalMessagesLength(messages) > MAX_TOKEN_ALLOCATION * 4) {
+    // Need to start removing messages from the beginning of the array and adding them to the summary
+    // start from index 2, because index 0 is the system prompt and index 1 is the summary
+    let i = 2;
+    let combined_removed = "";
+    while (totalMessagesLength(messages) > MAX_TOKEN_ALLOCATION) {
+      const game_log = messages[i].content;
+      const action_log = messages[i + 1].content;
+      combined_removed += game_log + "\n" + action_log + "\n\n";
+      messages.splice(i, 2);
+      // remove from the gameLog or actionLog array
+      gameLog.shift();
+      actionLog.shift();
+      i += 2;
+    }
+    // get the new summary
+    summary = await updateSummary(summary, combined_removed);
+    // update the messages array
+    messages[1].content = SUMMARY_PREAMBLE + summary;
+  }
+
+  return { messages, summary, gameLog, actionLog };
+};
+
+const updateSummary = async (
+  summary: string,
+  removed: string
+): Promise<string> => {
+  const messages = [
+    {
+      role: "system",
+      content:
+        "You are an advanced AI that updates summaries. You take two inputs, a summary and a list of dialogue that may have an impact on the summary. Your job is to look at the recent dialogue, and update the summary accordingly. To do so, you must respond with the entire summary and with no other output. Do not produce any output other than the updated summary. It should read very similar to the original summary that you received.",
+    },
+    {
+      role: "user",
+      content:
+        "Your job is to update the below summary based on the recent events that have transpired. Here is the summary you will update:\n" +
+        summary +
+        "\n\n" +
+        "Below is the recent dialogue that you must include in the summary. Include information that seems important, and leave out information that seems unimportant. The updated summary should be roughly the same length as the original. Dialogue:\n" +
+        removed,
+    },
+  ];
+  // TODO remove. Just make sure this works first
+  console.log(
+    "Updating summary, prompt:\n",
+    messages[1].content + "\nPROMPT ENDED"
+  );
+  return await OpenAIRequest({
+    model: "gpt-4",
+    messages,
+    max_tokens: 1000,
+    temperature: 0.4,
+  });
+};
+
+const totalMessagesLength = (messages: ChatMessages): number => {
+  return messages.reduce((acc, message) => acc + message.content.length, 0);
 };
 
 // lib/OpenAIRequest.ts
 export interface OpenAIRequestPayload {
   model: string;
-  messages: Array<{ role: string; content: string }>;
+  messages: ChatMessages;
   max_tokens?: number;
   temperature?: number;
 }

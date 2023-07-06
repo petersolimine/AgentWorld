@@ -9,19 +9,27 @@ import {
   MAX_RETRIES,
   MAX_RESPONSE_TOKENS,
 } from "../../lib/constants";
+import { ChatMessages } from "../../lib/types";
 
 const app: Express = express();
 const port: number = 3111;
 
 app.use(bodyParser.json());
 
-let actionLog: string[] = []; // Log of past actions
-let gameLog: string[] = []; // Log of past messages
+let actionLog: string[] = [];
+let gameLog: string[] = [];
+let summary: string = "";
+let messages: ChatMessages = [];
 
 app.post("/chat/", async (req: Request, res: Response) => {
   gameLog.push(req.body.actionRequest);
 
-  const messages = createMessagesArray(Agent1SystemPrompt, gameLog, actionLog);
+  ({ messages, summary, gameLog, actionLog } = await createMessagesArray(
+    Agent1SystemPrompt,
+    gameLog,
+    actionLog,
+    summary
+  ));
 
   const text = await OpenAIRequest({
     model: "gpt-4",
