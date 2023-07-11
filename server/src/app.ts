@@ -13,6 +13,7 @@ import {
   WORLD_STATE_COLLECTION_NAME,
   ACTIONS_COLLECTION_NAME,
   MAX_RESPONSE_TOKENS,
+  RESET_CHROMA_ON_START
 } from "../lib/constants";
 import {
   initChroma,
@@ -108,7 +109,7 @@ const startGame = async () => {
   // initialize chroma with the collection names that we will use (return value is a client)
   const chroma_client = await initChroma(
     [WORLD_STATE_COLLECTION_NAME, "actions"],
-    true
+    RESET_CHROMA_ON_START
   );
 
   const actions_collection = await chroma_client.getCollection({
@@ -229,12 +230,8 @@ const startGame = async () => {
         // update world state if necessary
         await findAndUpdateWorldInformation({
           collection: world_collection,
-          recentAction: response.data.action,
+          recentAction: `${user.name}: ${response.data.action}`
         });
-
-        if (actions.length > 100) {
-          actions.shift(); // Keep the array size to a maximum of 100 elements
-        }
 
         if (actions.length > 100) {
           actions.shift(); // Keep the array size to a maximum of 100 elements

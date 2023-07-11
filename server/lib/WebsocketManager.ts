@@ -10,6 +10,7 @@ type broadcastMessage = {
 };
 
 export const broadcast = (info: broadcastMessage) => {
+  console.log('broadcasting, is_server: ', info.is_server);
   clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
       client.send(
