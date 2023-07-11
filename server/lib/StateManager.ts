@@ -6,6 +6,17 @@ import { WORLD_STATE_COLLECTION_NAME } from "./constants";
 import { ChatMessages } from "./types";
 import { Collection } from "chromadb";
 import { broadcast } from "./WebsocketManager";
+import axiosRetry from 'axios-retry';
+
+// Add retry logic to axios
+axiosRetry(axios, { 
+  retries: 3, 
+  retryDelay: axiosRetry.exponentialDelay, 
+  retryCondition: (error: AxiosError) => error.response?.status === 502, 
+  onRetry: (retryCount: number, error: AxiosError) => {
+    console.error(`Retrying OpenAI API request due to error: ${error}. Retry count: ${retryCount}`);
+  }
+});
 
 dotenv.config();
 
@@ -69,8 +80,15 @@ export interface OpenAIFuncRequestPayload {
 }
 
 export async function OpenAIFuncRequest(
-  payload: OpenAIFuncRequestPayload
+  payload: OpenAIFuncRequestPayload,
+  maxDepth: number = 10 // Add a maximum depth to prevent infinite recursion
 ): Promise<string> {
+  console.log('OpenAIFuncRequest called, maxDepth: ', maxDepth);
+  if (maxDepth <= 0) {
+    console.log('Max recursion depth reached, stopping...');
+    return '';
+  }
+
   try {
     const res = await axios.post(
       "https://api.openai.com/v1/chat/completions",
@@ -98,24 +116,24 @@ export async function OpenAIFuncRequest(
         addToDatabase,
       };
 
-      // actually call the function
-      // wrap this in a try catch because it could faile
       try {
         await available_functions[function_name](function_args);
         payload.messages.push(data.choices[0].message);
       } catch (e) {
+        console.error(`Error with OpenAI Functions API: ${e}`);
         throw new Error(`Error with OpenAI Functions API: ${e}`);
       }
 
-      return await OpenAIFuncRequest(payload);
+      return await OpenAIFuncRequest(payload, maxDepth - 1); // Decrease maximum depth by one
     }
 
     return data.choices[0].message.content;
   } catch (error) {
-    console.log(`Error in OpenAI API request: ${error}`);
+    console.error(`Error in OpenAI API request: ${error}`);
     throw new Error(`Error in OpenAI API request: ${error}`);
   }
 }
+
 
 export async function findAndUpdateWorldInformation({
   recentAction,
@@ -192,7 +210,8 @@ export async function findAndUpdateWorldInformation({
       functions,
       function_call: "auto",
     });
-    console.log(response || "no res");
+    console.log(response + '\nreturning' || "no res. returning.");
+    return 
   } catch (e) {
     console.log("Error in findAndUpdateWorldInformation", e);
   }
