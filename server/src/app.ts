@@ -153,7 +153,7 @@ const startGame = async () => {
         available_tokens: available_tokens,
         query_text: previous_action + "\n" + other_actions,
         collection: world_collection,
-        num_results: 20,
+        num_results: 30,
       });
 
       broadcast({

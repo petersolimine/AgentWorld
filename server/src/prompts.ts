@@ -283,6 +283,7 @@ your task is to assess how these actions have affected the world (if at all),
 and then rewrite the world state (people, places, and things) accordingly, using the functions you have been provided with. 
 Only update items or locations if they have been affected in a meaningful way by the recent actions.
 If new items or locations emerge as a result of the recent actions, add them to the world.
+If you are adding something to the world state, it should be a physical object or location.
 When rewriting the state of an item and/or location, be extremely wary not to leave out any prior information that is still true or relevant. 
 Below is information that represents the current state of the world 
 (ordered from most relevant to least relevant, but use your judgement):\n`;

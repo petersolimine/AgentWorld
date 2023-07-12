@@ -1,1 +1,5 @@
 config
+node_modules
+.env
+server/built/
+built/

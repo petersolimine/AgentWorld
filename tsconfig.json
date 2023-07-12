@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+      "module": "CommonJS",
+      "target": "ES6",
+      "outDir": "./built",
+      "rootDir": "./",
+      "strict": true,
+      "esModuleInterop": true,
+      "moduleResolution": "node",
+      "typeRoots": ["./server/**/*", "./agent/**/*"]
+    },
+    "include": [
+      "server/src/**/*",
+      "server/lib/**/*",
+      "agent/**/*.ts",
+      "server/tests/**/*",
+      "server/src/types/declarations.d.ts",
+      "server/lib/constants.ts",
+      "server/lib/utils.ts"
+    ],
+    "paths": {
+      "*": ["node_modules/*", "server/src/types/*", "agent/types/*"]
+    }
+  }
+  

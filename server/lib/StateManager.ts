@@ -147,7 +147,7 @@ export async function findAndUpdateWorldInformation({
       available_tokens: 7000,
       query_text: recentAction,
       collection: collection,
-      num_results: 20,
+      num_results: 30,
     });
 
     const messages = [
