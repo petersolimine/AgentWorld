@@ -233,8 +233,6 @@ export const WorldState = {
     "A never-ending abyss within Diamond Dust Glacier, where opal encrusted ice formations are common.",
 };
 
-export const WorldStateOneLiner: string = `Calabasis is a fantasy world where the forrest meet the ocean`;
-
 export const WorldStatePreamble = `You are roleplaying as a sophisticated AI. 
 Your role is to manage a dynamic virtual world, reacting to the players' actions, and updating the world accordingly.\n`;
 
@@ -249,7 +247,7 @@ export const GenerateRequestNextActionPrompt = (
   return `Your task is to request the next action from a player in a turn-based environment.
 To do so, you have access to three types of information:
 
-Your task is to provide a Third-Person Objective Narration to a player in a turn-based, immersive environment.
+Your task is to provide a Third-Person Objective Narration to the player.
 
 You have access to a few types of information to facilitate this:
 
@@ -258,10 +256,10 @@ You have access to a few types of information to facilitate this:
 3. Pertinent details about the current state of the virtual world
 
 It's crucial to remember that while you possess comprehensive information about the world, the players DO NOT. 
-They can only act based on what they know from their perspective.
+Therefore, you can only tell them about what they *would* know, given their current circumstance and the state of the world.
 
-Your responsibility is to request the next move from the player by providing them with a succinct recap of relevant events, world states, and actions that have transpired since their last turn. 
-If someone said or did something to the character, you must tell them who it was and what they said or did.
+Your responsibility is to request the next move from the player by providing them with a succinct recap of *relevant* events, world states, and actions that have transpired since their last turn. 
+If someone said or did something to ${character}, you must tell them who it was and exactly what was said and/or done.
 
 ${
   previous_action.length > 5
@@ -276,7 +274,7 @@ ${
     : ""
 }
 
-Here are some potentially relevant elements of the current state of the virtual world that you are maintaining, ignore all information that is not directly relevant to ${character}:
+Here are some potentially relevant elements of the current state of the virtual world that you are maintaining, remember to ignore all information that is not directly relevant to ${character}:
 \`\`\`${world_state}\`\`\`
 
 Now, compile the concise Third-Person Objective Narration for ${character}, using only information that is directly relevant to 
