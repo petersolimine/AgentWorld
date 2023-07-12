@@ -13,14 +13,18 @@ export const broadcast = (info: broadcastMessage) => {
   console.log('broadcasting, is_server: ', info.is_server);
   clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
-      client.send(
-        JSON.stringify({
-          message: info.message,
-          name: info.name,
-          color: info.color,
-          is_server: info.is_server,
-        })
-      );
+      try {
+        client.send(
+          JSON.stringify({
+            message: info.message,
+            name: info.name,
+            color: info.color,
+            is_server: info.is_server,
+          })
+        );
+      } catch (error) {
+        console.error(`Error broadcasting to client: ${error}`);
+      }
     }
   });
 };
