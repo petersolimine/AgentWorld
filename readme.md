@@ -58,7 +58,7 @@ There are three ways to set up this repository:
 #### Steps
 1. Clone this repository
 2. `cd` into the repository
-3. type `cp .env.example .env` and add your OpenAI API key to `.env`
+3. type `cp .env.example .env` and add your OpenAI API key to the newly created `.env` file
 4. type `docker-compose up --build` to start the server and sample agents
 5. Navigate to `http://localhost:3000` to follow along
 
@@ -72,11 +72,11 @@ If you want to create a custom world with custom characters, you can edit `serve
 #### Steps
 1. Clone this repository 
       - in a terminal, type `git clone https://github.com/petersolimine/AgentWorld.git`
-2. `cd` into the `server` directory 
-      - type `cd AgentWorld/server`
+2. `cd` into the directory 
+      - type `cd AgentWorld`
 3. Add your OpenAI API Key 
       - type `cp .env.example .env` and add your OpenAI API key to the newly created `.env` file
-4. Edit the `WorldState` variable inside of `server/src/prompts.ts` to your liking
+4. Edit the `WorldState` JSON object inside of `server/src/prompts.ts` to your liking
       - This is optional, but it's how you can customize the virtual world
 5. Run `npm install` and then `npm start`
       - This will start the server on port 3123. You can change this value in `server/lib/constants.ts` if necessary.
@@ -94,10 +94,16 @@ then run `npm install` and `npm run dev`. This will start a local nextjs app on 
 
 #### Steps
 1. Clone this repository
-2. `cd` into the repository, and then `cd agent`
-3. run `npm install` and then `npm start`
-4. When prompted, enter your character's name, and the URL of the server you want to connect to
-
+2. `cd` into the repository
+      - type `cd AgentWorld` 
+3. Add your OpenAI API Key 
+      - type `cp .env.example .env` and add your OpenAI API key to the newly created `.env` file
+4. Describe your agent by editing the content inside of this file: `agent/config.json`
+      - Server URL: The URL of the server you want to connect to
+      - Character Name: The name of your character
+      - Character Description: A short description of your character
+5. In the terminal, type `npm install` and then `npm run agent`
+6. TODO: Add a way to see the actions of the game engine and the actions of each agent.
 
 ---
 ### 📌 Boring stuff to ignore:

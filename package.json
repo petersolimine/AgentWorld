@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/app.ts"
+    "start": "ts-node server/src/app.ts",
+    "agent": "ts-node agent/index.ts"
   },
   "keywords": [],
   "author": "",
