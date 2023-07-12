@@ -27,6 +27,8 @@ interface FunctionArgs {
 
 export async function updateDatabase({ item, new_value }: FunctionArgs) {
   if (!new_value) return;
+  // start a timer to see how long each step takes
+  const start = Date.now();
   try {
     let collection = await retrieveCollection(WORLD_STATE_COLLECTION_NAME);
     // using upsert here means that it's possible to add new items to the collection if they don't already exist
@@ -37,7 +39,6 @@ export async function updateDatabase({ item, new_value }: FunctionArgs) {
   } catch (e) {
     // may not want to ignore this, we'll see
     // @ts-ignore
-    console.log("updating collection failed with error:", e.message);
   }
 
   broadcast({
@@ -46,9 +47,11 @@ export async function updateDatabase({ item, new_value }: FunctionArgs) {
     message: `Update ${item} with new value: ${new_value}`,
     color: "green",
   });
+
 }
 
 export async function addToDatabase({ item, new_value }: FunctionArgs) {
+  const start = Date.now();
   try {
     let collection = await retrieveCollection(WORLD_STATE_COLLECTION_NAME);
     // we don't use upsert here because it means the model didn't have the right context, so we want to fail rather than overwrite an existing item
@@ -56,8 +59,8 @@ export async function addToDatabase({ item, new_value }: FunctionArgs) {
       ids: [item],
       documents: [new_value],
     });
+
   } catch (e) {
-    console.log("Adding to collection failed with error:", e);
   }
 
   broadcast({
@@ -81,9 +84,8 @@ export interface OpenAIFuncRequestPayload {
 
 export async function OpenAIFuncRequest(
   payload: OpenAIFuncRequestPayload,
-  maxDepth: number = 10 // Add a maximum depth to prevent infinite recursion
+  maxDepth: number = 15 // Add a maximum depth to prevent infinite recursion
 ): Promise<string> {
-  console.log('OpenAIFuncRequest called, maxDepth: ', maxDepth);
   if (maxDepth <= 0) {
     console.log('Max recursion depth reached, stopping...');
     return '';
@@ -98,9 +100,10 @@ export async function OpenAIFuncRequest(
           "Content-Type": "application/json",
           "Authorization": `Bearer ${process.env.OPENAI_API_KEY ?? ""}`,
         },
+        timeout: 30000, // Wait for 30 seconds
       }
-    );
-
+      );
+      
     const data = res.data;
 
     if (data.choices[0].message.function_call) {
@@ -120,16 +123,13 @@ export async function OpenAIFuncRequest(
         await available_functions[function_name](function_args);
         payload.messages.push(data.choices[0].message);
       } catch (e) {
-        console.error(`Error with OpenAI Functions API: ${e}`);
         throw new Error(`Error with OpenAI Functions API: ${e}`);
       }
-
       return await OpenAIFuncRequest(payload, maxDepth - 1); // Decrease maximum depth by one
     }
 
     return data.choices[0].message.content;
   } catch (error) {
-    console.error(`Error in OpenAI API request: ${error}`);
     throw new Error(`Error in OpenAI API request: ${error}`);
   }
 }
@@ -176,7 +176,7 @@ export async function findAndUpdateWorldInformation({
             new_value: {
               type: "string",
               description:
-                "The new value (full description) for the item or location. Include all relevant information. Remove information only if it is no longer accurate or relevant due to the recent actions. The new value is a comprehensive description reflecting the current state.",
+                "The new value (full physical description) for the item or location. Include all relevant information. Remove information only if it is no longer accurate or relevant due to the recent actions. The new value is a comprehensive description reflecting the current state.",
             },
           },
           required: ["item", "new_value"],
@@ -196,7 +196,7 @@ export async function findAndUpdateWorldInformation({
             new_value: {
               type: "string",
               description:
-                "The full description for the item or location. Include all relevant information. The  value is a comprehensive description reflecting the current state.",
+                "The full, physicsl description for the item or location. Include all relevant information. The  value is a comprehensive description reflecting the current state of that thing.",
             },
           },
           required: ["item", "new_value"],

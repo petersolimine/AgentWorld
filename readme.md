@@ -84,6 +84,8 @@ Backend:
 - [ ] Create a hosted version
 - [ ] When character leaves game (dies) create an explanation
 
-- Resolve OpenAI error
-- Context length exceeded?
-- Characters are dying
+Bugs:
+- [x] Code sometimes hangs during openai function calls
+
+Backlog:
+- [ ] when composing an action prompt, first have a model check if something is relevant or not
