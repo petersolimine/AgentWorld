@@ -215,6 +215,9 @@ export const WorldState = {
     "A never-ending abyss within Diamond Dust Glacier, where opal encrusted ice formations are common.",
 };
 
+/*
+WARNING: Do not edit the below code, unless you know what you're doing.
+*/
 export const WorldStatePreamble = `You are roleplaying as a sophisticated AI. 
 Your role is to manage a dynamic virtual world, reacting to the actions of the world's inhabitants, 
 and updating the world accordingly.\n`;
@@ -284,51 +287,15 @@ When rewriting the state of an item and/or location, be extremely wary not to le
 Below is information that represents the current state of the world 
 (ordered from most relevant to least relevant, but use your judgement):\n`;
 
-// This is just for context, to analyze performance.
-const characterInfo = `{
-  "characters": {
-    "thalos_the_mystic": {
-      "description": "A wise and ancient elf with long silver hair and captivating evergreen eyes. Adorned in robes interwoven with spider silk and peppered with starstone, Thalos radiates an ambiance of magic.",
-      "traits": "Scholarly, serene, polite, mysterious, possesses incredible magical abilities",
-      "starting_position": "elderwood_library",
-      "goal": "Thalos aims to decipher an ancient prophecy about a forthcoming great calamity and find a way to thwart it.",
-      "reason_for_position": "Placed in Elderwood Library, Thalos has access to most ancient scripts and historical records of the world in his quest for knowledge."
-    },
-    "morgana_blackstone": {
-      "description": "A human knight in black steel armor, Morgana is known for her stern steel-grey eyes and raven hair. Displaying her family's crest - a flaming sword - on her attire, she is a formidable force on the battlefield.",
-      "traits": "Courageous, disciplined, loyal, pragmatic, brilliant strategist",
-      "starting_position": "blackstone_castle",
-      "goal": "Being the rightful heiress, Morgana is desperately trying to reclaim her stolen throne from an evil, usurping relative.",
-      "reason_for_position": "Morgana starts in Blackstone Castle, the heart of her heritage and the seat she aspires to reclaim."
-    },
-    "ranulf_flameheart": {
-      "description": "A hardy dwarf with flaming red hair and a fiery spirit that matches, Ranulf is a renowned blacksmith. Known for his booming laugh and vast generosity as much as his artistry with magic-infused weapons.",
-      "traits": "Strong, jovial, generous, dedicated, master blacksmith",
-      "starting_position": "flamekeeper_forges",
-      "goal": "Ranulf searches for a mythical ore, said to endure the ethereal fire of the Smoldering Plains, in order to craft a weapon of legend.",
-      "reason_for_position": "The Flamekeeper Forges are the perfect place for Ranulf as it gives him the environment to hone his craft."
-    },
-    "elara_moonshade": {
-      "description": "Elara is a lithe and beguiling sylph with luminescent skin and hair, tinged an ethereal silver. Wearing a cloak made of sparkling moondust, she moves like a whisper between shadows.",
-      "traits": "Clever, stealthy, agile, nocturnal, sly",
-      "starting_position": "moonshadow_valley",
-      "goal": "Elara is searching for a legendary artifact allegedly hidden in Lunarian Rock to restore power to her fading forest.",
-      "reason_for_position": "Moonshadow Valley is Elara's home, and her nocturnal nature allows her to use this environment to her advantage."
-    }
-  },
-  "relationships": {
-    "distance": "Morgana's castle is the farthest from Elara's forest, requiring them to traverse the dangerous Wandering Peak or the mystical Emerald Forest to meet. Ranulf and Thalos, meanwhile, are closer to each other. Ranulf's forges are west of Thalos's library, requiring a journey through the Emerald Forest. On the other hand, Morgana and Ranulf would have to cross the fiery Smoldering Plains to find each other.",
-    "crossing_paths": "In order to cross paths, each will need to travel outside their comfort zones. Thalos might need to journey to Morgana's castle for historical records in recovering his prophecy. Meanwhile, the ore Ranulf seeks might very well be within the depths of the castle Morgana seeks to reclaim. Elara may be drawn to the Flamekeeper Forges, should she need Ranulf's skills to unlock the power of the artifact she seeks."
-  }
-}`;
+/*
+The below variables are unused.
+They are just sample prompts for creating world states and characters within the world.
+Paste them into ChatGPT for inspiration when creating worlds and characters!
+*/
 
-// use this with the context of the world state to create characters:
-const CharacterCreatorPrompt = `Now, create 4 characters that will live in this world. 
-Describe their features, characteristics, traits, and their starting positions in the world. Describe their goals. 
-Explain why you are placing them where you are on the map, and explain how far apart they are from eachother and
- what it would take for them to cross paths.`;
+const WorldCreatorPrompt = `
 
-const WorldCreatorPrompt = `Your job is to create a cohesive, comprehensive, consistent virtual fantasy world. To create the world, you will describe various locations, items, and characters. When describing a location, make note of what is nearby, and keep a mental model of the map of the world. (e.g. if you go north from this place, where do you end up?). Create many interesting locations and items, at least 20 of each, and also create 5 characters. 
+Your job is to create a cohesive, comprehensive, consistent virtual fantasy world. To create the world, you will describe various locations, items, and characters. When describing a location, make note of what is nearby, and keep a mental model of the map of the world. (e.g. if you go north from this place, where do you end up?). Create many interesting locations and items, at least 20 of each, and also create 5 characters. 
 Produce the world in this format, valid JSON with Camel Casing:
 \`\`\`
 const world = {
@@ -338,4 +305,14 @@ const world = {
 'name of thingN': 'description_of_thingN'
 }
 \`\`\`
+
 `;
+
+const CharacterCreatorPrompt = `
+
+Now, create 4 characters that will live in this world. 
+Describe their features, characteristics, traits, and their starting positions in the world. Describe their goals. 
+Explain why you are placing them where you are on the map, and explain how far apart they are from eachother and
+what it would take for them to cross paths.
+
+ `;
