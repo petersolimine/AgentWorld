@@ -1,6 +1,6 @@
 # 🤖 AgentWorld 🌎
 
-## What is it?
+## 🤔 What is it?
 
 AgentWorld is a unique game/simulation environment, underpinned by a language model acting as the game engine. This project was born from our curiosity about what it would take to create such a system.
 
@@ -12,10 +12,9 @@ Agents (or humans) can interact inside the virtual world via text, prompted by t
 
 *Note*: The terms `players`, `agents`, and `characters` are used interchangeably throughout this documentation, as are `game`, `simulation`, and `server`. 
 
-## How does it work?
+## 🛠️ How does it work?
 
-Before the game begins, the "World State" is written in json format (see: `server/src/prompts.ts`). This includes initial
-'places & things' that exist in the world. 
+Before the game begins, the "World State" is written in json format (see: `server/src/prompts.ts`). This includes initial 'places & things' that exist in the world. 
 
 At the start of a game, the server embeds the entire world state in a vector database (a ChromaDB collection called `world`). The game starts once two agents have joined the server.
 
@@ -35,11 +34,11 @@ The narration is sent to the agent's server as a post request. The agent then ha
 When the response is received, the server will:
 1. Store the action in the `actions` collection in Chroma and the `actions` array in the server
 2. Query Chroma (`world` collection) for relevant items, locations, etc that may have been affected by the action
-3. Update or add to the state of the world in Chroma using OpenAI functions (see: `server/lib/StateManager`)
+3. Update or add to the state of the world in Chroma using [OpenAI Functions](https://openai.com/blog/function-calling-and-other-api-updates) (implementation can be found in `server/lib/StateManager`)
 
 The server will then repeat the process for the next agent.
 
-## Getting Started
+## ⚡ Getting Started
 
 There are three ways to set up this repository:
 1. Run an entire local environment, with agents and a server
@@ -50,7 +49,7 @@ There are three ways to set up this repository:
 - docker installed
 
 
-### 1. Run an entire local environment, with agents and a server
+### 1. Run an entire local environment, with agents and a server 🤖-🌎-🤖
 
 #### Requirements
 - Node.js installed locally
@@ -65,7 +64,7 @@ There are three ways to set up this repository:
 
 If you want to create a custom world with custom characters, you can edit `server/src/prompts.ts` and restart the server.
 
-### 2. Run a local server, and allow others to connect to it
+### 2. Run a local server, and allow others to connect to it →🌎←
 #### Requirements
 - Node.js installed
 - ngrok installed
@@ -87,10 +86,9 @@ If you want to create a custom world with custom characters, you can edit `serve
 
 #### UI View
 If you want to follow along with the game, you can open a new terminal and navigate to the `frontend` directory,
-then run `npm install` and `npm run dev`. This will start a local nextjs app on port 3000 that will show you
-the current state of the world, and the actions that have been taken by each agent.
+then run `npm install` and `npm run dev`. This will start a local nextjs app on `http://localhost:3000` that will show you the actions of the game engine and the actions of each agent.
 
-### 3. Run an agent, and connect to a remote server
+### 3. Run an agent, and connect to a remote server 🤖→
 #### Requirements
 - Node.js installed
 
@@ -102,7 +100,7 @@ the current state of the world, and the actions that have been taken by each age
 
 
 ---
-### Boring stuff to ignore:
+### 📌 Boring stuff to ignore:
 
 TODO: It would be interesting to add some end state, some way for the game to come to a conclusion.
 This could be done with fucntions as well, when a user performs the right action, for example.
