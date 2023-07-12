@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { Inter } from "next/font/google";
-import ChatApp from "@/components/ChatApp";
 import ConversationTerminal from "@/components/ConversationTerminal";
 import styles from "@/styles/Home.module.css";
 
