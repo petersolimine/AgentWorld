@@ -1,5 +1,5 @@
 /*
-The purpose of this is to give a means of exploring the embeddings space created by the game engine
+The purpose of this file is to give a means of exploring the embeddings space created by the game engine
 
 to run, cd into /server/ and run `npx ts-node tests/ChromaQuery.ts`
 

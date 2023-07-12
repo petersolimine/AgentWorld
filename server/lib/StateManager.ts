@@ -66,7 +66,7 @@ export async function addToDatabase({ item, new_value }: FunctionArgs) {
   broadcast({
     is_server: true,
     name: "$",
-    message: `Added ${item} with value: ${new_value}`,
+    message: `Add ${item} with value: ${new_value}`,
     color: "green",
   });
 }

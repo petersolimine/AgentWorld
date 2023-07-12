@@ -84,14 +84,12 @@ function ConversationTerminal({ is_server }: { is_server: boolean }) {
           {displayedMessages.map((message, index) => (
             <p
               key={message.key}
-              className={`${styles["line" + ((index % 4) + 1)]} ${styles.p}`}
+              className={`${styles["line"]}`}
               style={{ color: message.color }}
             >
               {message.text}
               <span
-                className={`${styles["cursor" + ((index % 4) + 1)]} ${
-                  styles.cursor
-                }`}
+                className={styles.cursor}
               >
                 _
               </span>

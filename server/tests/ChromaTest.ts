@@ -1,3 +1,7 @@
+/*
+This file is just a sample for getting started with ChromaDB.
+*/
+
 import { ChromaClient, OpenAIEmbeddingFunction } from "chromadb";
 import dotenv from "dotenv";
 dotenv.config();

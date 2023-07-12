@@ -145,7 +145,9 @@ Backend:
 
 Bugs:
 - [x] Code sometimes hangs during openai function calls
+- [ ] The server_url for the frontend needs to be changed to the correct URL
 
 Backlog:
+- [ ] Create a win condition (in prompts.ts) and win check (classifier) after each turn
 - [ ] when composing an action prompt, first have a model check if something is relevant or not
 - [ ] Try to be more explicit about include information about the current _location_ of every action that is taken

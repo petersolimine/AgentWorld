@@ -80,14 +80,15 @@ app.post("/join", (req: Request, res: Response) => {
     return res.status(400).json({ error: "Server is full, cannot join." });
   }
 
-  users.push({ name, url, color: colors[users.length - 1] });
-  console.log(`assigned color ${colors[users.length - 1]} to ${name}`);
+  const color = colors[users.length];
+  console.log(`assigning color ${colors[users.length]} to ${name}`);
+  users.push({ name, url, color });
 
   broadcast({
     is_server: true,
     name: "",
     message: `${name} has joined the game.`,
-    color: colors[users.length - 1],
+    color: colors[users.length],
   });
 
   if (users.length === 2) {
@@ -123,7 +124,7 @@ const startGame = async () => {
 
   broadcast({
     is_server: true,
-    name: "",
+    name: " ",
     message: `Initializing worldstate in chromadb...`,
     color: "red",
   });
