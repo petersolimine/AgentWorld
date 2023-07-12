@@ -1,22 +1,20 @@
 # 🤖 AgentWorld 🌎
 
-## wtf is this? why?
+## What is it?
 
-With this project, we set out to discover what it would mean to create a game/simulation environment where the underlying game engine was a language model. 
+AgentWorld is a unique game/simulation environment, underpinned by a language model acting as the game engine. This project was born from our curiosity about what it would take to create such a system.
 
-We sought to make it extremely easy for anyone to set up their own language-based games. This repository
-is the result of that effort. 
+We sought to make it extremely simple for anyone to set up their own language-based games. This repository is the result of that effort. 
 
-AgentWorld is unique in that the game engine itself is a language model. The state of the world is maintained by a language model which embeds, retrieves, and augments the state of the virtual environment according to the actions of the players.
+AgentWorld is unique in that the game engine itself is a language model. This model maintains the state of the virtual environment, embedding, retrieving, and modifying the state as per the actions of the players.
 
-Agents (or humans) can interact inside the virtual world via text, and they are prompted to do so by the game engine.
+Agents (or humans) can interact inside the virtual world via text, prompted by the game engine.
 
-Please note, the terms 'players', 'agents', and 'characters' are used interchangeably here, sorry 🤒.
-Similarly, 'game' and 'simulation' and 'server' are used interchangeably.
+*Note*: The terms `players`, `agents`, and `characters` are used interchangeably throughout this documentation, as are `game`, `simulation`, and `server`. 
 
 ## How does it work?
 
-Before the game begins, the "World State" is written in json format (see: `src/prompts.ts`). This includes initial
+Before the game begins, the "World State" is written in json format (see: `server/src/prompts.ts`). This includes initial
 'places & things' that exist in the world. 
 
 At the start of a game, the server embeds the entire world state in a vector database (a ChromaDB collection called `world`). The game starts once two agents have joined the server.
@@ -37,7 +35,7 @@ The narration is sent to the agent's server as a post request. The agent then ha
 When the response is received, the server will:
 1. Store the action in the `actions` collection in Chroma and the `actions` array in the server
 2. Query Chroma (`world` collection) for relevant items, locations, etc that may have been affected by the action
-3. Update or add to the state of the world in Chroma using OpenAI functions (see: `lib/StateManager`)
+3. Update or add to the state of the world in Chroma using OpenAI functions (see: `server/lib/StateManager`)
 
 The server will then repeat the process for the next agent.
 
@@ -65,7 +63,7 @@ There are three ways to set up this repository:
 4. type `docker-compose up --build` to start the server and sample agents
 5. Navigate to `http://localhost:3000` to follow along
 
-If you want to create a custom world with custom characters, you can edit `src/prompts.ts` and restart the server.
+If you want to create a custom world with custom characters, you can edit `server/src/prompts.ts` and restart the server.
 
 ### 2. Run a local server, and allow others to connect to it
 #### Requirements
@@ -79,10 +77,10 @@ If you want to create a custom world with custom characters, you can edit `src/p
       - type `cd AgentWorld/server`
 3. Add your OpenAI API Key 
       - type `cp .env.example .env` and add your OpenAI API key to the newly created `.env` file
-4. Edit the `WorldState` variable inside of `src/prompts.ts` to your liking
+4. Edit the `WorldState` variable inside of `server/src/prompts.ts` to your liking
       - This is optional, but it's how you can customize the virtual world
 5. Run `npm install` and then `npm start`
-      - This will start the server on port 3123. You can change this value in `lib/constants.ts` if necessary.
+      - This will start the server on port 3123. You can change this value in `server/lib/constants.ts` if necessary.
 6. Open a _new_ terminal, run `ngrok http 3123`, and copy the ngrok URL
       - It will look something like this: `https://9d06-104-7-12-69.ngrok-free.app`
 7. Share the URL with your friends, and have them follow the steps in the next section!
@@ -104,6 +102,7 @@ the current state of the world, and the actions that have been taken by each age
 
 
 ---
+### Boring stuff to ignore:
 
 TODO: It would be interesting to add some end state, some way for the game to come to a conclusion.
 This could be done with fucntions as well, when a user performs the right action, for example.
