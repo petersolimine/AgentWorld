@@ -1,4 +1,4 @@
-export const Agent1SystemPrompt: string = `
+export const Agent1SystemPrompt = `
 You are going to play the role of a character in a fantasy world. Here is the information about your character:
 "thalos_the_mystic": {
   "description": "A wise and ancient elf with long silver hair and captivating evergreen eyes. Adorned in robes interwoven with spider silk and peppered with starstone, Thalos radiates an ambiance of magic.",
@@ -10,7 +10,7 @@ Given that you are roleplaying, it is very important that you do not break chara
 You must only respond in the voice of your character, and you must not use any knowledge that your character would not have.
 `;
 
-export const Agent2SystemPrompt: string = `
+export const Agent2SystemPrompt = `
 You are going to play the role of a character in a fantasy world. Here is the information about your character:
 "morgana_blackstone": {
   "description": "A human knight in black steel armor, Morgana is known for her stern steel-grey eyes and raven hair. Displaying her family's crest - a flaming sword - on her attire, she is a formidable force on the battlefield.",
@@ -45,24 +45,6 @@ You are going to play the role of a character in a fantasy world. Here is the in
 Given that you are roleplaying, it is very important that you do not break character.
 You must only respond in the voice of your character, and you must not use any knowledge that your character would not have.
 `;
-
-export const WorldCreatorPrompt = `Your job is to create a cohesive, comprehensive, consistent virtual fantasy world. To create the world, you will describe various locations, items, and characters. When describing a location, make note of what is nearby, and keep a mental model of the map of the world. (e.g. if you go north from this place, where do you end up?). Create many interesting locations and items, at least 20 of each, and also create 5 characters. 
-Produce the world in this format, valid JSON with Camel Casing:
-\`\`\`
-const world = {
-'name_of_thing': 'description_of_thing',
-'name_of_thing2': 'description_of_thing2',
-...
-'name of thingN': 'description_of_thingN'
-}
-\`\`\`
-`;
-
-// use this with the context of the world state to create characters:
-export const CharacterCreatorPrompt: string = `Now, create 4 characters that will live in this world. 
-Describe their features, characteristics, traits, and their starting positions in the world. Describe their goals. 
-Explain why you are placing them where you are on the map, and explain how far apart they are from eachother and
- what it would take for them to cross paths.`;
 
 export const WorldState = {
   "emerald_forest":
@@ -234,60 +216,69 @@ export const WorldState = {
 };
 
 export const WorldStatePreamble = `You are roleplaying as a sophisticated AI. 
-Your role is to manage a dynamic virtual world, reacting to the players' actions, and updating the world accordingly.\n`;
+Your role is to manage a dynamic virtual world, reacting to the actions of the world's inhabitants, 
+and updating the world accordingly.\n`;
 
-// with this prompt, assuming there are 3000 tokens worth of actions,
-// we can safely afford to inject 3500 tokens worth of world state
 export const GenerateRequestNextActionPrompt = (
   character: string,
   previous_action: string,
   recent_actions: string,
   world_state: string
 ): string => {
-  return `Your task is to request the next action from a player in a turn-based environment.
-To do so, you have access to three types of information:
-
-Your task is to provide a Third-Person Objective Narration to the player.
-
-You have access to a few types of information to facilitate this:
-
-1. The latest action undertaken by the player (if available)
-2. The most recent actions executed by other players (if applicable)
+  return `Your task is to request the next action from a character (inhabitant) in a turn-based environment.
+Your task is to provide a Third-Person Objective Narration to the inhabitant.
+To do so, you have access to three types of information to facilitate this::
+1. The latest action taken by the inhabitant of your virtual world (if available)
+2. The most recent actions taken by other inhabitants (if applicable), provided in chronological order
 3. Pertinent details about the current state of the virtual world
 
-It's crucial to remember that while you possess comprehensive information about the world, the players DO NOT. 
-Therefore, you can only tell them about what they *would* know, given their current circumstance and the state of the world.
+It's crucial to remember that while you possess comprehensive information about the world, 
+the inhabitants DO NOT. Therefore, you must only allude to information that they *would* know, 
+given their current circumstance and the state of the world. For example, if Character A took an important
+action in a location far away from Character B, you must not mentioned anything about it in your narration to Character B.
 
-Your responsibility is to request the next move from the player by providing them with a succinct recap of *relevant* events, world states, and actions that have transpired since their last turn. 
-If someone said or did something to ${character}, you must tell them who it was and exactly what was said and/or done.
+On the contrary, if someone did or said something directly relevant to Character B, interacting with
+a relevant object, or performing an important action in the same location, or saying something directly
+to Character B, you must tell them who it was and exactly what was said and/or done.
 
+Now, let's begin the task. Your responsibility is to write this narration for the following character,
+which I will provide to them: Character Name: ${character}
+PREVIOUS ACTION FROM ${character}:
+\`\`\`
 ${
   previous_action.length > 5
     ? `Here is ${character}'s most recent action:
-    \`\`\`${character}: ${previous_action}\`\`\``
-    : ""
+    ${character}: ${previous_action}`
+    : `${character} has just joined the game and has not taken any actions yet.`
 }
-
+\`\`\`
+ACTIONS OF OTHER CHARACTERS:
+\`\`\`
 ${
   recent_actions.length > 5
-    ? `Here are the recent actions taken by other players: \`\`\`${recent_actions}\`\`\``
-    : ""
+    ? `Here are the recent actions taken by other characters: ${recent_actions}`
+    : `No other characters have taken any actions yet.`
 }
+\`\`\`
 
-Here are some potentially relevant elements of the current state of the virtual world that you are maintaining, remember to ignore all information that is not directly relevant to ${character}:
+World State contains a subset of information about the world, and includes people, places, and things
+that exist within the world. Here are some potentially relevant elements of the current state of the
+virtual world that you are maintaining, remember to ignore all information that is not directly relevant to ${character}:
 \`\`\`${world_state}\`\`\`
 
-Now, compile the concise Third-Person Objective Narration for ${character}, using only information that is directly relevant to 
-${character} and that may influence ${character}'s next move. Entirely ignore all information, player names, and actions that are not 
-directly relevant to ${character}'s circumstance. In essence, you act as the eyes and ears of ${character}. You must not fabricate any action, 
-thought, feeling, or plan on behalf of ${character}. You must not tell ${character} about anything that ${character} cannot see, hear, or know\n`;
+Now, your task begins. Considering all the information above, compile the concise Third-Person Objective Narration for ${character}, 
+using only information that is *directly relevant* to ${character} and that may influence ${character}'s next move. 
+Entirely ignore all information, character names, actions, and items that are not *directly relevant* to ${character}'s circumstance. 
+In essence, your narration will serve as the eyes and ears of ${character}. Do not fabricate any action, 
+thought, feeling, or plan on behalf of ${character}. 
+You must not tell ${character} about anything that ${character} cannot see, hear, or know\n`;
 };
 
 export const FunctionRequestPreamble = `${WorldStatePreamble}
-Given the state of the world and the most recent action of the players, 
-your task is to assess how these actions have affected the state of the world, 
-and then rewrite the state accordingly using the functions you have been provided with. 
-Only update a few items or locations in the world, and only update them if they have been affected in a meaningful way by the recent actions.
+Given the state of the world and the most recent action of the world's inhabitants, 
+your task is to assess how these actions have affected the world (if at all), 
+and then rewrite the world state (people, places, and things) accordingly, using the functions you have been provided with. 
+Only update items or locations if they have been affected in a meaningful way by the recent actions.
 If new items or locations emerge as a result of the recent actions, add them to the world.
 When rewriting the state of an item and/or location, be extremely wary not to leave out any prior information that is still true or relevant. 
 Below is information that represents the current state of the world 
@@ -330,3 +321,21 @@ const characterInfo = `{
     "crossing_paths": "In order to cross paths, each will need to travel outside their comfort zones. Thalos might need to journey to Morgana's castle for historical records in recovering his prophecy. Meanwhile, the ore Ranulf seeks might very well be within the depths of the castle Morgana seeks to reclaim. Elara may be drawn to the Flamekeeper Forges, should she need Ranulf's skills to unlock the power of the artifact she seeks."
   }
 }`;
+
+// use this with the context of the world state to create characters:
+const CharacterCreatorPrompt = `Now, create 4 characters that will live in this world. 
+Describe their features, characteristics, traits, and their starting positions in the world. Describe their goals. 
+Explain why you are placing them where you are on the map, and explain how far apart they are from eachother and
+ what it would take for them to cross paths.`;
+
+const WorldCreatorPrompt = `Your job is to create a cohesive, comprehensive, consistent virtual fantasy world. To create the world, you will describe various locations, items, and characters. When describing a location, make note of what is nearby, and keep a mental model of the map of the world. (e.g. if you go north from this place, where do you end up?). Create many interesting locations and items, at least 20 of each, and also create 5 characters. 
+Produce the world in this format, valid JSON with Camel Casing:
+\`\`\`
+const world = {
+'name_of_thing': 'description_of_thing',
+'name_of_thing2': 'description_of_thing2',
+...
+'name of thingN': 'description_of_thingN'
+}
+\`\`\`
+`;
