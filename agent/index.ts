@@ -2,7 +2,6 @@ import express, { Express, Request, Response } from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
 import { OpenAIRequest, createMessagesArray } from "../server/lib/utils";
-import { Agent1SystemPrompt } from "../server/src/prompts";
 import {
   server_port,
   network_url,
@@ -10,6 +9,8 @@ import {
   MAX_RESPONSE_TOKENS,
 } from "../server/lib/constants";
 import { ChatMessages } from "../server/lib/types";
+// to import from the config.json file, use the following:
+import config from "./config.json";
 
 const app: Express = express();
 const port: number = 3111;
@@ -25,7 +26,7 @@ app.post("/chat/", async (req: Request, res: Response) => {
   gameLog.push(req.body.actionRequest);
 
   ({ messages, summary, gameLog, actionLog } = await createMessagesArray(
-    Agent1SystemPrompt,
+    config.character_description, // edit the character description in config.json
     gameLog,
     actionLog,
     summary

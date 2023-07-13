@@ -68,6 +68,7 @@ If you want to create a custom world with custom characters, you can edit `serve
 #### Requirements
 - Node.js installed
 - ngrok installed
+- Docker installed
 
 #### Steps
 1. Clone this repository 
@@ -78,21 +79,32 @@ If you want to create a custom world with custom characters, you can edit `serve
       - type `cp .env.example .env` and add your OpenAI API key to the newly created `.env` file
 4. Edit the `WorldState` JSON object inside of `server/src/prompts.ts` to your liking
       - This is optional, but it's how you can customize the virtual world
-5. Run `npm install` and then `npm start`
+5. Start a ChromaDB instance in Docker
+      - Run `docker-compose -f docker-compose.chroma.yaml up --build -d`
+6. Run `npm install` and then `npm start`
       - This will start the server on port 3123. You can change this value in `server/lib/constants.ts` if necessary.
-6. Open a _new_ terminal, run `ngrok http 3123`, and copy the ngrok URL
+7. Open a _new_ terminal, run `ngrok http 3123`, and copy the ngrok URL
       - It will look something like this: `https://9d06-104-7-12-69.ngrok-free.app`
-7. Share the URL with your friends, and have them follow the steps in the next section!
+8. Share the URL with your friends, and have them follow the steps in the next section!
 
 #### UI View
 If you want to follow along with the game, you can open a new terminal and navigate to the `frontend` directory,
 then run `npm install` and `npm run dev`. This will start a local nextjs app on `http://localhost:3000` that will show you the actions of the game engine and the actions of each agent.
 
 ### 3. Run an agent, and connect to a remote server 🤖→
-#### Requirements
-- Node.js installed
+There are three ways to do this. You can either 
+1. Run the sample agent written in node.js, which requires nodejs _and_ Docker to be installed
+2. Run the sample agent written in python, which _only_ requires python to be installed
+3. Write your own agent in any language, following the spec, and connect to the server
 
-#### Steps
+These sections will be outlined below as _3.1_, _3.2_, and _3.3_, respectively.
+
+#### _3.1_ Run the sample agent written in node.js
+#### _3.1_ Requirements
+- Node.js installed
+- Docker installed
+
+#### _3.1_ Steps
 1. Clone this repository
 2. `cd` into the repository
       - type `cd AgentWorld` 
@@ -101,9 +113,39 @@ then run `npm install` and `npm run dev`. This will start a local nextjs app on 
 4. Describe your agent by editing the content inside of this file: `agent/config.json`
       - Server URL: The URL of the server you want to connect to
       - Character Name: The name of your character
-      - Character Description: A short description of your character
-5. In the terminal, type `npm install` and then `npm run agent`
-6. TODO: Add a way to see the actions of the game engine and the actions of each agent.
+      - Character Description: A short description of your character (this will be used as the agent's System Prompt)
+5. Start a ChromaDB instance in Docker (this is where your agent's memory 🧠 is stored)
+      - type `docker-compose -f docker-compose.chroma.yaml up --build -d`
+6. Install necessary packages and start the agent
+      -  type `npm install` and then `npm run agent`
+7. (optional) Follow along with the gameplay (the stuff that your agent _can't_ see)
+      - TODO: Add a way to see the actions of the game engine and the actions of each agent.
+
+#### _3.2_ Run the sample agent written in python
+TODO
+#### _3.2_ Requirements
+TODO
+#### _3.2_ Steps
+TODO
+
+#### _3.3_ Run the sample agent written in node.js
+You can write your agent in any language, as long as it follows the spec outlined below.
+You could also build a client that prompts you for text input, so that you can play the game yourself.
+
+#### _3.3_ Requirements
+N/A, make your own rules. But use [Chroma](https://trychroma.com) for your agent's memory if you are based and AGI pilled.
+
+#### _3.3_ Steps
+- Set up an agent and establish a connection with the server.
+- To connect, make a POST request to the server's `/join/` endpoint, including a JSON object with:
+      - name: Your agent's name
+      - url: Your agent's server URL
+
+- Your agent's server should accept POST requests at the `/chat/` endpoint.
+- When the game server makes a POST request to `/chat/` with `actionRequest` in the body, your server should respond with a JSON object containing:
+      - `action`: The response of your agent, which will be treated as the agent's action.
+
+For an example of this, see the implementation in `agent/index.ts`
 
 ---
 ### 📌 Boring stuff to ignore:
@@ -130,6 +172,8 @@ Frontend:
 Other:
 
 - [x] Clean up readme
+- [x] Include Docker setup when running server-only or agent-only
+- [ ] and ngrok ^ (need agent to be able to connect to server) (wait for postback url to get from ngrok)
 - [ ] Create an interesting long-form piece of content about this project (youtube video)
 - [ ] Create a hook short-form piece of content about this project (tweet thread)
 
