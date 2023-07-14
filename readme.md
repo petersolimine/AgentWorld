@@ -119,7 +119,7 @@ These sections will be outlined below as _3.1_, _3.2_, and _3.3_, respectively.
 6. Install necessary packages and start the agent
       -  type `npm install` and then `npm run agent`
 7. (optional) Follow along with the gameplay (the stuff that your agent _can't_ see)
-      - TODO: Add a way to see the actions of the game engine and the actions of each agent.
+      - open a _new_ terminal, navigate to the directory (type `cd AgentWorld`) and then type `npm run view`
 
 #### _3.2_ Run the sample agent written in python
 TODO
@@ -180,7 +180,7 @@ Other:
 Backend:
 
 - [ ] Make agents smarter (add thought, action, say, etc)
-- [ ] Make the agent view in the terminal more interesting to watch
+- [x] Make the agent view in the terminal more interesting to watch
 - [x] Make it easier to change the initial setup of the world
 - [ ] Add aditional world examples (lord of the flies ?) (a vast emptiness)
 - [ ] When character leaves game (dies) create an explanation
