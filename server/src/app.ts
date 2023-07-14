@@ -86,7 +86,7 @@ app.post("/join", (req: Request, res: Response) => {
 
   broadcast({
     is_server: true,
-    name: "",
+    name: "server",
     message: `${name} has joined the game.`,
     color: colors[users.length],
   });
@@ -102,7 +102,7 @@ const startGame = async () => {
   // delay 20 seconds so that docker-compose can finish building
   broadcast({
     is_server: true,
-    name: "",
+    name: "server",
     message: `Starting game in 30 seconds...`,
     color: "red",
   });
@@ -124,7 +124,7 @@ const startGame = async () => {
 
   broadcast({
     is_server: true,
-    name: " ",
+    name: "server",
     message: `Initializing worldstate in chromadb...`,
     color: "red",
   });
@@ -159,7 +159,7 @@ const startGame = async () => {
 
       broadcast({
         is_server: true,
-        name: "",
+        name: "server",
         message: `Composing prompt for ${user.name}...`,
         color: user.color,
       });
@@ -188,7 +188,7 @@ const startGame = async () => {
 
       broadcast({
         is_server: true,
-        name: "",
+        name: "server",
         message: `Requesting action from ${user.name}...\n ${actionRequest}`,
         color: user.color,
       });
@@ -211,7 +211,7 @@ const startGame = async () => {
         // add action to chromadb
         broadcast({
           is_server: true,
-          name: "",
+          name: "server",
           message: `adding action from ${user.name} to ChromaDB actions collection...`,
           color: user.color,
         });
@@ -223,7 +223,7 @@ const startGame = async () => {
 
         broadcast({
           is_server: true,
-          name: "",
+          name: "server",
           message: `Finding and updating world state elements from ChromaDB world collection...`,
           color: user.color,
         });
@@ -245,7 +245,7 @@ const startGame = async () => {
         broadcast({
           is_server: true,
           message: `User ${user.name} has died.`,
-          name: "Server",
+          name: "server",
           color: "red",
         });
       }
