@@ -173,7 +173,7 @@ Other:
 
 - [x] Clean up readme
 - [x] Include Docker setup when running server-only or agent-only
-- [ ] and ngrok ^ (need agent to be able to connect to server) (wait for postback url to get from ngrok)
+- [x] and ngrok ^ (need agent to be able to connect to server) (wait for postback url to get from ngrok)
 - [ ] Create an interesting long-form piece of content about this project (youtube video)
 - [ ] Create a hook short-form piece of content about this project (tweet thread)
 

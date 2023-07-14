@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
+import ngrok from "ngrok";
 import { OpenAIRequest, createMessagesArray } from "../server/lib/utils";
 import {
   server_port,
@@ -9,7 +10,6 @@ import {
   MAX_RESPONSE_TOKENS,
 } from "../server/lib/constants";
 import { ChatMessages } from "../server/lib/types";
-// to import from the config.json file, use the following:
 import config from "./config.json";
 
 const app: Express = express();
@@ -45,15 +45,15 @@ app.post("/chat/", async (req: Request, res: Response) => {
 
 app.listen(port, () => console.log(`Agent listening on port ${port}!`));
 
-const serverUrl: string = `http://${network_url}:${server_port}`;
+const serverUrl: string = config.external_server ? `http://${network_url}:${server_port}` : '';
 
 let retries = 0;
 
-const joinServer = () => {
+const joinServer = (chatUrl: string) => {
   axios
     .post(`${serverUrl}/join`, {
       name: "Thalos The Mystic",
-      url: `http://${network_url}:${port}/chat/`,
+      url: chatUrl,
     })
     .then((res) => console.log(res.data))
     .catch((error) => {
@@ -67,9 +67,17 @@ const joinServer = () => {
 
       if (retries < MAX_RETRIES) {
         retries++;
-        setTimeout(joinServer, 10000); // Retry after 10 seconds
+        setTimeout(() => joinServer(chatUrl), 10000); // Retry after 10 seconds
       }
     });
 };
 
-joinServer();
+(async () => {
+  if(config.external_server) {
+    let url = await ngrok.connect(port);
+    console.log('URL: ', url)
+    joinServer(`${url}/chat/`);
+  } else {
+    joinServer(`http://${network_url}:${port}/chat/`);
+  }
+})();
