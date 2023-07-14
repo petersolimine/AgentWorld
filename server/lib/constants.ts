@@ -14,6 +14,7 @@ function isRunningInDocker() {
 export const RESET_CHROMA_ON_START = true;
 export const isDocker = isRunningInDocker();
 export const network_url = isDocker ? "host.docker.internal" : "localhost";
+export const chroma_url = isDocker ? "chroma-server" : "localhost";
 
 export const MAX_RETRIES = 6;
 

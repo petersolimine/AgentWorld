@@ -12,8 +12,12 @@ This function will take 2 params.
 2. Bool value to reset the collection or not
 returns a client
 */
+import {chroma_url, isDocker } from "./Constants";
 
-export const client = new ChromaClient({ path: "http://chroma-server:8000" });
+console.log("chroma_url: ", chroma_url);
+console.log("isDocke: ", isDocker);
+
+export const client = new ChromaClient({ path: `http://${chroma_url}:8000` });
 
 export const retrieveCollection = async (
   collection_name: string
