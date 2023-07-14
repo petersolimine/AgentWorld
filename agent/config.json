@@ -1,6 +1,7 @@
 {
+    "character_name": "Gad4",
+    "character_description": "You are going to play the role of a character in a fantasy world. Here is the information about your character: You are a funny black guy",
     "server_url": "http://localhost:3123",
-    "character_name": "Morgana",
-    "character_description": "You are going to play the role of a character in a fantasy world. Here is the information about your character: You are A human knight in black steel armor, Morgana is known for her stern steel-grey eyes and raven hair. Displaying her family's crest - a flaming sword - on her attire, she is a formidable force on the battlefield. Courageous, disciplined, loyal, pragmatic, brilliant strategist",
-    "external_server": true
+    "external_server": false,
+    "port": 3114
 }

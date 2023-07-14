@@ -4,7 +4,6 @@ import axios from "axios";
 import ngrok from "ngrok";
 import { OpenAIRequest, createMessagesArray } from "../server/lib/Utils";
 import {
-  server_port,
   network_url,
   MAX_RETRIES,
   MAX_RESPONSE_TOKENS,
@@ -13,7 +12,7 @@ import { ChatMessages } from "../server/lib/Types";
 import config from "./config.json";
 
 const app: Express = express();
-const port: number = 3111;
+const port: number = config.port;
 
 app.use(bodyParser.json());
 
@@ -24,9 +23,10 @@ let messages: ChatMessages = [];
 
 app.post("/chat/", async (req: Request, res: Response) => {
   gameLog.push(req.body.actionRequest);
+  console.log('Message Received from Game Engine:', req.body.actionRequest);
 
   ({ messages, summary, gameLog, actionLog } = await createMessagesArray(
-    config.character_description, // edit the character description in config.json
+    config.character_description,
     gameLog,
     actionLog,
     summary
@@ -43,16 +43,24 @@ app.post("/chat/", async (req: Request, res: Response) => {
   res.status(200).json({ action: text });
 });
 
-app.listen(port, () => console.log(`Agent listening on port ${port}!`));
+try{
+  app.listen(port, () => console.log(`Agent listening on port ${port}!`));
+} catch (e: any) {
+  if (e.code === 'EADDRINUSE') {
+    console.log(`Port ${port} is in use, edit the value of "port" in config.json and retry.`);
+  } else {
+    console.log(e);
+  }
+}
 
-const serverUrl: string = config.external_server ? `http://${network_url}:${server_port}` : '';
+const serverUrl: string = config.server_url
 
 let retries = 0;
 
 const joinServer = (chatUrl: string) => {
   axios
     .post(`${serverUrl}/join`, {
-      name: "Thalos The Mystic",
+      name: config.character_name,
       url: chatUrl,
     })
     .then((res) => console.log(res.data))
@@ -73,11 +81,12 @@ const joinServer = (chatUrl: string) => {
 };
 
 (async () => {
-  if(config.external_server) {
-    let url = await ngrok.connect(port);
-    console.log('URL: ', url)
-    joinServer(`${url}/chat/`);
+  let url;
+  if (config.external_server) {
+    url = await ngrok.connect(port);
   } else {
-    joinServer(`http://${network_url}:${port}/chat/`);
+    url = `http://${network_url}:${port}`;
   }
+  console.log('agent URL:', url)
+  joinServer(`${url}/chat/`);
 })();
