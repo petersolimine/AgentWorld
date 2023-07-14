@@ -1,20 +1,20 @@
 import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
-import { OpenAIRequest, delay } from "../lib/utils";
+import { OpenAIRequest, delay } from "../lib/Utils";
 import {
   GenerateRequestNextActionPrompt,
   WorldState,
   WorldStatePreamble,
-} from "./prompts";
+} from "./Prompts";
 import {
   server_port,
   colors,
   WORLD_STATE_COLLECTION_NAME,
   ACTIONS_COLLECTION_NAME,
   MAX_RESPONSE_TOKENS,
-  RESET_CHROMA_ON_START
-} from "../lib/constants";
+  RESET_CHROMA_ON_START,
+} from "../lib/Constants";
 import {
   initChroma,
   initializeWorldState,

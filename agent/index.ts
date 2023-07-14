@@ -2,14 +2,14 @@ import express, { Express, Request, Response } from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
 import ngrok from "ngrok";
-import { OpenAIRequest, createMessagesArray } from "../server/lib/utils";
+import { OpenAIRequest, createMessagesArray } from "../server/lib/Utils";
 import {
   server_port,
   network_url,
   MAX_RETRIES,
   MAX_RESPONSE_TOKENS,
-} from "../server/lib/constants";
-import { ChatMessages } from "../server/lib/types";
+} from "../server/lib/Constants";
+import { ChatMessages } from "../server/lib/Types";
 import config from "./config.json";
 
 const app: Express = express();

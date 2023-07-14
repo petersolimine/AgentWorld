@@ -1,15 +1,15 @@
 import express, { Express, Request, Response } from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
-import { OpenAIRequest, createMessagesArray } from "../../lib/utils";
+import { OpenAIRequest, createMessagesArray } from "../../lib/Utils";
 import {
   server_port,
   network_url,
   MAX_RETRIES,
   MAX_RESPONSE_TOKENS,
-} from "../../lib/constants";
-import { ChatMessages } from "../../lib/types";
-import { Agent4SystemPrompt } from "../prompts";
+} from "../../lib/Constants";
+import { ChatMessages } from "../../lib/Types";
+import { Agent4SystemPrompt } from "../Prompts";
 
 const app: Express = express();
 const port: number = 3114;

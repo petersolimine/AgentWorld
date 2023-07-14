@@ -1,9 +1,9 @@
 import axios, { AxiosError } from "axios";
 import dotenv from "dotenv";
-import { FunctionRequestPreamble } from "../src/prompts";
+import { FunctionRequestPreamble } from "../src/Prompts";
 import { retrieveCollection } from "./ChromaHelpers";
-import { WORLD_STATE_COLLECTION_NAME } from "./constants";
-import { ChatMessages } from "./types";
+import { WORLD_STATE_COLLECTION_NAME } from "./Constants";
+import { ChatMessages } from "./Types";
 import { Collection } from "chromadb";
 import { broadcast } from "./WebsocketManager";
 import axiosRetry from 'axios-retry';

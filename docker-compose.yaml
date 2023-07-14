@@ -7,7 +7,7 @@ networks:
 services:
   world:
     image: node:18
-    command: npx ts-node server/src/app.ts
+    command: npx ts-node server/src/App.ts
     volumes:
       - .:/app
     working_dir: /app
@@ -23,7 +23,7 @@ services:
 
   agent1:
     image: node:18
-    command: npx ts-node server/src/sample_agents/ag1.ts
+    command: npx ts-node server/src/sample_agents/Ag1.ts
     volumes:
       - .:/app
     working_dir: /app
@@ -36,7 +36,7 @@ services:
 
   agent2:
     image: node:18
-    command: npx ts-node server/src/sample_agents/ag2.ts
+    command: npx ts-node server/src/sample_agents/Ag2.ts
     volumes:
       - .:/app
     working_dir: /app
@@ -49,7 +49,7 @@ services:
 
   agent3:
     image: node:18
-    command: npx ts-node server/src/sample_agents/ag3.ts
+    command: npx ts-node server/src/sample_agents/Ag3.ts
     volumes:
       - .:/app
     working_dir: /app
@@ -62,7 +62,7 @@ services:
 
   agent4:
     image: node:18
-    command: npx ts-node server/src/sample_agents/ag4.ts
+    command: npx ts-node server/src/sample_agents/Ag4.ts
     volumes:
       - .:/app
     working_dir: /app
