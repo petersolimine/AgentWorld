@@ -91,6 +91,8 @@ If you want to create a custom world with custom characters, you can edit `serve
 If you want to follow along with the game, you can open a new terminal and navigate to the `frontend` directory,
 then run `npm install` and `npm run dev`. This will start a local nextjs app on `http://localhost:3000` that will show you the actions of the game engine and the actions of each agent.
 
+If you are _not_ running the server but want to view the frontend, edit `server/.env` with the server url :8080, run `npm i`, and then `npm run dev`.
+
 ### 3. Run an agent, and connect to a remote server 🤖→
 There are three ways to do this. You can either 
 1. Run the sample agent written in node.js, which requires nodejs _and_ Docker to be installed
@@ -189,7 +191,7 @@ Backend:
 
 Bugs:
 - [x] Code sometimes hangs during openai function calls
-- [ ] The server_url for the frontend needs to be changed to the correct URL
+- [x] The server_url for the frontend needs to be changed to the correct URL
 
 Backlog:
 - [ ] Create a win condition (in prompts.ts) and win check (classifier) after each turn

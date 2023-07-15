@@ -1,9 +1,6 @@
 import React, { useEffect, useState, MouseEvent } from "react";
 import styles from "./Terminal.module.css"; // Assuming you're using CSS Modules and styles are defined in Terminal.module.css
 
-const network_url =
-  process.env.NODE_ENV === "production" ? "localhost" : "world";
-
 export interface Message {
   text: string;
   key: string | number;
@@ -25,10 +22,10 @@ function ConversationTerminal({ is_server }: { is_server: boolean }) {
     let retryTimeoutId: NodeJS.Timeout;
 
     const connect = () => {
-      ws = new WebSocket(`ws://${network_url}:8080`);
+      ws = new WebSocket(`ws://${process.env.NEXT_PUBLIC_SERVER_URL}`);
 
       ws.addEventListener("open", () => {
-        console.log("Connected to WebSocket");
+        console.log(`Connected to WebSocket at ${process.env.NEXT_PUBLIC_SERVER_URL}`);
       });
 
       ws.addEventListener("error", (error) => {
