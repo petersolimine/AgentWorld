@@ -24,7 +24,6 @@ export const createMessagesArray = async (
       content: SUMMARY_PREAMBLE + summary_to_insert,
     });
   }
-  // TODO change the below back to 7000
   const MAX_TOKEN_ALLOCATION = 7000 - MAX_RESPONSE_TOKENS - summary.length * 4;
 
   for (let i = 0; i < gameLog.length; i++) {
@@ -98,7 +97,7 @@ const updateSummary = async (
   // TODO remove. Just make sure this works first
   console.log(
     "Updating summary, prompt:\n",
-    messages[1].content + "\nPROMPT ENDED"
+    messages[1].content
   );
   return await OpenAIRequest({
     model: "gpt-4",

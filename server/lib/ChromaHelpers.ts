@@ -14,9 +14,6 @@ returns a client
 */
 import {chroma_url, isDocker } from "./Constants";
 
-console.log("chroma_url: ", chroma_url);
-console.log("isDocke: ", isDocker);
-
 export const client = new ChromaClient({ path: `http://${chroma_url}:8000` });
 
 export const retrieveCollection = async (
