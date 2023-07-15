@@ -22,10 +22,10 @@ function ConversationTerminal({ is_server }: { is_server: boolean }) {
     let retryTimeoutId: NodeJS.Timeout;
 
     const connect = () => {
-      ws = new WebSocket(`ws://${process.env.NEXT_PUBLIC_SERVER_URL}`);
+      ws = new WebSocket(`ws://${process.env.NEXT_PUBLIC_SERVER_URL || 'localhost:8080'}`);
 
       ws.addEventListener("open", () => {
-        console.log(`Connected to WebSocket at ${process.env.NEXT_PUBLIC_SERVER_URL}`);
+        console.log(`Connected to WebSocket at ${process.env.NEXT_PUBLIC_SERVER_URL} || 'localhost:8080'`);
       });
 
       ws.addEventListener("error", (error) => {
