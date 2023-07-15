@@ -84,11 +84,11 @@ export async function initializeWorldState(
 }
 
 
-export async function initChromaWithRetry(collections: string[], reset: boolean, attempts = 50, delay = 5000) {
+export async function initChromaWithRetry(collections: string[], reset: boolean, attempts = 150, delay = 10000) {
   try {
     return await initChroma(collections, reset);
   } catch (error) {
-    console.error(`Chroma not running yet. Retrying in 5s. Attempts left: ${attempts}`, error);
+    console.error(`Chroma not running yet. Retrying in 10s. Attempts left: ${attempts}`);
     if (attempts === 0) throw error; // If no attempts left, throw error
     await new Promise(res => setTimeout(res, delay)); // Wait for 'delay' ms
     return initChromaWithRetry(collections, reset, attempts - 1, delay);
