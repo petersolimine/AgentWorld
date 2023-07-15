@@ -59,7 +59,7 @@ There are three ways to set up this repository:
 1. Clone this repository
 2. `cd` into the repository
 3. type `cp .env.example .env` and add your OpenAI API key to the newly created `.env` file
-4. type `docker-compose up --build` to start the server and sample agents
+4. type `docker-compose up --build` to start the server and sample agents (having issues? upgrade docker-compose to v2.12.1)
 5. Navigate to `http://localhost:3000` to follow along
 
 If you want to create a custom world with custom characters, you can edit `server/src/prompts.ts` and restart the server.
