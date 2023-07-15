@@ -17,7 +17,7 @@
       "server/tests/**/*",
       "server/src/types/declarations.d.ts",
       "server/lib/Constants.ts",
-      "server/lib/Utils.ts"
+      "server/lib/utils.ts"
     ],
     "paths": {
       "*": ["node_modules/*", "server/src/types/*", "agent/types/*"]

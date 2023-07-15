@@ -7,7 +7,7 @@ networks:
 services:
   world:
     image: node:18
-    command: bash -c "npm install && npx ts-node server/src/App.ts"
+    command: bash -c "npm install && npx ts-node server/src/app.ts"
     volumes:
       - .:/app
       - /app/node_modules
@@ -24,7 +24,7 @@ services:
 
   agent1:
     image: node:18
-    command: bash -c "npm install && npx ts-node server/src/sample_agents/Ag1.ts"
+    command: bash -c "npm install && npx ts-node server/src/sample_agents/ag1.ts"
     volumes:
       - .:/app
       - /app/node_modules
@@ -38,7 +38,7 @@ services:
 
   agent2:
     image: node:18
-    command: bash -c "npm install && npx ts-node server/src/sample_agents/Ag2.ts"
+    command: bash -c "npm install && npx ts-node server/src/sample_agents/ag2.ts"
     volumes:
       - .:/app
       - /app/node_modules
@@ -53,7 +53,7 @@ services:
 
   agent3:
     image: node:18
-    command: bash -c "npm install && npx ts-node server/src/sample_agents/Ag3.ts"
+    command: bash -c "npm install && npx ts-node server/src/sample_agents/ag3.ts"
     volumes:
       - .:/app
       - /app/node_modules
@@ -67,7 +67,7 @@ services:
 
   agent4:
     image: node:18
-    command: bash -c "npm install && npx ts-node server/src/sample_agents/Ag4.ts"
+    command: bash -c "npm install && npx ts-node server/src/sample_agents/ag4.ts"
     volumes:
       - .:/app
       - /app/node_modules

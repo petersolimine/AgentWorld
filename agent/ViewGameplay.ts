@@ -1,5 +1,5 @@
 import WebSocket from "ws";
-import { BroadcastMessage } from "../server/lib/WebsocketManager";
+import { BroadcastMessage } from "../server/lib/websocketManager";
 import config from "./config.json";
 
 

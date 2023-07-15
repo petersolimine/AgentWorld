@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { MAX_RESPONSE_TOKENS } from "./Constants";
-import { ChatMessages } from "./Types";
+import { ChatMessages } from "./types";
 
 import dotenv from "dotenv";
 dotenv.config();

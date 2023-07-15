@@ -1,12 +1,12 @@
 import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
-import { OpenAIRequest, delay } from "../lib/Utils";
+import { OpenAIRequest, delay } from "../lib/utils";
 import {
   GenerateRequestNextActionPrompt,
   WorldState,
   WorldStatePreamble,
-} from "./Prompts";
+} from "./prompts";
 import {
   server_port,
   colors,
@@ -20,12 +20,12 @@ import {
   initializeWorldState,
   embedder,
   initChromaWithRetry
-} from "../lib/ChromaHelpers";
-import { broadcast, clients } from "../lib/WebsocketManager";
+} from "../lib/chromaHelpers";
+import { broadcast, clients } from "../lib/websocketManager";
 import {
   findAndUpdateWorldInformation,
   getStateOfTheWorld,
-} from "../lib/StateManager";
+} from "../lib/stateManager";
 
 const app = express();
 

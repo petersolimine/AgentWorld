@@ -34,7 +34,7 @@ The narration is sent to the agent's server as a post request. The agent then ha
 When the response is received, the server will:
 1. Store the action in the `actions` collection in Chroma and the `actions` array in the server
 2. Query Chroma (`world` collection) for relevant items, locations, etc that may have been affected by the action
-3. Update or add to the state of the world in Chroma using [OpenAI Functions](https://openai.com/blog/function-calling-and-other-api-updates) (implementation can be found in `server/lib/StateManager`)
+3. Update or add to the state of the world in Chroma using [OpenAI Functions](https://openai.com/blog/function-calling-and-other-api-updates) (implementation can be found in `server/lib/stateManager`)
 
 The server will then repeat the process for the next agent.
 

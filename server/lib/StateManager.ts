@@ -1,11 +1,11 @@
 import axios, { AxiosError } from "axios";
 import dotenv from "dotenv";
-import { FunctionRequestPreamble } from "../src/Prompts";
-import { retrieveCollection } from "./ChromaHelpers";
+import { FunctionRequestPreamble } from "../src/prompts";
+import { retrieveCollection } from "./chromaHelpers";
 import { WORLD_STATE_COLLECTION_NAME } from "./Constants";
-import { ChatMessages } from "./Types";
+import { ChatMessages } from "./types";
 import { Collection } from "chromadb";
-import { broadcast } from "./WebsocketManager";
+import { broadcast } from "./websocketManager";
 import axiosRetry from 'axios-retry';
 
 // Add retry logic to axios
