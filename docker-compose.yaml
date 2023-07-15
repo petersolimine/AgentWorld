@@ -10,6 +10,7 @@ services:
     command: bash -c "npm install && npx ts-node server/src/App.ts"
     volumes:
       - .:/app
+      - /app/node_modules
     working_dir: /app
     depends_on:
       - chroma-server
@@ -26,6 +27,7 @@ services:
     command: bash -c "npm install && npx ts-node server/src/sample_agents/Ag1.ts"
     volumes:
       - .:/app
+      - /app/node_modules
     working_dir: /app
     networks:
       - net
@@ -39,6 +41,8 @@ services:
     command: bash -c "npm install && npx ts-node server/src/sample_agents/Ag2.ts"
     volumes:
       - .:/app
+      - /app/node_modules
+
     working_dir: /app
     networks:
       - net
@@ -52,6 +56,7 @@ services:
     command: bash -c "npm install && npx ts-node server/src/sample_agents/Ag3.ts"
     volumes:
       - .:/app
+      - /app/node_modules
     working_dir: /app
     networks:
       - net
@@ -65,6 +70,7 @@ services:
     command: bash -c "npm install && npx ts-node server/src/sample_agents/Ag4.ts"
     volumes:
       - .:/app
+      - /app/node_modules
     working_dir: /app
     networks:
       - net
