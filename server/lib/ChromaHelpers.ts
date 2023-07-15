@@ -12,7 +12,7 @@ This function will take 2 params.
 2. Bool value to reset the collection or not
 returns a client
 */
-import {chroma_url, isDocker } from "./Constants";
+import {chroma_url, isDocker } from "./constants";
 
 export const client = new ChromaClient({ path: `http://${chroma_url}:8000` });
 

@@ -14,7 +14,7 @@ import {
   ACTIONS_COLLECTION_NAME,
   MAX_RESPONSE_TOKENS,
   RESET_CHROMA_ON_START,
-} from "../lib/Constants";
+} from "../lib/constants";
 import {
   initChroma,
   initializeWorldState,

@@ -16,7 +16,7 @@
       "agent/**/*.ts",
       "server/tests/**/*",
       "server/src/types/declarations.d.ts",
-      "server/lib/Constants.ts",
+      "server/lib/constants.ts",
       "server/lib/utils.ts"
     ],
     "paths": {

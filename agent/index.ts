@@ -7,7 +7,7 @@ import {
   network_url,
   MAX_RETRIES,
   MAX_RESPONSE_TOKENS,
-} from "../server/lib/Constants";
+} from "../server/lib/constants";
 import { ChatMessages } from "../server/lib/types";
 import config from "./config.json";
 

@@ -7,7 +7,7 @@ import {
   network_url,
   MAX_RETRIES,
   MAX_RESPONSE_TOKENS,
-} from "../../lib/Constants";
+} from "../../lib/constants";
 import { ChatMessages } from "../../lib/types";
 import { Agent2SystemPrompt } from "../prompts";
 
