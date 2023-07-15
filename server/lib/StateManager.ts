@@ -27,8 +27,6 @@ interface FunctionArgs {
 
 export async function updateDatabase({ item, new_value }: FunctionArgs) {
   if (!new_value) return;
-  // start a timer to see how long each step takes
-  const start = Date.now();
   try {
     let collection = await retrieveCollection(WORLD_STATE_COLLECTION_NAME);
     // using upsert here means that it's possible to add new items to the collection if they don't already exist

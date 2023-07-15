@@ -19,6 +19,7 @@ import {
   initChroma,
   initializeWorldState,
   embedder,
+  initChromaWithRetry
 } from "../lib/ChromaHelpers";
 import { broadcast, clients } from "../lib/WebsocketManager";
 import {
@@ -103,12 +104,12 @@ const startGame = async () => {
   broadcast({
     is_server: true,
     name: "server",
-    message: `Starting game in 30 seconds...`,
+    message: `Starting game in 5 seconds...`,
     color: "red",
   });
-  await delay(30000);
+  await delay(5000);
   // initialize chroma with the collection names that we will use (return value is a client)
-  const chroma_client = await initChroma(
+  const chroma_client = await initChromaWithRetry(
     [WORLD_STATE_COLLECTION_NAME, "actions"],
     RESET_CHROMA_ON_START
   );
