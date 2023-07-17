@@ -1,5 +1,5 @@
 import React, { useEffect, useState, MouseEvent } from "react";
-import styles from "./Terminal.module.css"; // Assuming you're using CSS Modules and styles are defined in Terminal.module.css
+import styles from "./Terminal.module.css"; 
 
 export interface Message {
   text: string;
@@ -15,7 +15,6 @@ function ConversationTerminal({ is_server }: { is_server: boolean }) {
       key: 17283273,
     },
   ]);
-  const [page, setPage] = useState(1);
 
   useEffect(() => {
     let ws: WebSocket;
@@ -35,7 +34,6 @@ function ConversationTerminal({ is_server }: { is_server: boolean }) {
 
       ws.addEventListener("message", (e) => {
         const data = JSON.parse(e.data);
-        // if is_server is true, then we only want to display messages from the server. If not, only display messages from the players.
         if (is_server === data.is_server) {
           setMessages((prevMessages) => [
             ...prevMessages,
@@ -57,13 +55,6 @@ function ConversationTerminal({ is_server }: { is_server: boolean }) {
     };
   }, []);
 
-  const loadMore = (event: MouseEvent) => {
-    event.preventDefault();
-    setPage(page + 1);
-  };
-
-  const displayedMessages = messages.slice(-page * 20);
-
   return (
     <div className={styles.terminalContainer}>
       <div className={styles.fakeMenu}>
@@ -73,23 +64,13 @@ function ConversationTerminal({ is_server }: { is_server: boolean }) {
       </div>
       <div className={styles.fakeScreen}>
         <div className={styles.content}>
-          {page * 20 < messages.length && (
-            <button className={styles.loadMoreButton} onClick={loadMore}>
-              Load more messages...
-            </button>
-          )}
-          {displayedMessages.map((message, index) => (
+          {messages.map((message, index) => (
             <p
               key={message.key}
               className={`${styles["line"]}`}
               style={{ color: message.color }}
             >
               {message.text}
-              <span
-                className={styles.cursor}
-              >
-                _
-              </span>
             </p>
           ))}
         </div>
