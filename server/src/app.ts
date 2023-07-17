@@ -6,6 +6,7 @@ import {
   GenerateRequestNextActionPrompt,
   WorldState,
   WorldStatePreamble,
+  GenerateDeathReasonPrompt
 } from "./prompts";
 import {
   server_port,
@@ -239,15 +240,66 @@ const startGame = async () => {
           actions.shift(); // Keep the array size to a maximum of 100 elements
         }
       } catch (error) {
+        // the player failed to respond, lets kill them
         users.splice(i, 1);
         i--;
-        console.log("NOT DEAD: ", error);
         console.log(`User ${user.name} has died.`);
+        // BEGIN MURDER
         broadcast({
           is_server: true,
-          message: `User ${user.name} has died.`,
+          message: `${user.name} failed to respond in time, creating reason for death...`,
+          name: user.name,
+          color: user.color,
+        });
+        // first, create a reason why the character died
+        let death_reason_prompt = GenerateDeathReasonPrompt(
+          user.name,
+          previous_action,
+          other_actions,
+          world_state
+        );
+
+        let death_reason = await OpenAIRequest({
+          model: "gpt-4",
+          messages: [
+            { role: "system", content: WorldStatePreamble },
+            {
+              role: "user",
+              content: death_reason_prompt,
+            },
+          ],
+          max_tokens: MAX_RESPONSE_TOKENS,
+          temperature: 0.5,
+        });
+
+
+        
+        broadcast({
+          is_server: true,
           name: "server",
-          color: "red",
+          message: `${death_reason}..\nAdding death reason to ChromaDB actions collection...`,
+          color: user.color,
+        });
+        
+        // second, add the info to chromadb
+        await actions_collection.add({
+          ids: [counter.toString()],
+          metadatas: [{ user: user.name }],
+          documents: [death_reason],
+        });
+        
+        broadcast({
+          is_server: true,
+          name: "server",
+          message: `Finding and updating world state elements from ChromaDB world collection...`,
+          color: user.color,
+        });
+        
+        // then, add the reason to actions array and embed it to chroma actions array and update world state accordingly
+        actions.push({ user: user.name, action: `${user.name} has died: ${death_reason}` });
+        await findAndUpdateWorldInformation({
+          collection: world_collection,
+          recentAction: `${user.name} has died: ${death_reason}`
         });
       }
     }

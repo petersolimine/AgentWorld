@@ -181,11 +181,11 @@ Other:
 
 Backend:
 
-- [ ] Make agents smarter (add thought, action, say, etc)
 - [x] Make the agent view in the terminal more interesting to watch
 - [x] Make it easier to change the initial setup of the world
+- [ ] Make agents smarter (add thought, action, say, etc)
 - [ ] Add aditional world examples (lord of the flies ?) (a vast emptiness)
-- [ ] When character leaves game (dies) create an explanation
+- [x] When character leaves game (dies) create an explanation
 - [ ] Create a hosted version
 - [ ] Theoretically, all agents and all world state could be generated and embedded from a single prompt (or sequence of prompts)
 

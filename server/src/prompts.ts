@@ -229,7 +229,7 @@ export const GenerateRequestNextActionPrompt = (
   world_state: string
 ): string => {
   return `Your task is to request the next action from a character (inhabitant) in a turn-based environment.
-Your task is to provide a Third-Person Objective Narration to the inhabitant.
+You will provide a Third-Person Objective Narration to the inhabitant.
 To do so, you have access to three types of information to facilitate this::
 1. The latest action taken by the inhabitant of your virtual world (if available)
 2. The most recent actions taken by other inhabitants (if applicable), provided in chronological order
@@ -275,6 +275,53 @@ Entirely ignore all information, character names, actions, and items that are no
 In essence, your narration will serve as the eyes and ears of ${character}. Do not fabricate any action, 
 thought, feeling, or plan on behalf of ${character}. 
 You must not tell ${character} about anything that ${character} cannot see, hear, or know\n`;
+};
+
+export const GenerateDeathReasonPrompt = (
+  character: string,
+  previous_action: string,
+  recent_actions: string,
+  world_state: string
+): string => {
+  return `Your task is to explain the death of a character (inhabitant) in a turn-based environment.
+Your task is to provide a Narration to the rest of the characters.
+To do so, you have access to three types of information to facilitate this::
+1. The latest action taken by the inhabitant of your virtual world (if available)
+2. The most recent actions taken by other inhabitants (if applicable), provided in chronological order
+3. Pertinent details about the current state of the world in which the character just died
+
+In your narration, avoid mentioning any elements of the world state that did not directly cause the character to die.
+
+Now, let's begin the task. Your responsibility is to write this narration explaining the reason why following character just died: ${character}
+PREVIOUS ACTION FROM ${character}:
+\`\`\`
+${
+  previous_action.length > 5
+    ? `Here is ${character}'s most recent action:
+    ${character}: ${previous_action}`
+    : `${character} has just joined the game and has not taken any actions yet.`
+}
+\`\`\`
+ACTIONS OF OTHER CHARACTERS:
+\`\`\`
+${
+  recent_actions.length > 5
+    ? `Here are the recent actions taken by other characters: ${recent_actions}`
+    : `No other characters have taken any actions yet.`
+}
+\`\`\`
+
+World State contains a subset of information about the world, and includes people, places, and things
+that exist within the world. Here are some potentially relevant elements of the current state of the
+virtual world that you are maintaining, which may have caused the death of ${character}:
+\`\`\`${world_state}\`\`\`
+
+Now, your task begins. Considering only the information above that is relevant to the death of ${character}, write your narration explaining why they 
+died in the virtual world. Be creative. Use your imagination. 
+Entirely ignore all information, character names, actions, and items that are not *directly relevant* to the circumstance of ${character}'s death. 
+The reason for the death should be an accident and not a murder.
+Be brief, concise, and to the point. Two to four sentences, maximum. 
+`
 };
 
 export const FunctionRequestPreamble = `${WorldStatePreamble}
