@@ -158,22 +158,22 @@ Interested in contributing? We've got a few ideas that would be cool to add. We 
 Also, feel free to just contribute other ideas!
 
 - [ ] Build a "map" into the game
-      1. Add x,y coordinates as metadata on each world state item within Chroma. 
-      2. Display those items on the frontend using the coordinates.
-      3. When fetching world state items, filter by distance from the character.
-      4. Or, do it some other way!
+  - Add x,y coordinates as metadata on each world state item within Chroma. 
+  - Display those items on the frontend using the coordinates.
+  - When fetching world state items, filter by distance from the character.
+  - Or, do it some other way!
 
 - [ ] Build a win-state
-      1. Change the game loop from while (True) to while (!game_over)
-      2. Create a "WinCriteria" variable, described as text, `inside of prompts.ts`
-      3. Add an additional OpenAI call in `app.ts` after each agent action, which injects both the WinCriteria and the user's action into context for a T/F classifier that decides whether the action meets the criteria. 
-      4. If so, exit the game loop and crown the winner!
+  - Change the game loop from while (True) to while (!game_over)
+  - Create a "WinCriteria" variable, described as text, `inside of prompts.ts`
+  - Add an additional OpenAI call in `app.ts` after each agent action, which injects both the WinCriteria and the user's action into context for a T/F classifier that decides whether the action meets the criteria. 
+  - If so, exit the game loop and crown the winner!
 
 - [ ] Build a filter to check if content is relevant _before_ summarizing it 
-      1. This will make the game engine more effective, but will come at a higher compute cost.
-      2. Before passing World State elements into the GenerateRequestNextActionPrompt function, _filter_ the list using another call to OpenAI. In that way, you could be more confident that only relevant items would be inserted.
-      3. Note: Adding coordinates (above) could be a more efficient means of filtering.
+  - This will make the game engine more effective, but will come at a higher compute cost.
+  - Before passing World State elements into the GenerateRequestNextActionPrompt function, _filter_ the list using another call to OpenAI. In that way, you could be more confident that only relevant items would be inserted.
+  - Note: Adding coordinates (above) could be a more efficient means of filtering.
 
 - [ ] Implement other sample agents
-      1. First of all, it would be great to have an agent implementation written in python
-      2. It would be so cool to see how AutoGPT matches up against BabyAGI, etc... 
+  - First of all, it would be great to have an agent implementation written in python
+  - It would be so cool to see how AutoGPT matches up against BabyAGI, etc...
