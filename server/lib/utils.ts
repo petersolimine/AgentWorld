@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { MAX_RESPONSE_TOKENS } from "./constants";
+import { BASE_MODEL, MAX_RESPONSE_TOKENS } from "./constants";
 import { ChatMessages } from "./types";
 
 import dotenv from "dotenv";
@@ -100,7 +100,7 @@ const updateSummary = async (
     messages[1].content
   );
   return await OpenAIRequest({
-    model: "gpt-4",
+    model: BASE_MODEL,
     messages,
     max_tokens: 1000,
     temperature: 0.4,

@@ -2,7 +2,7 @@ import axios, { AxiosError } from "axios";
 import dotenv from "dotenv";
 import { FunctionRequestPreamble } from "../src/prompts";
 import { retrieveCollection } from "./chromaHelpers";
-import { WORLD_STATE_COLLECTION_NAME } from "./constants";
+import { BASE_MODEL, WORLD_STATE_COLLECTION_NAME } from "./constants";
 import { ChatMessages } from "./types";
 import { Collection } from "chromadb";
 import { broadcast } from "./websocketManager";
@@ -203,7 +203,7 @@ export async function findAndUpdateWorldInformation({
     ];
 
     const response = await OpenAIFuncRequest({
-      model: "gpt-4-0613",
+      model: `${BASE_MODEL}-0613`,
       messages,
       functions,
       function_call: "auto",

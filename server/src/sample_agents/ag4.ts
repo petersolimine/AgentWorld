@@ -7,6 +7,7 @@ import {
   network_url,
   MAX_RETRIES,
   MAX_RESPONSE_TOKENS,
+  BASE_MODEL,
 } from "../../lib/constants";
 import { ChatMessages } from "../../lib/types";
 import { Agent4SystemPrompt } from "../prompts";
@@ -32,7 +33,7 @@ app.post("/chat/", async (req: Request, res: Response) => {
   ));
 
   const text = await OpenAIRequest({
-    model: "gpt-4",
+    model: BASE_MODEL,
     messages,
     max_tokens: MAX_RESPONSE_TOKENS,
     temperature: 1,

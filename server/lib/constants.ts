@@ -10,6 +10,8 @@ function isRunningInDocker() {
   }
 }
 
+export const BASE_MODEL = 'gpt-4'
+
 
 export const RESET_CHROMA_ON_START = true;
 export const isDocker = isRunningInDocker();

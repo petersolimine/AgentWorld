@@ -15,6 +15,7 @@ import {
   ACTIONS_COLLECTION_NAME,
   MAX_RESPONSE_TOKENS,
   RESET_CHROMA_ON_START,
+  BASE_MODEL,
 } from "../lib/constants";
 import {
   initChroma,
@@ -176,7 +177,7 @@ const startGame = async () => {
 
       // use the prompt:
       const actionRequest = await OpenAIRequest({
-        model: "gpt-4",
+        model: BASE_MODEL,
         messages: [
           { role: "system", content: WorldStatePreamble },
           {
@@ -260,7 +261,7 @@ const startGame = async () => {
         );
 
         let death_reason = await OpenAIRequest({
-          model: "gpt-4",
+          model: BASE_MODEL,
           messages: [
             { role: "system", content: WorldStatePreamble },
             {
