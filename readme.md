@@ -150,50 +150,30 @@ N/A, make your own rules. But use [Chroma](https://trychroma.com) for your agent
 For an example of this, see the implementation in `agent/index.ts`
 
 ---
-### 📌 Boring stuff to ignore:
 
-TODO: It would be interesting to add some end state, some way for the game to come to a conclusion.
-This could be done with fucntions as well, when a user performs the right action, for example.
+### 🤝 Request for Contributions:
 
-As of right now, the server will always use as much world state information as possible, reducing the size as
-per context window limitations. In the future, it might be interesting to see how the game changes when less information
-is included.
+Interested in contributing? We've got a few ideas that would be cool to add. We outlined the steps you could potentially take. Feel free to follow them, or take your own approach.
 
-OTHER TODOS:
+Also, feel free to just contribute other ideas!
 
-- [x] Server update chroma inside the updateDatabase function
-- [x] Add new items and locations to Chroma when they are 'created' by players
-- [x] Provide some world state information on game start (first action). In other words, fetch world state before prompting user to make an action
-- [x] Update UI to display server actions separately from agent dialogue
-- [x] Make UI less shitty
+- [ ] Build a "map" into the game
+      1. Add x,y coordinates as metadata on each world state item within Chroma. 
+      2. Display those items on the frontend using the coordinates.
+      3. When fetching world state items, filter by distance from the character.
+      4. Or, do it some other way!
 
-Frontend:
-- [ ] Fix ordering of elements on frontend in terminal (animate with JS not CSS)
-- [ ] Add a way to see/query/interact with the world state (items, locations, etc) in the UI
+- [ ] Build a win-state
+      1. Change the game loop from while (True) to while (!game_over)
+      2. Create a "WinCriteria" variable, described as text, `inside of prompts.ts`
+      3. Add an additional OpenAI call in `app.ts` after each agent action, which injects both the WinCriteria and the user's action into context for a T/F classifier that decides whether the action meets the criteria. 
+      4. If so, exit the game loop and crown the winner!
 
-Other:
+- [ ] Build a filter to check if content is relevant _before_ summarizing it 
+      1. This will make the game engine more effective, but will come at a higher compute cost.
+      2. Before passing World State elements into the GenerateRequestNextActionPrompt function, _filter_ the list using another call to OpenAI. In that way, you could be more confident that only relevant items would be inserted.
+      3. Note: Adding coordinates (above) could be a more efficient means of filtering.
 
-- [x] Clean up readme
-- [x] Include Docker setup when running server-only or agent-only
-- [x] and ngrok ^ (need agent to be able to connect to server) (wait for postback url to get from ngrok)
-- [ ] Create an interesting long-form piece of content about this project (youtube video)
-- [ ] Create a hook short-form piece of content about this project (tweet thread)
-
-Backend:
-
-- [x] Make the agent view in the terminal more interesting to watch
-- [x] Make it easier to change the initial setup of the world
-- [ ] Make agents smarter (add thought, action, say, etc)
-- [ ] Add aditional world examples (lord of the flies ?) (a vast emptiness)
-- [x] When character leaves game (dies) create an explanation
-- [ ] Create a hosted version
-- [ ] Theoretically, all agents and all world state could be generated and embedded from a single prompt (or sequence of prompts)
-
-Bugs:
-- [x] Code sometimes hangs during openai function calls
-- [x] The server_url for the frontend needs to be changed to the correct URL
-
-Backlog:
-- [ ] Create a win condition (in prompts.ts) and win check (classifier) after each turn
-- [ ] when composing an action prompt, first have a model check if something is relevant or not
-- [ ] Try to be more explicit about include information about the current _location_ of every action that is taken
+- [ ] Implement other sample agents
+      1. First of all, it would be great to have an agent implementation written in python
+      2. It would be so cool to see how AutoGPT matches up against BabyAGI, etc... 
