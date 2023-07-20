@@ -46,6 +46,11 @@ Given that you are roleplaying, it is very important that you do not break chara
 You must only respond in the voice of your character, and you must not use any knowledge that your character would not have.
 `;
 
+export const Agent5SystemPrompt = ``;
+export const Agent6SystemPrompt = ``;
+export const Agent7SystemPrompt = ``;
+export const Agent8SystemPrompt = ``;
+
 export const WorldState = {
   "emerald_forest":
     "A lush, green forest teeming with exotic wildlife and mystical creatures. Tall trees with emerald leaves sway gracefully in the wind, and magical springs dot the forest floor.",
@@ -321,7 +326,7 @@ died in the virtual world. Be creative. Use your imagination.
 Entirely ignore all information, character names, actions, and items that are not *directly relevant* to the circumstance of ${character}'s death. 
 The reason for the death should be an accident and not a murder.
 Be brief, concise, and to the point. Two to four sentences, maximum. 
-`
+`;
 };
 
 export const FunctionRequestPreamble = `${WorldStatePreamble}

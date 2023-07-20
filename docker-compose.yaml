@@ -79,6 +79,62 @@ services:
     ports:
       - "3114:3114"
 
+  # agent5:
+  #   image: node:18
+  #   command: bash -c "npm install && npx ts-node server/src/sample_agents/ag5.ts"
+  #   volumes:
+  #     - .:/app
+  #     - /app/node_modules
+  #   working_dir: /app
+  #   networks:
+  #     - net
+  #   depends_on:
+  #     - world
+  #   ports:
+  #     - "3115:3115"
+
+  # agent6:
+  #   image: node:18
+  #   command: bash -c "npm install && npx ts-node server/src/sample_agents/ag6.ts"
+  #   volumes:
+  #     - .:/app
+  #     - /app/node_modules
+  #   working_dir: /app
+  #   networks:
+  #     - net
+  #   depends_on:
+  #     - world
+  #   ports:
+  #     - "3116:3116"
+
+  # agent7:
+  #   image: node:18
+  #   command: bash -c "npm install && npx ts-node server/src/sample_agents/ag7.ts"
+  #   volumes:
+  #     - .:/app
+  #     - /app/node_modules
+  #   working_dir: /app
+  #   networks:
+  #     - net
+  #   depends_on:
+  #     - world
+  #   ports:
+  #     - "3117:3117"
+
+  # agent8:
+  #   image: node:18
+  #   command: bash -c "npm install && npx ts-node server/src/sample_agents/ag8.ts"
+  #   volumes:
+  #     - .:/app
+  #     - /app/node_modules
+  #   working_dir: /app
+  #   networks:
+  #     - net
+  #   depends_on:
+  #     - world
+  #   ports:
+  #     - "3118:3118"
+
   frontend:
     build: ./frontend
     networks:
