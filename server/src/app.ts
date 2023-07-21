@@ -6,7 +6,7 @@ import {
   GenerateRequestNextActionPrompt,
   WorldState,
   WorldStatePreamble,
-  GenerateDeathReasonPrompt
+  GenerateDeathReasonPrompt,
 } from "./prompts";
 import {
   server_port,
@@ -21,7 +21,7 @@ import {
   initChroma,
   initializeWorldState,
   embedder,
-  initChromaWithRetry
+  initChromaWithRetry,
 } from "../lib/chromaHelpers";
 import { broadcast, clients } from "../lib/websocketManager";
 import {
@@ -234,7 +234,7 @@ const startGame = async () => {
         // update world state if necessary
         await findAndUpdateWorldInformation({
           collection: world_collection,
-          recentAction: `${user.name}: ${response.data.action}`
+          recentAction: `${user.name}: ${response.data.action}`,
         });
 
         if (actions.length > 100) {
@@ -273,34 +273,35 @@ const startGame = async () => {
           temperature: 0.5,
         });
 
-
-        
         broadcast({
           is_server: true,
           name: "server",
           message: `${death_reason}..\nAdding death reason to ChromaDB actions collection...`,
           color: user.color,
         });
-        
+
         // second, add the info to chromadb
         await actions_collection.add({
           ids: [counter.toString()],
           metadatas: [{ user: user.name }],
           documents: [death_reason],
         });
-        
+
         broadcast({
           is_server: true,
           name: "server",
           message: `Finding and updating world state elements from ChromaDB world collection...`,
           color: user.color,
         });
-        
+
         // then, add the reason to actions array and embed it to chroma actions array and update world state accordingly
-        actions.push({ user: user.name, action: `${user.name} has died: ${death_reason}` });
+        actions.push({
+          user: user.name,
+          action: `${user.name} has died: ${death_reason}`,
+        });
         await findAndUpdateWorldInformation({
           collection: world_collection,
-          recentAction: `${user.name} has died: ${death_reason}`
+          recentAction: `${user.name} has died: ${death_reason}`,
         });
       }
     }

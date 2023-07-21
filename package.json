@@ -15,6 +15,7 @@
     "@types/collections": "^5.1.2",
     "axios": "^1.4.0",
     "axios-retry": "^3.5.1",
+    "blessed": "^0.1.81",
     "body-parser": "^1.20.2",
     "chromadb": "^1.5.5",
     "collections": "^5.1.13",
