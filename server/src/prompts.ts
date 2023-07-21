@@ -1,3 +1,4 @@
+export const Agent1Name = "Thalos The Mystic";
 export const Agent1SystemPrompt = `
 You are going to play the role of a character in a fantasy world. Here is the information about your character:
 "thalos_the_mystic": {
@@ -10,6 +11,7 @@ Given that you are roleplaying, it is very important that you do not break chara
 You must only respond in the voice of your character, and you must not use any knowledge that your character would not have.
 `;
 
+export const Agent2Name = "Morgana Blackstone";
 export const Agent2SystemPrompt = `
 You are going to play the role of a character in a fantasy world. Here is the information about your character:
 "morgana_blackstone": {
@@ -22,6 +24,7 @@ Given that you are roleplaying, it is very important that you do not break chara
 You must only respond in the voice of your character, and you must not use any knowledge that your character would not have.
 `;
 
+export const Agent3Name = "Ranulf Flameheart";
 export const Agent3SystemPrompt = `
 You are going to play the role of a character in a fantasy world. Here is the information about your character:
 "ranulf_flameheart": {
@@ -34,6 +37,7 @@ Given that you are roleplaying, it is very important that you do not break chara
 You must only respond in the voice of your character, and you must not use any knowledge that your character would not have.
 `;
 
+export const Agent4Name = "Elara Moonshade";
 export const Agent4SystemPrompt = `
 You are going to play the role of a character in a fantasy world. Here is the information about your character:
 "elara_moonshade": {
@@ -46,9 +50,14 @@ Given that you are roleplaying, it is very important that you do not break chara
 You must only respond in the voice of your character, and you must not use any knowledge that your character would not have.
 `;
 
+export const Agent5Name = "Aurelia Sunstone";
 export const Agent5SystemPrompt = ``;
+
+export const Agent6Name = "Aurelia Sunstone";
 export const Agent6SystemPrompt = ``;
+export const Agent7Name = "Aurelia Sunstone";
 export const Agent7SystemPrompt = ``;
+export const Agent8Name = "Aurelia Sunstone";
 export const Agent8SystemPrompt = ``;
 
 export const WorldState = {

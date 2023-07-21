@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
 import { OpenAIRequest, createMessagesArray } from "../../lib/utils";
-import { Agent1SystemPrompt } from "../prompts";
+import { Agent1SystemPrompt, Agent1Name } from "../prompts";
 import {
   server_port,
   network_url,
@@ -52,7 +52,7 @@ let retries = 0;
 const joinServer = () => {
   axios
     .post(`${serverUrl}/join`, {
-      name: "Thalos The Mystic",
+      name: Agent1Name,
       url: `http://${network_url}:${port}/chat/`,
     })
     .then((res) => console.log(res.data))

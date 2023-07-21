@@ -10,7 +10,7 @@ import {
   BASE_MODEL,
 } from "../../lib/constants";
 import { ChatMessages } from "../../lib/types";
-import { Agent3SystemPrompt } from "../prompts";
+import { Agent3SystemPrompt, Agent3Name } from "../prompts";
 
 const app: Express = express();
 const port: number = 3113;
@@ -52,7 +52,7 @@ let retries = 0;
 const joinServer = () => {
   axios
     .post(`${serverUrl}/join`, {
-      name: "Ranulf Flameheart",
+      name: Agent3Name,
       url: `http://${network_url}:${port}/chat/`,
     })
     .then((res) => console.log(res.data))
